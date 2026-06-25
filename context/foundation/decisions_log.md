@@ -63,8 +63,8 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 | 11 | SaaS | Administrator danych gości: platforma czy hotel? | ✅ zamknięta | Hotel = ADM, platforma = procesor. Potwierdzone przez RODO research + HITL #3. DPA z każdym hotelem obowiązkowe przed pierwszym wdrożeniem. UUID nie zwalnia z DPA — hotel łączy token z rezerwacją po swojej stronie. | 2026-06-25 |
 | 12 | Tech | Build vs buy dla komponentów AI | ✅ zamknięta | Prompt injection na MVP (cała baza wiedzy hotelu bezpośrednio w kontekście LLM — GPT-4o-mini 128K ctx wystarczy dla ~5-10K tokenów bazy małego hotelu). pgvector w Supabase jako ścieżka upgradu gdy hotel urośnie. Zero Qdrant/Pinecone na MVP. | 2026-06-25 |
 | 13 | Tech | Zespół: zewnętrzny vs własny | ✅ zamknięta | Solo + Claude Code + Spec Driven Development. Ten research = specyfikacja techniczna dla implementacji. Implikacja: stack musi być opinionated i uproszczony (Railway > Fly.io na start). | 2026-06-25 |
-| 14 | Metryki | Definicja sukcesu MVP przed testami | ⬜ otwarta | — | — |
-| 15 | Metryki | Skala testu: ile hoteli, ile tygodni | ⬜ otwarta | — | — |
+| 14 | Metryki | Definicja sukcesu MVP przed testami | ✅ zamknięta | Rygorystyczny (3 z 3 warunków): ≥30% gości skanuje QR w ciągu doby + ≥10% konwersja upsell (≥1 zamówienie/10 gości) + hotel kontynuuje po 3 mies. bez "stop" | 2026-06-25 |
+| 15 | Metryki | Skala testu: ile hoteli, ile tygodni | ✅ zamknięta | 3 hotele × 6 tygodni (w ramach Lighthouse Program) | 2026-06-25 |
 
 **Statusy:** ⬜ otwarta · 🔄 w toku · ✅ zamknięta · 🚫 odroczona
 
@@ -608,7 +608,7 @@ Monitoring: Sentry + PostHog EU Cloud + Better Stack
 ---
 
 ## Sesja 7 — Metryki i Walidacja MVP
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesja 6 zamknięta*
+*Status: ✅ zamknięta — 2026-06-25*
 
 ### Subagenty do uruchomienia równolegle [SUBAGENT]
 
@@ -641,14 +641,93 @@ Zapisz wynik do research/session_07/analytics-stack-mvp.md
 Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 ```
 
+### Subagenty uruchomione [SUBAGENT]
+- `hotel-upsell-benchmarks.md` — benchmarki upsell branży hotelarskiej, konwersja, kategorie, Canary/Oaky/Duve ✅
+- `mvp-validation-frameworks.md` — framework walidacji B2B2C, minimalna próba, leading/lagging, błędy pilotów ✅
+- `analytics-stack-mvp.md` — event taxonomy PostHog, automatyczny pomiar AI concierge, RODO, dashboard founder ✅
+
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Metryki hotelowe:**
+- Baseline branżowy upsell: 10-25% konwersja pre-arrival (golden window 48-72h przed przyjazdem); in-stay niższe
+- Early check-in / late checkout = #1 konwertująca kategoria (>Spa, >Room service, >Transfer)
+- Digital upsell: 4x wyższy conversion niż tradycyjny front-desk (benchmark Canary 2025)
+- Revenue per guest: Oaky €35-200/mies. dla hoteli z dojrzałym programem; cel realistyczny MVP: €5-15/pobyt/gość
+- Odciążenie recepcji: mierzalne przez `front_desk_inquiry_count` — cel: widoczny spadek po 60 dniach
+
+**Metryki gościa (PostHog event taxonomy — 10 core events od dnia 1):**
+
+| Lejek | Event | Kluczowe właściwości |
+|---|---|---|
+| Hotel operator | `hotel_login` | `days_since_signup` |
+| Hotel operator | `hotel_settings_updated` | `setting_type` |
+| Hotel operator | `guest_order_received` | `order_value`, `hotel_id` (GROUP) |
+| Gość — top funnel | `guest_qr_scanned` | `hotel_id`, session UUID (opaque) |
+| Gość — browse | `guest_item_details_opened` | `item_id`, dwell time |
+| Gość — konwersja | `guest_order_submitted` | `order_value`, `fulfillment_type` |
+| Gość — retention | `guest_session_returned` | 7/30-day cohort flag |
+| AI concierge | `concierge_query_submitted` | `category_detected`, `hotel_id` |
+| AI concierge | `concierge_response_delivered` | `confidence_score`, latency ms |
+| AI concierge | `concierge_response_escalated` | fallback trigger |
+
+- **Adoption rate cel**: ≥30% gości skanuje QR w ciągu pierwszej doby pobytu (leading indicator, tydzień 1-7)
+- **Session depth cel**: ≥2 sekcje odwiedzone per sesja
+- **Retention cel**: ≥40% gości wraca do appki 2+ razy podczas pobytu
+
+**Metryki AI concierge (automatyczne — bez manualnego review każdej rozmowy):**
+- **Containment rate** (% queries bez eskalacji): target 40-65% (Gartner 2025); alert gdy >35% escalation
+- **Response latency**: alert jeśli >5s end-to-end; target <1,5s (streaming SSE poprawia perceived)
+- **Confidence score histogram**: alert gdy avg <0,6 dla kategorii (sygnał że baza wiedzy niekompletna)
+- **Downstream action rate**: czy gość składa zamówienie w ciągu 2 min po odpowiedzi concierge
+- **Monthly spot-audit**: 10 próbek (5 eskalowanych + 5 high-confidence) — kalibracja progów bez pełnego audytu
+
+**Feedback loop (jakościowy):**
+- Tygodniowe synce z hotel championem (staff adoption owner + GM)
+- Exit survey gościa: 5 pytań po checkout (<2 min) — świadomość appki, użycie, NPS
+- Monthly 10-sample audit AI concierge — ręczna ocena przez personel hotelu
+- Biweekly data review z danymi pilotu (early warning na spadek engagement)
+
+**Kryteria sukcesu MVP — 3 z 3 (HITL #14):**
+1. **Leading (tydzień 1-7):** ≥30% gości skanuje QR w ciągu doby 1. pobytu
+2. **Lagging (tydzień 4-6):** ≥10% konwersja upsell (≥1 zamówienie na 10 aktywnych gości)
+3. **Retention (miesiąc 3):** hotel kontynuuje bez wyraźnego "stop" — nie rezygnuje po fazie Lighthouse
+
+Kryterium kill (co oznacza "nie iść dalej"):
+- <15% adoption QR po 14 dniach (i hotel aktywnie promował appkę) → problem produktowy
+- Brak ani jednego zamówienia przez appkę po 30 dniach → problem value proposition
+- Hotel prosi o wyłączenie przed końcem 6 tygodni → implementation lub product fail
+
+**Skala pilotu (HITL #15):** 3 hotele × 6 tygodni
+- Tygodnie 1-2: setup, training personelu, pierwsze QR aktywne
+- Tygodnie 3-6: aktywny okres używania przez gości (2-3 cykle rotacji)
+- Po 6 tygodniach: decyzja go/no-go na podstawie leading + lagging metrics
+- Dywersyfikacja: min. 2 hotele boutique/niezależne + 1 mid-size; różne geografie (catch implementation variation)
+
+**Dashboard founder (PostHog):**
+- **Daily "Pulse"** (5 min): gości online, zamówień/24h, QR scans/24h, escalation rate, hotel operators aktywnych 7d
+- **Weekly "Growth"** (piątek): guest funnel (QR→order), cohort activation hoteli wg wieku, AI performance per kategoria, top/bottom hotel comparison
+
+**Separacja product-fit od implementation-fit:**
+- Jeśli hotel nie ukończył trainingu → dane tego hotelu wykluczone z walidacji produktu
+- Track: `staff_training_completion` (gate) + `hotel_promotion_activity` (emails/signage/frontdesk)
+- Wysoka świadomość gości + niska adopcja = problem UX (product-fit); niska świadomość = problem promotji (implementation)
+
+**PostHog RODO compliance:**
+- `guest_id` = opaque server-side UUID (nie email/imię/pokój) — retencja 90 dni, potem purge
+- Brak PII w propertiach eventów
+- Consent banner dla gości: "Mierzymy użycie bez danych osobowych"
+- PostHog EU Cloud = sub-procesor → DPA z PostHog obowiązkowe (jak Anthropic DPA z Sesji 1)
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+- ✅ HITL #14: Rygorystyczny — 3 z 3 warunków muszą być spełnione jednocześnie: ≥30% QR adoption/dobę + ≥10% upsell conversion + hotel kontynuuje po 3 mies. Decyzja: rygorystyczna definicja przed testami, nie post-hoc. Kryterium kill: <15% adoption + brak zamówień + hotel rezygnuje.
+- ✅ HITL #15: 3 hotele × 6 tygodni. W ramach Lighthouse Program (3-5 hoteli gratis). Dywersyfikacja: 2 boutique + 1 mid-size. Tygodnie 1-2 setup; tygodnie 3-6 dane. Minimum 50-100 aktywnych gości per hotel dla statystycznej sensowności.
 
 ### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+- **Sesja 7 jest ostatnią sesją research roadmapy.** Kolejny krok: specyfikacja implementacyjna (SDD — Spec Driven Development) na podstawie Sesji 1-7.
+- Pytania do rozważenia przy implementacji:
+  - Kolejność implementacji: Auth + QR flow (Sesja 1) → Panel minimum (Sesja 2) → Guest UI (Sesja 3) → AI Concierge (Sesja 4) → Analytics events (Sesja 7)
+  - PostHog Group Analytics (hotel cohorts) wymaga paid tier — zaplanować moment upgrade
+  - Confidence score z GPT-4o-mini: weryfikacja czy model zwraca `logprobs` lub czy lepiej użyć własnej heurystyki (długość odpowiedzi + czy fallback triggered)
 
 ---
 
@@ -663,6 +742,7 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 | 2026-06-25 | Sesja 3 — Interfejs Gościa | Welcome screen z imieniem, 5 kategorii top-level, 3-4 tap flow zamówień (charge to room), sekcja "Polecamy" na home (3 kafelki), PWA z App Shell + SSE (no push na MVP), PL+EN z AI translate treści, stany brzegowe P0/P1/P2 |
 | 2026-06-25 | Sesja 5 — SaaS & Onboarding | Lighthouse Program (HITL #10), DPA obowiązkowe hotel=ADM platforma=procesor (HITL #11), model cenowy per-room €5–8 lub flat €99–179/mies. po lighthouse, zero setup fee, AI included (nie add-on), 48h time-to-value, template-first onboarding, offboarding: CSV export + 30-dniowa retencja po zakończeniu |
 | 2026-06-25 | Sesja 6 — Technologia | Stack: Next.js 15 App Router + Supabase + Railway + Upstash Redis + GPT-4o-mini prompt injection; HITL #12 (prompt injection nie RAG) + HITL #13 (solo + Claude Code + Spec Driven Dev); Vercel wyeliminowany (SSE bloker); pgvector jako ścieżka upgradu RAG |
+| 2026-06-25 | Sesja 7 — Metryki | HITL #14 (Rygorystyczny sukces: 3/3 warunki: ≥30% QR adoption + ≥10% upsell conversion + hotel kontynuuje 3 mies.) + HITL #15 (3 hotele × 6 tygodni Lighthouse); 10 core PostHog events; automatyczny pomiar AI concierge (containment rate, confidence score, latency); RODO-compliant opaque guest_id; daily Pulse + weekly Growth dashboard |
 
 ---
 
