@@ -320,7 +320,7 @@ Kategoria → Usługa (cena na karcie) → Modal potwierdzenia + opcjonalne uwag
 ---
 
 ## Sesja 4 — AI Concierge
-*Status: 🔄 w toku — czeka na decyzje HITL #7, #8, #9*
+*Status: ✅ zamknięta — 2026-06-25*
 
 ### Subagenty uruchomione [SUBAGENT]
 - `rag-hospitality-patterns.md` — RAG w hotelarstwie, chunking, latency, embeddings, caching ✅
@@ -389,7 +389,9 @@ Kategoria → Usługa (cena na karcie) → Modal potwierdzenia + opcjonalne uwag
 - Fine-tuning modelu
 
 ### Zamknięte decyzje HITL
-*— czekają na decyzję użytkownika — patrz HITL #7, #8, #9 poniżej*
+- ✅ HITL #7: Tylko informuje — concierge nie wykonuje akcji na MVP. Sugeruje usługi, gość sam składa zamówienie przez UI. Konsekwencja: brak integracji silnika zamówień z AI na MVP, niższa złożoność.
+- ✅ HITL #8: Zawsze transparentny — EU AI Act + standard rynkowy. Hotel może nadać imię botowi (panel), ale wzmianka "wirtualny asystent" jest obowiązkowa. Konsekwencja: zero ryzyka regulacyjnego.
+- ✅ HITL #9: Standard rynkowy — hotel = właściciel treści i odpowiada za jej poprawność; platforma = operator silnika i odpowiada za dostępność. Wyłączenie odpowiedzialności platformy za błędy z niepoprawnych danych hotelowych musi być w umowie przed wdrożeniem.
 
 ### Otwarte pytania do następnej sesji
 - Sesja 5 (SaaS): czy AI concierge wchodzi w pakiet podstawowy czy jako add-on? Wpływ na model cenowy.
