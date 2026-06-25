@@ -405,13 +405,13 @@ No existing data or code to migrate. This is a greenfield initialization.
 
 #### Automated
 
-- [x] 2.1 `git branch --show-current` outputs `main`
-- [x] 2.2 `.github/workflows/ci.yml` exists and is valid YAML
-- [x] 2.3 `railway.toml` exists with `healthcheckPath = "/api/health"`
-- [ ] 2.4 Test PR opened against `main` → GitHub Actions `Lint` and `Type check` both pass
+- [x] 2.1 `git branch --show-current` outputs `main` — 819dc0e
+- [x] 2.2 `.github/workflows/ci.yml` exists and is valid YAML — 819dc0e
+- [x] 2.3 `railway.toml` exists with `healthcheckPath = "/api/health"` — 819dc0e
+- [x] 2.4 Test PR opened against `main` → GitHub Actions `Lint` and `Type check` both pass — 819dc0e
 
 #### Manual
 
-- [ ] 2.5 Railway preview environment deploys on test PR (visible in Railway dashboard)
-- [ ] 2.6 Preview URL `/api/health` returns 200 in browser
-- [ ] 2.7 Test PR merged → Railway production build on `main` succeeds
+- [x] 2.5 Railway preview environment deploys on test PR (visible in Railway dashboard)
+- [x] 2.6 Preview URL `/api/health` returns 200 in browser
+- [x] 2.7 Test PR merged → Railway production build on `main` succeeds
