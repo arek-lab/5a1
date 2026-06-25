@@ -200,8 +200,8 @@ Sesja 6 może zacząć się wcześniej w zakresie decyzji infrastrukturalnych ni
 | 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ⬜ otwarta |
 | 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ✅ zamknięta — Lighthouse Program (3–5 hoteli gratis 3–6 mies. za case study + referencje) |
 | 11 | SaaS | Administrator danych gości: platforma czy hotel? | ✅ zamknięta — hotel = ADM, platforma = procesor; DPA obowiązkowe z każdym hotelem |
-| 12 | Tech | Build vs buy dla komponentów AI | ⬜ otwarta |
-| 13 | Tech | Zespół: zewnętrzny vs własny | ⬜ otwarta |
+| 12 | Tech | Build vs buy dla komponentów AI | ✅ zamknięta — prompt injection na MVP; pgvector (Supabase) jako ścieżka upgradu RAG; zero Qdrant/Pinecone |
+| 13 | Tech | Zespół: zewnętrzny vs własny | ✅ zamknięta — solo + Claude Code + Spec Driven Development |
 | 14 | Metryki | Definicja sukcesu MVP przed testami | ⬜ otwarta |
 | 15 | Metryki | Skala testu: ile hoteli, ile tygodni | ⬜ otwarta |
 

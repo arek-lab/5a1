@@ -61,8 +61,8 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 | 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ✅ zamknięta | Standard rynkowy: hotel odpowiada za treść bazy wiedzy; platforma odpowiada za uptime i delivery. Wyłączenie odpowiedzialności platformy za błędy wynikające z niepoprawnych danych hotelu — w umowie. | 2026-06-25 |
 | 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ✅ zamknięta | Lighthouse Program — 3–5 hoteli gratis przez 3–6 mies. w zamian za case study, referencje i prawo do wywiadu. Standard rynkowy (Duve, Oaky, Canary). Po fazie lighthouse: flat fee €99–179/mies. lub per-room €5–8/mies. z min. €150 | 2026-06-25 |
 | 11 | SaaS | Administrator danych gości: platforma czy hotel? | ✅ zamknięta | Hotel = ADM, platforma = procesor. Potwierdzone przez RODO research + HITL #3. DPA z każdym hotelem obowiązkowe przed pierwszym wdrożeniem. UUID nie zwalnia z DPA — hotel łączy token z rezerwacją po swojej stronie. | 2026-06-25 |
-| 12 | Tech | Build vs buy dla komponentów AI | ⬜ otwarta | — | — |
-| 13 | Tech | Zespół: zewnętrzny vs własny | ⬜ otwarta | — | — |
+| 12 | Tech | Build vs buy dla komponentów AI | ✅ zamknięta | Prompt injection na MVP (cała baza wiedzy hotelu bezpośrednio w kontekście LLM — GPT-4o-mini 128K ctx wystarczy dla ~5-10K tokenów bazy małego hotelu). pgvector w Supabase jako ścieżka upgradu gdy hotel urośnie. Zero Qdrant/Pinecone na MVP. | 2026-06-25 |
+| 13 | Tech | Zespół: zewnętrzny vs własny | ✅ zamknięta | Solo + Claude Code + Spec Driven Development. Ten research = specyfikacja techniczna dla implementacji. Implikacja: stack musi być opinionated i uproszczony (Railway > Fly.io na start). | 2026-06-25 |
 | 14 | Metryki | Definicja sukcesu MVP przed testami | ⬜ otwarta | — | — |
 | 15 | Metryki | Skala testu: ile hoteli, ile tygodni | ⬜ otwarta | — | — |
 
@@ -483,7 +483,7 @@ Kategoria → Usługa (cena na karcie) → Modal potwierdzenia + opcjonalne uwag
 ---
 
 ## Sesja 6 — Technologia i Infrastruktura
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesje 1-5 zamknięte*
+*Status: ✅ zamknięta — 2026-06-25*
 
 ### Subagenty do uruchomienia równolegle [SUBAGENT]
 
@@ -517,14 +517,93 @@ Zapisz wynik do research/session_06/security-qr-sessions.md
 Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 ```
 
+### Subagenty uruchomione
+- `multitenant-patterns.md` — Shared DB + RLS, wzorce Next.js + Supabase, property_id conventions ✅
+- `pwa-techstack-2026.md` — Next.js App Router, Supabase Auth + QR flow, hosting Railway vs Vercel, monitoring ✅
+- `security-qr-sessions.md` — JWT vs opaque token, rate limiting, token harvesting defense, anomaly detection ✅
+
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Stack frontendowy (werdykt: Next.js 15 App Router):**
+- **Next.js 15 App Router** + TypeScript + Tailwind CSS + next-intl (i18n PL/EN)
+- Eliminuje Remix (niepewna roadmapa) i SvelteKit (słabszy ekosystem admin paneli, mniejsza pula PL developerów)
+- RSC redukuje bundle PWA poniżej 150 KB bez heroicznego wysiłku (potwierdzenie Sesji 3)
+- SSE: Next.js Route Handler z `runtime = "nodejs"` — nie Edge Functions (limit 2s CPU wyklucza semantic cache + streaming AI)
+- **Krytyczne:** SSE wymaga serwera persystentnego → Vercel odpada (serverless timeouty przy long-lived SSE)
+
+**Backend — Supabase jako jedyna warstwa:**
+- Supabase Pro: Postgres + Auth + Storage = $25/mies.
+- **Supabase Auth dla gości:** Anonymous Sign-In + Custom Access Token Hook → wstrzyknięcie `property_id` do JWT → RLS używa tego claima
+  - QR URL → jednorazowy init_token (15 min TTL) → `signInAnonymously()` → Custom Hook → JWT z `property_id`
+  - Opaque UUID jako `session_id` pozostaje w tabeli sessions (rewokacja, audit trail)
+- **Supabase Realtime: NIE dla zamówień** — Pro plan limit 500 concurrent connections; 200 hoteli × 50 gości = 10K połączeń → za drogie przy skali
+- Zamówienia: custom SSE przez PostgreSQL `LISTEN/NOTIFY` (MVP single-instance)
+
+**Multi-tenancy — Shared Database + RLS:**
+- Koszt: Shared DB ~$25-50/mies. (200 hoteli) | Schema-per-tenant ~$100/mies. | Database-per-tenant ~$5,000/mies.
+- **Wzorzec RLS:** `property_id = current_setting('app.property_id', true)::uuid` — nie subquery (10-20x wolniej)
+- **Obowiązkowe indeksy** na `property_id` w każdej tabeli
+- Ujednolicona nazwa: `property_id` wszędzie (agnostyczne wobec sieci hotelowych)
+- Tabele z RLS: `services`, `orders`, `sessions`, `reservations`, `hotel_users`, `qr_codes`, `knowledge_chunks`
+- Tabele bez RLS (tylko service_role): `audit_logs`, `platform_config`, `job_queue`
+
+**AI Concierge — Prompt Injection na MVP [HITL #12]:**
+- RAG jest overkill dla małych hoteli z małą bazą wiedzy
+- Mała KB hotelu: 50-100 Q&A + menu + polityki ≈ 5-10K tokenów
+- GPT-4o-mini: 128K context window → **cała KB hotelu bezpośrednio w kontekście** systemu
+- Wzorzec: `[SYSTEM PROMPT] + [HOTEL KNOWLEDGE BASE (markdown)] + [CONVERSATION]`
+- Semantic cache (Upstash Redis): hash pytania → cached odpowiedź; 30-70% hit rate
+- **Ścieżka upgradu:** pgvector extension w Supabase (zero dodatkowej infrastruktury) gdy hotel urośnie
+
+**Hosting — Railway (MVP) → Fly.io Warsaw (wzrost):**
+- **MVP: Railway** — najprostszy deployment Next.js, preview environments, instant rollback
+  - Koszt łączny: $40-60 (Railway) + $25 (Supabase Pro) + $10-20 (Upstash Redis) ≈ **$75-105/mies. total**
+- **Wzrost: Fly.io Warsaw (`waw`)** — jedyna platforma z DC w Polsce, RODO data residency
+- **Vercel: NIE** — long-lived SSE timeouty w serverless to bloker architektoniczny
+
+**CI/CD — GitHub Actions + Railway:**
+- GitHub Actions: lint + type-check + unit tests przy każdym PR
+- Railway: preview deployment per branch → staging (main) → production (manual promote)
+- Rollback: Railway instant rollback (jeden klik)
+
+**Monitoring — trzy narzędzia od dnia 1:**
+| Narzędzie | Koszt | Co monitoruje |
+|---|---|---|
+| **Sentry** | Free tier | Błędy JS, wyjątki server-side |
+| **PostHog EU Cloud** | Free (< 1M eventów/mies.) | Adoption rate QR, session depth — RODO compliant (EU hosting) |
+| **Better Stack** | $24/mies. | Uptime, log aggregation, alerty SLA 99.5% |
+
+**Bezpieczeństwo — potwierdzenia i uzupełnienia:**
+- UUID opaque token potwierdzony — natychmiastowa rewokacja to wymóg biznesowy
+- `__Host-session` cookie — eliminuje cookie injection i HTTP downgrade na hotelowym WiFi
+- Rate limiting: 5 prób/15min per IP, podwyższone do 100 dla NAT hotelowego (Upstash Redis middleware)
+- Anomaly detection po ASN (nie IP) — `COUNT(DISTINCT asn) > 2` w 30 min → alert; country jump → auto-revoke
+- QR koduje `room_id`, nie `reservation_id` — kontrola przez `room_active_reservation(valid_from, valid_until)`
+- Early check-out: jedna SQL transakcja unieważnia sesje i zamyka okno pokoju
+
+**Stack ostateczny:**
+```
+Frontend:  Next.js 15 App Router + TypeScript + Tailwind CSS + next-intl
+Auth:      Supabase Auth (Anonymous Sign-In + Custom Access Token Hook)
+Database:  Supabase Postgres + RLS (property_id + current_setting wzorzec)
+Realtime:  Custom SSE via Next.js Route Handler (runtime=nodejs) + LISTEN/NOTIFY
+Cache:     Upstash Redis (serverless) — semantic cache AI + rate limiting
+AI:        GPT-4o-mini + prompt injection (cała KB hotelu w kontekście)
+Vector DB: pgvector w Supabase (gotowe, nie aktywowane na MVP)
+Hosting:   Railway MVP → Fly.io waw (wzrost)
+CI/CD:     GitHub Actions + Railway preview deployments
+Monitoring: Sentry + PostHog EU Cloud + Better Stack
+```
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+- ✅ HITL #12: Prompt injection na MVP (nie RAG, nie zewnętrzny serwis). GPT-4o-mini 128K ctx wystarczy dla całej KB małego hotelu. pgvector w Supabase jako zero-cost ścieżka upgradu. Semantic cache (Upstash Redis). Uzasadnienie: RAG overkill gdy cała KB hotelu mieści się w kontekście — dodatkowa infrastruktura bez wartości na MVP.
+- ✅ HITL #13: Solo + Claude Code + Spec Driven Development. Ten research (Sesje 1-6) = specyfikacja techniczna. Implikacje: stack opinionated z minimalnymi opcjami; Railway > Fly.io na start; Supabase jako "one-stop backend" eliminuje zarządzanie wieloma serwisami solo.
 
-### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+### Otwarte pytania do Sesji 7
+- Metryki adopcji QR: jaki % gości skanuje QR w pierwszej dobie — leading indicator sukcesu MVP
+- PostHog events schema: jakie events trackować od dnia 1 (QR scan, order placed, concierge message, fallback triggered)
+- HITL #14: Jaki minimalny wynik uznasz za "MVP działa" i uzasadnia dalszą inwestycję?
+- HITL #15: Ile hoteli i ile tygodni to wystarczający test?
 
 ---
 
@@ -583,6 +662,7 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 | 2026-06-25 | Sesja 4 — AI Concierge | RAG z chunking per typ treści, GPT-4o-mini ($2,59/hotel/mies.), semantic cache, fallback pattern, tone of voice neutralny z opcją imienia — czeka na HITL #7, #8, #9 |
 | 2026-06-25 | Sesja 3 — Interfejs Gościa | Welcome screen z imieniem, 5 kategorii top-level, 3-4 tap flow zamówień (charge to room), sekcja "Polecamy" na home (3 kafelki), PWA z App Shell + SSE (no push na MVP), PL+EN z AI translate treści, stany brzegowe P0/P1/P2 |
 | 2026-06-25 | Sesja 5 — SaaS & Onboarding | Lighthouse Program (HITL #10), DPA obowiązkowe hotel=ADM platforma=procesor (HITL #11), model cenowy per-room €5–8 lub flat €99–179/mies. po lighthouse, zero setup fee, AI included (nie add-on), 48h time-to-value, template-first onboarding, offboarding: CSV export + 30-dniowa retencja po zakończeniu |
+| 2026-06-25 | Sesja 6 — Technologia | Stack: Next.js 15 App Router + Supabase + Railway + Upstash Redis + GPT-4o-mini prompt injection; HITL #12 (prompt injection nie RAG) + HITL #13 (solo + Claude Code + Spec Driven Dev); Vercel wyeliminowany (SSE bloker); pgvector jako ścieżka upgradu RAG |
 
 ---
 
