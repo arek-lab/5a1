@@ -54,11 +54,11 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 | 2 | Identity | Czas życia sesji gościa | ✅ zamknięta | Fixed expiry = checkout_datetime + 2h | 2026-06-25 |
 | 3 | Panel | Właściciel danych po stronie hotelu | ✅ zamknięta | Owner = billing = data owner (ADM). Osoba zakładająca konto = odpowiedzialna za DPA z platformą | 2026-06-25 |
 | 4 | Panel | Zakres panelu na MVP vs manual onboarding | ✅ zamknięta | Maksymalny self-service + wsparcie jako opcja płatna (dodatkowa monetyzacja) | 2026-06-25 |
-| 5 | Interfejs | Płatności: rachunek do pokoju vs bramka na MVP | ⬜ otwarta | — | — |
-| 6 | Interfejs | Granica upsell vs doświadczenie gościa | ⬜ otwarta | — | — |
-| 7 | AI | Concierge: tylko informuje czy wykonuje akcje? | ⬜ otwarta | — | — |
-| 8 | AI | Transparentność AI wobec gościa | ⬜ otwarta | — | — |
-| 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ⬜ otwarta | — | — |
+| 5 | Interfejs | Płatności: rachunek do pokoju vs bramka na MVP | ✅ zamknięta | Rachunek do pokoju — zero bramki płatniczej na MVP. Hotel rozlicza przy checkout lub przez własny POS. | 2026-06-25 |
+| 6 | Interfejs | Granica upsell vs doświadczenie gościa | ✅ zamknięta | Sekcja "Polecamy" (3 kafelki) na home screen, poniżej nawigacji (wymaga scrollu). Brak pop-upów i modali. AI concierge sugeruje przy okazji, nie inicjuje sprzedaży. | 2026-06-25 |
+| 7 | AI | Concierge: tylko informuje czy wykonuje akcje? | ✅ zamknięta | Tylko informuje i sugeruje — gość sam składa zamówienie w UI. Brak integracji akcji na MVP. | 2026-06-25 |
+| 8 | AI | Transparentność AI wobec gościa | ✅ zamknięta | Zawsze transparentny — wymóg EU AI Act. Hotel może dostosować imię bota, ale informacja o AI jest obowiązkowa. | 2026-06-25 |
+| 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ✅ zamknięta | Standard rynkowy: hotel odpowiada za treść bazy wiedzy; platforma odpowiada za uptime i delivery. Wyłączenie odpowiedzialności platformy za błędy wynikające z niepoprawnych danych hotelu — w umowie. | 2026-06-25 |
 | 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ⬜ otwarta | — | — |
 | 11 | SaaS | Administrator danych gości: platforma czy hotel? | ⬜ otwarta | — | — |
 | 12 | Tech | Build vs buy dla komponentów AI | ⬜ otwarta | — | — |
@@ -225,89 +225,176 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 ---
 
 ## Sesja 3 — Interfejs Gościa
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesja 2 zamknięta*
+*Status: ✅ zamknięta — 2026-06-25*
 
-### Subagenty do uruchomienia równolegle [SUBAGENT]
-
-```
-Uruchom równolegle jako subagenty w tle:
-
-Subagent 1: guest-app-ux-benchmarks
-Zbadaj UX aplikacji dla gości hotelowych — Duve, ALICE, Intelity, Canary, HiJiffy.
-Skup się na: pierwsze 10 sekund po wejściu przez QR, architektura informacji
-(jak kategoryzują usługi), wzorce zamawiania bez rejestracji, obsługa wielojęzyczności.
-Zapisz wynik do research/session_03/guest-app-ux-benchmarks.md
-
-Subagent 2: pwa-mobile-constraints
-Zbadaj ograniczenia i możliwości PWA na urządzeniach mobilnych w 2025-2026.
-Skup się na: wydajność na słabych urządzeniach, offline mode — co można cachować,
-instalacja na home screen — czy warto promować, iOS vs Android różnice dla PWA,
-Web Push Notifications — zgody i delivery rate.
-Zapisz wynik do research/session_03/pwa-mobile-constraints.md
-
-Subagent 3: upsell-ux-patterns
-Zbadaj wzorce UX upsellingu które nie psują doświadczenia użytkownika.
-Skup się na: różnica między helpful recommendation a agresywnym upsell,
-przykłady z branży hotelarskiej i lotniczej (co działa, co irytuje),
-timing rekomendacji (przy wejściu vs kontekstowo), A/B testy w tej dziedzinie.
-Zapisz wynik do research/session_03/upsell-ux-patterns.md
-
-Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
-```
+### Subagenty uruchomione [SUBAGENT]
+- `guest-app-ux-benchmarks.md` — UX benchmarks: Duve, ALICE, Intelity, Canary, HiJiffy ✅
+- `pwa-mobile-constraints.md` — PWA na mobile 2025-2026: wydajność, offline, iOS vs Android ✅
+- `upsell-ux-patterns.md` — Wzorce upsell UX: helpful vs agresywny, timing, contextual recs ✅
 
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Pierwsze 10 sekund — wzorzec (na podstawie benchmarków):**
+- Splash (logo hotelu, max 1,5 s) → Welcome screen ("Witaj, [Imię]!" + hero image) → 5–6 kafelków kategorii
+- Żaden formularz, żadna weryfikacja przed pierwszym ekranem
+- Imię gościa (z danych rezerwacji, HITL #1) w nagłówku przez cały pobyt
+
+**Architektura informacji — 5 kategorii top-level:**
+```
+🍽️ Restauracja & Bar     → menu + zamówienie do pokoju
+🛎️ Usługi pokojowe       → housekeeping, amenities, maintenance
+💆 Spa & Wellness         → zabiegi, basen, siłownia
+🚖 Transport              → transfer, wynajem, taxi
+ℹ️ Informacje              → FAQ, WiFi, check-out, godziny, okolica
+```
+- Sekcja "Polecamy" (3 kafelki pinowane przez hotel) poniżej nawigacji na home screen
+- Max 6 pozycji top-level — powyżej: cognitive overload
+- Ceny widoczne na karcie usługi (nie po kliknięciu)
+- Bezpłatne usługi: etykieta "Included" (nie "0 PLN") — lepsze postrzeganie wartości
+
+**Flow zamówienia (Duve-wzorzec, 3–4 tapy):**
+```
+Kategoria → Usługa (cena na karcie) → Modal potwierdzenia + opcjonalne uwagi → Ekran sukcesu
+```
+- Dane gościa (imię, pokój, daty) z tokenu — gość nic nie wpisuje
+- Pole uwag: opcjonalne, z placeholderem; nigdy wymagane
+- Wybór godziny: tylko dla usług time-sensitive (masaż, śniadanie), nie dla wszystkich
+- Płatność: "Charge to room" — jedyna opcja (HITL #5)
+- Ekran potwierdzenia: pełny (nie tylko toast) → sekcja "Moje zamówienia" ze statusem
+
+**Upsell — implementacja (HITL #6 — sekcja "Polecamy" na home):**
+- 3 kafelki max, poniżej nawigacji (wymaga scrollu) — nie blokuje głównego flow
+- Hotel pinuje usługi w panelu (nie algorytm)
+- Brak pop-upów i modali przy wejściu
+- AI concierge: sugeruje usługi przy okazji odpowiedzi na pytanie, nie inicjuje
+- Etykieta: "Polecane przez [Hotel Name]" — nie "PROMOCJA"
+- Frequency cap: jeśli gość nie kliknął w ciągu 24h → ukryj tę pozycję
+
+**Wielojęzyczność — architektura dwuwarstwowa:**
+- Warstwa 1 (UI strings): i18n JSON, platforma tłumaczy — MVP: PL + EN
+- Warstwa 2 (treści hotelowe): hotel wpisuje w PL, platforma auto-tłumaczy na EN (Claude/DeepL API)
+- Auto-detect z `Accept-Language` → fallback do EN
+- Przełącznik PL | EN w nagłówku (text, nie tylko flaga)
+- Preferencja języka: `localStorage` (nie cookie)
+
+**PWA — architektura dla "first-visit, no-install, flaky WiFi":**
+- App Shell Architecture: HTML/CSS/JS < 150 KB gzipped → pierwsze ładowanie < 3 s na 3G
+- Service Worker: Cache First (shell, obrazy, i18n) + Stale While Revalidate (menu, usługi)
+- NIE push notifications na MVP — zamiast: SSE (Server-Sent Events) dla statusu zamówień
+  - SSE działa bez instalacji, bez uprawnień, iOS + Android
+  - Fallback: polling co 10 s
+- Add to Home Screen: nie promować aktywnie (gość jednorazowy, < 5% instaluje)
+- iOS krytyczne: service workers tak (od iOS 11.3), push bez instalacji NIE, background sync NIE
+
+**Stany brzegowe — priorytety:**
+| Priorytet | Stan | Handling |
+|---|---|---|
+| 🔴 P0 | Wygasły/nieważny token | Branded strona (logo hotelu) + numer recepcji |
+| 🔴 P0 | Usługa niedostępna | Greyed tile + "Tymczasowo niedostępne" (nie ukrywać) |
+| 🟡 P1 | Brak internetu | Toast + cache działa (menu, FAQ), zamówienia wymagają sieci |
+| 🟡 P1 | Błąd serwera | Friendly error + numer recepcji |
+| 🟢 P2 | Zamówienie odrzucone | Status update w "Moje zamówienia" |
+
+**Komunikat powitalny 5A:**
+- Forma: wbudowany w welcome screen (nie oddzielny ekran) — imię + hero image + krótka informacja
+- Treść: "Witaj, [Imię]! Jesteś w [Hotel Name]. Jak możemy Ci dziś pomóc?"
+- Długość: max 2 zdania — reszta to nawigacja
+- Moment: natychmiastowy (po załadowaniu welcome screen, bez opóźnienia)
+
+**Anti-patterns (z benchmarków — czego NIE robić):**
+- Formularz przed treścią (ALICE mistake)
+- Koszyk (nadmiar złożoności dla MVP)
+- Ukrywanie niedostępnych usług (Canary) — lepiej greyed
+- Pop-up wyboru języka przed wyświetleniem aplikacji
+- Toast jako jedyny feedback po zamówieniu
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+- ✅ HITL #5: Rachunek do pokoju — zero bramki płatniczej na MVP. Potwierdzony przez benchmarki (Duve, Intelity, ALICE = standard rynkowy). Hotel rozlicza przez własny POS lub przy checkout. Konsekwencja: platforma nie obsługuje płatności, brak PCI DSS scope.
+- ✅ HITL #6: Sekcja "Polecamy" na home screen (3 kafelki, poniżej nawigacji). Filozofia: curated helpfulness (jak Duve/Oaky), nie aggressive push. Granica: zero pop-upów, AI nie inicjuje sprzedaży, hotel decyduje co wyświetla.
 
 ### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+- Sesja 4 (AI Concierge): format bazy wiedzy Q&A (ustalony w Sesji 2 jako lista Q&A w panelu) — jak AI concierge przetwarza przy architekturze SSE dla statusu zamówień?
+- Sesja 6 (Tech): Service Worker + SSE wymaga konkretnego stacku backendowego — Next.js z Supabase Realtime czy inne podejście?
+- Do potwierdzenia: czy DeepL API czy Claude do auto-translate treści hotelowych — koszt vs jakość dla PL→EN
 
 ---
 
 ## Sesja 4 — AI Concierge
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesja 2 zamknięta*
+*Status: 🔄 w toku — czeka na decyzje HITL #7, #8, #9*
 
-### Subagenty do uruchomienia równolegle [SUBAGENT]
-
-```
-Uruchom równolegle jako subagenty w tle:
-
-Subagent 1: rag-for-hospitality
-Zbadaj implementacje RAG (Retrieval Augmented Generation) w branży hotelarskiej.
-Skup się na: format danych wejściowych (co hotel musi przygotować i w jakiej formie),
-chunking strategia dla danych hotelowych (FAQ, menu, usługi, okolica),
-jak obsługiwać aktualizacje danych (hotel zmienia menu), latency wymagania
-dla chat UX (max akceptowalny czas odpowiedzi).
-Zapisz wynik do research/session_04/rag-hospitality-patterns.md
-
-Subagent 2: ai-concierge-market
-Zbadaj rynek AI concierge dla hoteli — HiJiffy, Quicktext, Asksuite, Aplysia.
-Skup się na: zakres funkcjonalności na MVP vs pełna wersja, jak rozwiązują
-fallback do ludzkiego agenta, języki i wielojęzyczność, modele cenowe,
-co hotele chwalą a co krytykują w recenzjach.
-Zapisz wynik do research/session_04/ai-concierge-market.md
-
-Subagent 3: llm-cost-estimation
-Oszacuj koszty operacyjne LLM dla AI concierge przy założeniu:
-100 hoteli × 50 aktywnych gości dziennie × średnio 5 wiadomości na sesję.
-Porównaj: GPT-4o-mini, Claude Haiku, Gemini Flash — koszt na 1000 wiadomości,
-koszt miesięczny dla powyższego scenariusza, wpływ RAG (dodatkowe tokeny kontekstu)
-na finalny koszt.
-Zapisz wynik do research/session_04/llm-cost-estimation.md
-
-Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
-```
+### Subagenty uruchomione [SUBAGENT]
+- `rag-hospitality-patterns.md` — RAG w hotelarstwie, chunking, latency, embeddings, caching ✅
+- `ai-concierge-market.md` — HiJiffy, Quicktext, Asksuite; fallback patterns, pricing, tone of voice ✅
+- `llm-cost-estimation.md` — GPT-4o-mini vs Haiku 4.5 vs Gemini, koszty z RAG, caching analysis ✅
 
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Format i struktura danych wejściowych od hotelu:**
+- Rekomendowany format: Markdown z YAML frontmatter (metadane: `category`, `valid_from`, `valid_until`, `property_id`, `language`)
+- Model dwudokumentowy (wzorzec HiJiffy Aplysia 3): Company Knowledge (globalne polityki platformy) + Property Knowledge (edytowane przez hotel)
+- Panel Q&A z Sesji 2 to właściwy kierunek — prościej niż konkurencja; hotel wypełnia szablony, platforma seeduje ze strony www hotelu
+- Dane dynamiczne (ceny, dostępność) → NIE w RAG — function calling do PMS API; na MVP bez PMS → fallback do recepcji
+
+**Chunking i retrieval:**
+
+| Typ treści | Strategia | Rozmiar (tokeny) |
+|---|---|---|
+| FAQ | Q&A pairs (każda para osobny chunk) | 50–150 |
+| Menu | Item-level z prefixem kategorii | 50–100 |
+| Pokoje | Attribute-structured (1 chunk / typ pokoju) | 100–200 |
+| Polityki | Recursive split | 400–512 (10–15% overlap) |
+| Okolica | Semantic chunking | 300–600 (50–80 overlap) |
+
+- Technika Contextual Retrieval (Anthropic 2024): +1–2 zdania kontekstu per chunk → recall +20–35%
+- Hybrid search (BM25 + dense embeddings) lepszy niż samo semantic search dla krótkich pytań hotelowych
+- Embedding MVP: `text-embedding-3-small` (OpenAI) — dobra jakość PL, $0.02/1M tokenów
+
+**Obsługa aktualizacji:**
+- Incremental update (nie full re-index): hash comparison → DELETE starych → UPSERT nowych chunków
+- Metadane `valid_from`/`valid_until` + filtrowanie przy retrieval (eliminuje nieaktualne treści sezonowe)
+- Cel: edycja Q&A przez managera hotelu w panelu = natychmiastowa propagacja bez re-indeksu
+
+**Zakres wiedzy concierge na MVP:**
+- Oferta hotelu (usługi, ceny) + godziny wszystkich punktów + FAQ + okolica
+- 70–85% zapytań gości to FAQ — najwyższy ROI
+- NIE obsługiwać przez AI: booking, zmiany rezerwacji, reklamacje → bezpośredni fallback do recepcji
+
+**Fallback do recepcji:**
+- Confidence threshold → jeśli poniżej progu: "To wykracza poza to, co mogę sprawdzić. Połączę Cię z recepcją — [przycisk] lub zadzwoń: +48 XXX"
+- 3 nieudane próby AI → automatyczna eskalacja (wzorzec HiJiffy)
+- Fallback musi zawierać konkretny kontakt — nie wolno zostawić gościa z ciszą
+- Skargi i pilne sytuacje → natychmiastowy routing, AI nie próbuje odpowiadać
+
+**Tone of voice:**
+- Rekomendacja MVP: neutralny, ciepły, pomocny — bez wymyślonej osobowości
+- Opcja nadania imienia bota w panelu (np. "Sofia", "Max") — ważne dla premium hoteli
+- Wielojęzyczność natywna w LLM (GPT-4o-mini, Claude Haiku) — baza wiedzy po polsku wystarczy, LLM tłumaczy
+
+**Logowanie konwersacji:**
+- Treść wiadomości powiązana z `session_id` (opaque UUID) — nie z danymi osobowymi gościa
+- Manager hotelu widzi: najczęstsze pytania, fallback rate, unanswered queries — nie treść per gość
+- Provider LLM = sub-procesor → DPA z OpenAI/Anthropic wymagane (potwierdzono w Sesji 1)
+
+**Rekomendacja modelu LLM:**
+- MVP: **GPT-4o-mini** — $258,75/mies. dla 100 hoteli z RAG; koszt AI per hotel: $2,59/mies. (<1% ceny SaaS)
+- Prompt caching: GPT-4o-mini (próg 1 024 tok.) → możliwy przy RAG; Haiku 4.5 (próg 4 096 tok.) → trudniejszy
+- Semantic caching (Redis): 30–70% zapytań hotelowych powtarzalnych → duże oszczędności latency i kosztu
+- Latency cel: <1,5 s end-to-end; streaming (SSE/WebSocket) poprawia perceived performance
+- Stack: Qdrant lub FAISS jako vector DB, `text-embedding-3-small` dla embeddings
+
+**Czego NIE ma na MVP (potwierdzone benchmarkami):**
+- Integracja PMS real-time (CSV wystarczy)
+- Booking w czacie / zmiany rezerwacji
+- Voice assistant, proactive messaging, sentiment analysis
+- Fine-tuning modelu
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+*— czekają na decyzję użytkownika — patrz HITL #7, #8, #9 poniżej*
 
 ### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+- Sesja 5 (SaaS): czy AI concierge wchodzi w pakiet podstawowy czy jako add-on? Wpływ na model cenowy.
+- Sesja 6 (Tech): wybór vector DB (Qdrant vs Pinecone vs FAISS), czy semantic cache (Redis) jest zależnością infrastrukturalną
+- Sesja 6 (Tech): potwierdzenie decyzji HITL #12 (build vs buy dla komponentów AI) — RAG własny vs zewnętrzny serwis
 
 ---
 
@@ -454,6 +541,9 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 |---|---|---|
 | 2026-06-25 | Sesja 1 — Identity | Model tokenu QR, RODO (token anonimowy + DPA + imię), czas sesji (fixed expiry = checkout+2h), model bez PMS |
 | 2026-06-25 | Sesja 2 — Panel | 6 modułów panelu MVP, 4 role RBAC, template-first onboarding, Owner=ADM=billing, self-service + wsparcie jako płatna opcja, dashboard 3 widoków (GM/F&B/Recepcja) |
+| 2026-06-25 | Sesja 3 — Interfejs Gościa | Flow 10 sekund: splash→welcome→5 kategorii, 3-tap order, "charge to room", SSE status zamówień, PWA App Shell <150 KB, fallback states P0/P1/P2 |
+| 2026-06-25 | Sesja 4 — AI Concierge | RAG z chunking per typ treści, GPT-4o-mini ($2,59/hotel/mies.), semantic cache, fallback pattern, tone of voice neutralny z opcją imienia — czeka na HITL #7, #8, #9 |
+| 2026-06-25 | Sesja 3 — Interfejs Gościa | Welcome screen z imieniem, 5 kategorii top-level, 3-4 tap flow zamówień (charge to room), sekcja "Polecamy" na home (3 kafelki), PWA z App Shell + SSE (no push na MVP), PL+EN z AI translate treści, stany brzegowe P0/P1/P2 |
 
 ---
 
