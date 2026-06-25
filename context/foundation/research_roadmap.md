@@ -191,8 +191,8 @@ Sesja 6 może zacząć się wcześniej w zakresie decyzji infrastrukturalnych ni
 |---|---|---|---|
 | 1 | Identity | Dane osobowe gościa: przechowywać czy token anonimowy? | ✅ zamknięta — token anonimowy + DPA + imię do UX |
 | 2 | Identity | Czas życia sesji gościa | ✅ zamknięta — fixed expiry = checkout + 2h |
-| 3 | Panel | Właściciel danych po stronie hotelu | ⬜ otwarta |
-| 4 | Panel | Zakres panelu na MVP vs manual onboarding | ⬜ otwarta |
+| 3 | Panel | Właściciel danych po stronie hotelu | ✅ zamknięta — Owner = billing = ADM, podpisuje DPA |
+| 4 | Panel | Zakres panelu na MVP vs manual onboarding | ✅ zamknięta — self-service + wsparcie jako płatna opcja |
 | 5 | Interfejs | Płatności: rachunek do pokoju vs bramka płatnicza na MVP | ⬜ otwarta |
 | 6 | Interfejs | Granica upsell vs doświadczenie gościa | ⬜ otwarta |
 | 7 | AI | Concierge informuje czy może wykonywać akcje? | ⬜ otwarta |

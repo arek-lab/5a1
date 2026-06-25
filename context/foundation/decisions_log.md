@@ -52,8 +52,8 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 |---|---|---|---|---|---|
 | 1 | Identity | Dane osobowe gościa: token anonimowy vs dane osobowe | ✅ zamknięta | Token anonimowy + DPA z każdym hotelem + imię gościa (tylko personalizacja UX) | 2026-06-25 |
 | 2 | Identity | Czas życia sesji gościa | ✅ zamknięta | Fixed expiry = checkout_datetime + 2h | 2026-06-25 |
-| 3 | Panel | Właściciel danych po stronie hotelu | ⬜ otwarta | — | — |
-| 4 | Panel | Zakres panelu na MVP vs manual onboarding | ⬜ otwarta | — | — |
+| 3 | Panel | Właściciel danych po stronie hotelu | ✅ zamknięta | Owner = billing = data owner (ADM). Osoba zakładająca konto = odpowiedzialna za DPA z platformą | 2026-06-25 |
+| 4 | Panel | Zakres panelu na MVP vs manual onboarding | ✅ zamknięta | Maksymalny self-service + wsparcie jako opcja płatna (dodatkowa monetyzacja) | 2026-06-25 |
 | 5 | Interfejs | Płatności: rachunek do pokoju vs bramka na MVP | ⬜ otwarta | — | — |
 | 6 | Interfejs | Granica upsell vs doświadczenie gościa | ⬜ otwarta | — | — |
 | 7 | AI | Concierge: tylko informuje czy wykonuje akcje? | ⬜ otwarta | — | — |
@@ -121,7 +121,7 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 ---
 
 ## Sesja 2 — Panel Hotelowy
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesja 1 zamknięta*
+*Status: ✅ zamknięta — 2026-06-25*
 
 ### Subagenty do uruchomienia równolegle [SUBAGENT]
 
@@ -154,13 +154,73 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 ```
 
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Minimalny zakres panelu — 6 modułów (wg benchmarków Duve, Oaky, Canary, ALICE):**
+1. **Profil hotelu** — nazwa, adres, godziny, logo (setup jednorazowy — może robić team platformy)
+2. **Zarządzanie usługami** — CRUD usług z gotowymi szablonami (hotel wybiera "Late Check-out" i wpisuje cenę)
+3. **Baza wiedzy AI concierge** — lista Q&A edytowana przez hotel; inicjalnie seedowana przez team platformy ze strony www hotelu
+4. **Zarządzanie QR** — generowanie QR recepcji (button), status aktywnych sesji, dezaktywacja QR pokoju
+5. **Zamówienia gości** — inbox zamówień z możliwością zmiany statusu; export CSV; powiadomienie email
+6. **Użytkownicy panelu** — 4 role: Owner, Admin, Staff, Viewer; invitation-based; dezaktywacja (nie usunięcie)
+
+**Role MVP (4 role, wg wzorców Stripe/Slack/Linear):**
+- **Owner** — billing + pełna administracja, wymuszone przeniesienie przed odejściem
+- **Admin** — user management + konfiguracja (bez billing)
+- **Staff** — operacje: zamówienia, QR, treść AI (recepcja, F&B)
+- **Viewer** — tylko raporty i dashboard (Revenue Manager, właściciel nieoperacyjny)
+
+**Zarządzanie cyklem użytkownika:**
+- Zaproszenie przez token email (ważny 72h), domyślna rola: Staff
+- Offboarding = dezaktywacja (nie usunięcie) — audit trail, RODO, rotacja 30-50%/rok
+- Zakaz usunięcia ostatniego Ownera bez transferu ownership
+
+**Panel konfiguracyjny vs operacyjny:**
+- Dwa odrębne "tryby" panelu: setup (jednorazowy, może robić team platformy) vs operacje (codzienne, robi recepcja)
+- Template-first eliminuje "syndrom pustego pola" — kluczowy wzorzec z Duve i Oaky
+
+**Model onboardingu (wg CMS benchmarks):**
+- Onboarding call 45 min (team platformy konfiguruje profil razem z hotelem)
+- Team platformy seeduje FAQ ze strony www hotelu
+- Team platformy generuje PDF z QR kodami dla pokoi
+- Hotel aktywuje 5–8 usług z biblioteki szablonów (wybiera + wpisuje cenę)
+- Cel: umowa → działający produkt w **3 dni robocze**
+- Ten model działa do ~30 hoteli; przy skalowaniu wymaga pełnego self-service
+
+**Dashboard analityczny MVP:**
+- 3 osobne widoki (GM / F&B / Recepcja) — różne role, radykalnie różne potrzeby
+- GM view (MUST): RevPAR + ADR + Occupancy (vs LY) + Booking pace na 7 dni
+- Recepcja view (MUST): lista arrivals/departures jako lista operacyjna (bez wykresów)
+- F&B view: tylko jeśli POS integracja — nie na MVP
+- Biała plama rynkowa: nikt (Duve, Canary, Oaky, ALICE) nie łączy RevPAR + F&B + operacje dla SMB (20-150 pokoi)
+- 67% niezależnych hoteli wciąż używa Excela — bar "wygodniejszy niż Excel" jest osiągalny
+
+**Zarządzanie QR (ustalenia z Sesji 1 + panel):**
+- QR recepcji: rotujący co 5 minut — hotel może wymusić ręczną rotację z panelu
+- QR pokoju: statyczny (jak karta hotelowa), generowany przez team platformy jako PDF do druku
+- Dezaktywacja QR: przycisk per pokój (przy early check-out lub zmianie pokoju)
+- Status: ile aktywnych sesji na bieżącym QR recepcji — widoczny w panelu
+
+**Import danych gości (MVP bez PMS):**
+- CSV import: `imię, email, nr pokoju, check_in, check_out` — hotel eksportuje z własnego PMS lub przygotowuje w Excelu
+- Platforma parsuje CSV → tworzy rekordy rezerwacji + generuje tokeny sesji
+- Webhook do PMS (Mews, apaleo): enhancement post-MVP dla hoteli z nowoczesnym PMS
+
+**Czego NIE ma na MVP (wg benchmarków):**
+- Automatyczne sekwencje wiadomości (drip campaigns) — Duve-style
+- Dynamiczne ceny i A/B testing ofert — Canary/Oaky-style
+- Mobile app dla personelu operacyjnego — ALICE-style
+- Multi-property management UI (ale `property_id` w schemacie bazy od początku)
+- Integracja PMS (CSV wystarczy)
+- Full P&L / GOPPAR (wymaga integracji z księgowością)
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+- ✅ HITL #3: Owner = billing = data owner — osoba zakładająca konto jest ADM (administratorem danych) i podpisuje DPA z platformą. Konsekwencja: przy offboardingu Ownera system wymusza transfer ownership przed dezaktywacją konta.
+- ✅ HITL #4: Maksymalny self-service + wsparcie jako opcja płatna — panel musi być na tyle prosty, że hotel konfiguruje sam. Wsparcie (onboarding call, seedowanie FAQ, generowanie QR PDF) dostępne jako płatna opcja, nie standard. Konsekwencja: UX panelu musi być bardzo dopracowany; template-first i guided wizard są obowiązkowe.
 
 ### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+- Sesja 3 (Interfejs Gościa): jak wygląda pierwsze 10 sekund po skanowaniu QR? Co gość widzi jako pierwsze w kontekście ustalonych modułów panelu?
+- Sesja 4 (AI Concierge): format bazy wiedzy Q&A ustalony (lista Q&A w panelu) — jak AI concierge ją przetwarza i jakie są limity granulacji?
+- Sesja 5 (SaaS): HITL #11 (ADM danych gości: platforma czy hotel?) jest już de facto zamknięte przez HITL #3 — hotel = ADM, platforma = procesor. Weryfikacja przy Sesji 5.
 
 ---
 
@@ -393,6 +453,7 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 | Data | Sesja | Co zostało zamknięte |
 |---|---|---|
 | 2026-06-25 | Sesja 1 — Identity | Model tokenu QR, RODO (token anonimowy + DPA + imię), czas sesji (fixed expiry = checkout+2h), model bez PMS |
+| 2026-06-25 | Sesja 2 — Panel | 6 modułów panelu MVP, 4 role RBAC, template-first onboarding, Owner=ADM=billing, self-service + wsparcie jako płatna opcja, dashboard 3 widoków (GM/F&B/Recepcja) |
 
 ---
 
