@@ -59,8 +59,8 @@ Kontynuuj główną sesję. Zsyntezuj wyniki gdy wszystkie skończą.
 | 7 | AI | Concierge: tylko informuje czy wykonuje akcje? | ✅ zamknięta | Tylko informuje i sugeruje — gość sam składa zamówienie w UI. Brak integracji akcji na MVP. | 2026-06-25 |
 | 8 | AI | Transparentność AI wobec gościa | ✅ zamknięta | Zawsze transparentny — wymóg EU AI Act. Hotel może dostosować imię bota, ale informacja o AI jest obowiązkowa. | 2026-06-25 |
 | 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ✅ zamknięta | Standard rynkowy: hotel odpowiada za treść bazy wiedzy; platforma odpowiada za uptime i delivery. Wyłączenie odpowiedzialności platformy za błędy wynikające z niepoprawnych danych hotelu — w umowie. | 2026-06-25 |
-| 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ⬜ otwarta | — | — |
-| 11 | SaaS | Administrator danych gości: platforma czy hotel? | ⬜ otwarta | — | — |
+| 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ✅ zamknięta | Lighthouse Program — 3–5 hoteli gratis przez 3–6 mies. w zamian za case study, referencje i prawo do wywiadu. Standard rynkowy (Duve, Oaky, Canary). Po fazie lighthouse: flat fee €99–179/mies. lub per-room €5–8/mies. z min. €150 | 2026-06-25 |
+| 11 | SaaS | Administrator danych gości: platforma czy hotel? | ✅ zamknięta | Hotel = ADM, platforma = procesor. Potwierdzone przez RODO research + HITL #3. DPA z każdym hotelem obowiązkowe przed pierwszym wdrożeniem. UUID nie zwalnia z DPA — hotel łączy token z rezerwacją po swojej stronie. | 2026-06-25 |
 | 12 | Tech | Build vs buy dla komponentów AI | ⬜ otwarta | — | — |
 | 13 | Tech | Zespół: zewnętrzny vs własny | ⬜ otwarta | — | — |
 | 14 | Metryki | Definicja sukcesu MVP przed testami | ⬜ otwarta | — | — |
@@ -401,48 +401,84 @@ Kategoria → Usługa (cena na karcie) → Modal potwierdzenia + opcjonalne uwag
 ---
 
 ## Sesja 5 — Model SaaS i Onboarding
-*Status: ⬜ nie rozpoczęta · Wymaga: Sesja 1 zamknięta*
+*Status: ✅ zamknięta — 2026-06-25*
 
-### Subagenty do uruchomienia równolegle [SUBAGENT]
-
-```
-Uruchom równolegle jako subagenty w tle:
-
-Subagent 1: saas-pricing-hospitality
-Zbadaj modele cenowe SaaS dla branży hotelarskiej (nie tylko guest apps —
-szerzej: PMS, channel managers, CRM hotelowy). Skup się na: flat fee vs per-room
-vs per-guest vs revenue share — co hotele preferują i dlaczego, typowe widełki
-cenowe dla małych hoteli (20-50 pokoi) vs średnich (50-150), jak wyceniać
-dodatkowe moduły (AI concierge jako add-on?).
-Zapisz wynik do research/session_05/saas-pricing-hospitality.md
-
-Subagent 2: rodo-data-processing-agreement
-Zbadaj wymagania prawne dla umów powierzenia przetwarzania danych (DPA)
-między platformą SaaS a hotelem jako administratorem danych w kontekście
-danych gości hotelowych w Polsce/UE. Skup się na: kto jest administratorem
-a kto procesorem, obowiązkowe klauzule DPA, odpowiedzialność za naruszenia,
-czy anonimowy token sesji zwalnia z obowiązku DPA.
-Zapisz wynik do research/session_05/rodo-dpa-requirements.md
-
-Subagent 3: hotel-saas-onboarding-patterns
-Zbadaj jak inne SaaS dla hoteli przeprowadzają onboarding operatora.
-Skup się na: czas od podpisania umowy do działającego produktu u klienta,
-co można zautomatyzować vs co wymaga wsparcia człowieka, typowe przeszkody
-w onboardingu hoteli (brak zasobów IT, rotacja personelu), czy white-glove
-onboarding jest konieczny na MVP.
-Zapisz wynik do research/session_05/hotel-saas-onboarding-patterns.md
-
-Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
-```
+### Subagenty uruchomione [SUBAGENT]
+- `saas-pricing-hospitality.md` — modele cenowe SaaS hospitality, benchmarki, AI add-on vs included ✅
+- `rodo-dpa-requirements.md` — wymagania DPA Art. 28, EDPB Opinion 22/2024, CJEU IX 2025, Anthropic DPA ✅
+- `hotel-saas-onboarding-patterns.md` — onboarding Duve/Canary/Oaky, time-to-value, offboarding ✅
 
 ### Ustalenia z sesji
-*— do uzupełnienia po sesji —*
+
+**Model cenowy i faza Lighthouse:**
+- HITL #10 (Lighthouse Program): 3–5 hoteli gratis przez 3–6 miesięcy → case study + referencje + prawo do wywiadu
+- Po fazie lighthouse: per-room €5–8/mies. z minimum €150/mies. + 15–20% dyskonto roczne
+- Alternatywnie: flat fee property-based €99–179/mies. (łatwiejsze do sprzedania małym hotelom)
+- Zero setup fee; opcjonalne white-glove onboarding €199 (waiver przy rocznej umowie)
+- AI concierge: included we wszystkich planach (nie add-on) — trend rynkowy 2024–2025 (HiJiffy Aplysia 3, Duve)
+- Permanent freemium NIE jest standardem w hospitality SaaS (koszt onboardingu zbyt wysoki)
+
+**Stack cenowy dla SMB (20–150 pokoi) — kontekst konkurencji:**
+- Hotel 30 pokoi: €420–900/mies. na cały stack (PMS + channel manager + guest app)
+- Nasza platforma: €99–179/mies. → "no-brainer addition" do istniejącego stacku
+- apaleo: €8/pokój/mies. (€240 dla 30 pokoi); Duve: $120–200/mies. min.; HiJiffy: ~€4/pokój/mies.
+
+**SLA standards:**
+- MVP: 99.5% uptime (standard dla early-stage SaaS)
+- Growth: 99.9% uptime (standard mid/enterprise)
+- 4h resolution dla critical issues; daily backup obowiązkowe
+- Support tier MVP: email w 24h; Pro: email + chat w 4h
+
+**Onboarding hotelu — zaktualizowane ustalenia:**
+- Korekta z Sesji 2: cel to **48h do first value** (nie 3 dni robocze)
+- Model: auto-setup + 1x kickoff call 30 min (nie white-glove, nie blank canvas)
+- Bottlenecki: brak treści (hotel musi za dużo stworzyć), rotacja personelu, brak IT
+- Template-first + guided in-app wizard = kluczowe; nie zewnętrzna dokumentacja
+- Definition of Done (4 warstwy): Tech (QR aktywne, import CSV) + Communication (szablon welcome wysłany) + Product (≥3 usługi aktywne, AI seeded) + Ops (≥1 staff przeszkolony)
+- Najwyższy churn: pierwsze 90 dni + zmiana GM → CS musi zareagować w 48h
+- CS structure dla 30–80 hoteli: 1–2 CSM po 40–60 hoteli
+
+**Offboarding — standard rynkowy:**
+- Export danych: CSV na żądanie hotelu (zamówienia, baza wiedzy AI) — standard od dnia 1
+- Retencja po zakończeniu: 30 dni (hotel może pobrać dane), potem usunięcie
+- Gość: token sesji wygasa automatycznie (checkout + 2h) — brak danych do usunięcia po stronie gościa
+- Logi serwera: usunięcie po 30 dniach (standard); zamówienia: 5 lat (obowiązek podatkowy)
+
+**RODO / DPA — kluczowe ustalenia:**
+- HITL #11 potwierdzone: hotel = ADM, platforma = procesor → DPA z każdym hotelem przed wdrożeniem
+- Opaque UUID nie zwalnia z DPA (hotel łączy token z rezerwacją po swojej stronie)
+- Imię + token + pokój = dane osobowe w kontekście hotelowym (TSUE C-434/16)
+- EDPB Opinion 22/2024: platforma musi proaktywnie informować hotel o sub-procesorach (nie tylko na żądanie)
+- CJEU wrzesień 2025: UUID może być nieosobowe dla sub-procesora LLM jeśli brak klucza mapowania i brak PII w prompcie → decyzja architektoniczna do udokumentowania
+- Anthropic DPA: dostępne online (privacy.claude.com), 15-dniowy notice o sub-procesorach
+- Breach notification chain: platforma → hotel max 24h; hotel → UODO max 72h (Art. 33)
+- Brak DPA = sankcja Art. 83 ust. 4: do €10M lub 2% globalnego obrotu
+
+**Obowiązkowe klauzule DPA hotel-platforma (Art. 28 RODO):**
+1. Opis przedmiotu i celu przetwarzania (dane rezerwacji, sesje gości, zamówienia)
+2. Zakaz przetwarzania w innych celach (krytyczne przy AI)
+3. Lista sub-procesorów (Anthropic, hosting provider) + 15-dniowy notice przy zmianach
+4. Techniczne i organizacyjne środki bezpieczeństwa
+5. Mechanizm breach notification (24h platforma → hotel)
+6. Retencja per kategorię danych
+7. Prawo hotelu do audytu
+8. Usunięcie danych po zakończeniu umowy (30 dni na export, potem delete)
+
+**Czego NIE ma na MVP:**
+- Per-user pricing (zbyt skomplikowane dla małych hoteli)
+- Revenue share (wymaga integracji z POS/PMS — poza scope MVP)
+- Multi-property discount UI (ale `property_id` w schemacie od początku)
+- Integracja płatności / PCI DSS (charge to room, HITL #5)
 
 ### Zamknięte decyzje HITL
-*— do uzupełnienia po sesji —*
+- ✅ HITL #10: Lighthouse Program — 3–5 hoteli gratis 3–6 mies. za case study + referencje. Decyzja oparta na standardzie rynkowym (Duve, Oaky, Canary). Konsekwencja: nie walidujemy WTP w fazie pilotowej — weryfikacja po przejściu na model płatny.
+- ✅ HITL #11: Hotel = ADM, platforma = procesor. Potwierdzone przez RODO research (Art. 28, EDPB) + de facto przez HITL #3. DPA obowiązkowe z każdym hotelem przed pierwszym wdrożeniem — bez wyjątków.
 
-### Otwarte pytania do następnej sesji
-*— do uzupełnienia po sesji —*
+### Otwarte pytania do Sesji 6
+- HITL #12 (build vs buy dla AI): RAG własny (Qdrant + embeddings) czy zewnętrzny serwis? → Sesja 6
+- HITL #13 (zewnętrzny vs własny zespół): determinuje poziom szczegółowości specyfikacji → Sesja 6
+- Infrastruktura dla SLA 99.5%: monitoring, alerting, automaty retencji (cron jobs) → Sesja 6
+- Czy white-glove onboarding (€199) realizuje team wewnętrzny czy partner zewnętrzny? → decyzja operacyjna
 
 ---
 
@@ -546,6 +582,7 @@ Kontynuuj sesję. Zsyntezuj wyniki gdy wszystkie subagenty skończą.
 | 2026-06-25 | Sesja 3 — Interfejs Gościa | Flow 10 sekund: splash→welcome→5 kategorii, 3-tap order, "charge to room", SSE status zamówień, PWA App Shell <150 KB, fallback states P0/P1/P2 |
 | 2026-06-25 | Sesja 4 — AI Concierge | RAG z chunking per typ treści, GPT-4o-mini ($2,59/hotel/mies.), semantic cache, fallback pattern, tone of voice neutralny z opcją imienia — czeka na HITL #7, #8, #9 |
 | 2026-06-25 | Sesja 3 — Interfejs Gościa | Welcome screen z imieniem, 5 kategorii top-level, 3-4 tap flow zamówień (charge to room), sekcja "Polecamy" na home (3 kafelki), PWA z App Shell + SSE (no push na MVP), PL+EN z AI translate treści, stany brzegowe P0/P1/P2 |
+| 2026-06-25 | Sesja 5 — SaaS & Onboarding | Lighthouse Program (HITL #10), DPA obowiązkowe hotel=ADM platforma=procesor (HITL #11), model cenowy per-room €5–8 lub flat €99–179/mies. po lighthouse, zero setup fee, AI included (nie add-on), 48h time-to-value, template-first onboarding, offboarding: CSV export + 30-dniowa retencja po zakończeniu |
 
 ---
 

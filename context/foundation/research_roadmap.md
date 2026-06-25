@@ -198,8 +198,8 @@ Sesja 6 może zacząć się wcześniej w zakresie decyzji infrastrukturalnych ni
 | 7 | AI | Concierge informuje czy może wykonywać akcje? | ⬜ otwarta |
 | 8 | AI | Transparentność AI wobec gościa | ⬜ otwarta |
 | 9 | AI | Odpowiedzialność za jakość odpowiedzi concierge | ⬜ otwarta |
-| 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ⬜ otwarta |
-| 11 | SaaS | Administrator danych gości: platforma czy hotel? | ⬜ otwarta |
+| 10 | SaaS | Model cenowy MVP: płatny czy free dla pierwszych hoteli? | ✅ zamknięta — Lighthouse Program (3–5 hoteli gratis 3–6 mies. za case study + referencje) |
+| 11 | SaaS | Administrator danych gości: platforma czy hotel? | ✅ zamknięta — hotel = ADM, platforma = procesor; DPA obowiązkowe z każdym hotelem |
 | 12 | Tech | Build vs buy dla komponentów AI | ⬜ otwarta |
 | 13 | Tech | Zespół: zewnętrzny vs własny | ⬜ otwarta |
 | 14 | Metryki | Definicja sukcesu MVP przed testami | ⬜ otwarta |
