@@ -731,6 +731,25 @@ Kryterium kill (co oznacza "nie iść dalej"):
 
 ---
 
+## Decyzje tech stack
+*Faza syntezy — Etap 1 (HITL-T). Potwierdzone przez użytkownika 2026-06-25. Ratyfikują ustalenia Sesji 6 (HITL #12, #13).*
+
+| # | Decyzja | Wybór | Status | Data |
+|---|---|---|---|---|
+| T1 | Frontend framework | Next.js 15 App Router + TypeScript + Tailwind CSS + next-intl (PL/EN) | ✅ zamknięta | 2026-06-25 |
+| T2 | Backend i baza danych | Supabase (Postgres + Auth + Storage) + RLS multi-tenant (`property_id` + `current_setting`) | ✅ zamknięta | 2026-06-25 |
+| T3 | Warstwa AI/RAG | GPT-4o-mini + prompt injection (cała KB hotelu w kontekście); Upstash Redis semantic cache; pgvector jako ścieżka upgradu | ✅ zamknięta | 2026-06-25 |
+| T4 | Hosting i DevOps | Railway (MVP) → Fly.io Warsaw (`waw`, wzrost); custom SSE (Route Handler nodejs + LISTEN/NOTIFY); Vercel wykluczony | ✅ zamknięta | 2026-06-25 |
+| T5 | Zespół deweloperski | Solo + Claude Code + Spec Driven Development (research Sesje 1-7 = specyfikacja) | ✅ zamknięta | 2026-06-25 |
+
+**Konsekwencje:**
+- T5 → roadmapa musi być maksymalnie szczegółowa i opinionated; stack uproszczony, minimalne opcje
+- T4 → architektura zakłada serwer persystentny (SSE long-lived); brak serverless timeoutów
+- T3 → brak osobnej infrastruktury vector DB na MVP; AI ~$2,59/hotel/mies
+- T2 → wszystkie tabele tenantowe z RLS po `property_id` + obowiązkowy indeks
+
+---
+
 ## Changelog
 
 | Data | Sesja | Co zostało zamknięte |
