@@ -4,6 +4,7 @@ title: Project bootstrap — Next.js 15, CI/CD, Railway preview
 status: implementing
 created: 2026-06-25
 updated: 2026-06-25
+
 archived_at: null
 ---
 

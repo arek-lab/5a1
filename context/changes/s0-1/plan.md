@@ -390,24 +390,24 @@ No existing data or code to migrate. This is a greenfield initialization.
 
 #### Automated
 
-- [x] 1.1 `npm run build` exits 0
-- [x] 1.2 `npm run lint` exits 0
-- [x] 1.3 `npx tsc --noEmit` exits 0
-- [x] 1.4 Route group files exist: `app/(guest)/page.tsx`, `app/(hotel)/dashboard/page.tsx`, `app/api/health/route.ts`, `proxy.ts` (Next.js 16: renamed from `middleware.ts`), `i18n/routing.ts`, `.env.example`
+- [x] 1.1 `npm run build` exits 0 — 07d8452
+- [x] 1.2 `npm run lint` exits 0 — 07d8452
+- [x] 1.3 `npx tsc --noEmit` exits 0 — 07d8452
+- [x] 1.4 Route group files exist: `app/(guest)/page.tsx`, `app/(hotel)/dashboard/page.tsx`, `app/api/health/route.ts`, `proxy.ts` (Next.js 16: renamed from `middleware.ts`), `i18n/routing.ts`, `.env.example` — 07d8452
 
 #### Manual
 
-- [x] 1.5 `npm run dev` → `localhost:3000` renders Guest Home placeholder, zero console errors
-- [x] 1.6 `localhost:3000/dashboard` renders Hotel Dashboard placeholder
-- [x] 1.7 `localhost:3000/api/health` returns 200 `ok`
+- [x] 1.5 `npm run dev` → `localhost:3000` renders Guest Home placeholder, zero console errors — 07d8452
+- [x] 1.6 `localhost:3000/dashboard` renders Hotel Dashboard placeholder — 07d8452
+- [x] 1.7 `localhost:3000/api/health` returns 200 `ok` — 07d8452
 
 ### Phase 2: CI/CD Pipeline
 
 #### Automated
 
-- [ ] 2.1 `git branch --show-current` outputs `main`
-- [ ] 2.2 `.github/workflows/ci.yml` exists and is valid YAML
-- [ ] 2.3 `railway.toml` exists with `healthcheckPath = "/api/health"`
+- [x] 2.1 `git branch --show-current` outputs `main`
+- [x] 2.2 `.github/workflows/ci.yml` exists and is valid YAML
+- [x] 2.3 `railway.toml` exists with `healthcheckPath = "/api/health"`
 - [ ] 2.4 Test PR opened against `main` → GitHub Actions `Lint` and `Type check` both pass
 
 #### Manual
