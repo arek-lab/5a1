@@ -451,9 +451,9 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Automated
 
-- [x] 1.1 `npx supabase db push` exits 0 for migration 004
-- [x] 1.2 `\df public.custom_access_token_hook` returns one row in psql
-- [x] 1.3 `\di sessions_auth_user_id_idx` returns one row in psql
+- [x] 1.1 `npx supabase db push` exits 0 for migration 004 — f0454a7
+- [x] 1.2 `\df public.custom_access_token_hook` returns one row in psql — f0454a7
+- [x] 1.3 `\di sessions_auth_user_id_idx` returns one row in psql — f0454a7
 
 #### Manual
 
@@ -465,14 +465,14 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Automated
 
-- [ ] 2.1 `npm run typecheck` passes with no errors
-- [ ] 2.2 `npm run lint` passes on all new files
-- [ ] 2.3 `npm run build` exits 0
+- [x] 2.1 `npm run typecheck` passes with no errors
+- [x] 2.2 `npm run lint` passes on all new files
+- [x] 2.3 `npm run build` exits 0
 
 #### Manual
 
-- [ ] 2.4 `npm run dev` — no console errors about cookie handling on any page
-- [ ] 2.5 Middleware matcher verified via request logs (static assets excluded)
+- [x] 2.4 `npm run dev` — no console errors about cookie handling on any page
+- [x] 2.5 Middleware matcher verified via request logs (static assets excluded)
 
 ### Phase 3: Monitoring Init
 

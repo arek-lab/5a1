@@ -1,16 +1,26 @@
 import { createServerClient as _createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import type { Database } from './database.types'
 
-// Stub — S0.3 replaces the cookie handlers with next/headers read/write callbacks
-// and wires this into middleware for set_tenant_context injection.
-export function createServerClient() {
+export async function createServerClient() {
+  const cookieStore = await cookies()
   return _createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        getAll: () => [],
-        setAll: () => {},
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // Server Components cannot set cookies; middleware handles the refresh.
+          }
+        },
       },
     }
   )
