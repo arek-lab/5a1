@@ -492,11 +492,11 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Automated
 
-- [x] 4.1 `psql $DATABASE_URL -f supabase/tests/dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED`
-- [x] 4.2 `npm run typecheck && npm run lint && npm run build` all pass
+- [x] 4.1 `psql $DATABASE_URL -f supabase/tests/dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED` — f28be55
+- [x] 4.2 `npm run typecheck && npm run lint && npm run build` all pass — f28be55
 
 #### Manual
 
-- [x] 4.3 `supabase.auth.signInAnonymously()` succeeds in browser / Dashboard console
-- [x] 4.4 `refreshSession()` returns JWT with `app_metadata.auth_level === 0` (no sessions row — expected)
-- [x] 4.5 Sentry catch-all confirmed: error appears in Sentry Issues
+- [x] 4.3 `supabase.auth.signInAnonymously()` succeeds in browser / Dashboard console — f28be55
+- [x] 4.4 `refreshSession()` returns JWT with `app_metadata.auth_level === 0` (no sessions row — expected) — f28be55
+- [x] 4.5 Sentry catch-all confirmed: error appears in Sentry Issues — f28be55
