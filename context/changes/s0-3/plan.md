@@ -457,9 +457,9 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Manual
 
-- [ ] 1.4 Anonymous Sign-In enabled in Supabase Dashboard
-- [ ] 1.5 `custom_access_token_hook` registered in Authentication → Hooks
-- [ ] 1.6 Hook smoke: `dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED`
+- [x] 1.4 Anonymous Sign-In enabled in Supabase Dashboard
+- [x] 1.5 `custom_access_token_hook` registered in Authentication → Hooks
+- [x] 1.6 Hook smoke: `dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED`
 
 ### Phase 2: Middleware + Server Client + Tenant Helper
 
@@ -478,25 +478,25 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Automated
 
-- [x] 3.1 `npm run build` exits 0 with Sentry wrapper applied
-- [x] 3.2 `npm run typecheck` passes after adding posthog packages
-- [x] 3.3 `npm run lint` passes on all new/modified files
+- [x] 3.1 `npm run build` exits 0 with Sentry wrapper applied — af33cae
+- [x] 3.2 `npm run typecheck` passes after adding posthog packages — af33cae
+- [x] 3.3 `npm run lint` passes on all new/modified files — af33cae
 
 #### Manual
 
-- [ ] 3.4 Test error thrown → appears in Sentry Issues
-- [ ] 3.5 PostHog Live Events shows init ping
-- [ ] 3.6 `.env.example` diff reviewed — no real secrets
+- [x] 3.4 Test error thrown → appears in Sentry Issues — af33cae
+- [x] 3.5 PostHog Live Events shows init ping — af33cae
+- [x] 3.6 `.env.example` diff reviewed — no real secrets — af33cae
 
 ### Phase 4: DoD Verification
 
 #### Automated
 
-- [ ] 4.1 `psql $DATABASE_URL -f supabase/tests/dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED`
-- [ ] 4.2 `npm run typecheck && npm run lint && npm run build` all pass
+- [x] 4.1 `psql $DATABASE_URL -f supabase/tests/dod_s0_3_jwt_claims.sql` prints `DOD S0.3 PASSED`
+- [x] 4.2 `npm run typecheck && npm run lint && npm run build` all pass
 
 #### Manual
 
-- [ ] 4.3 `supabase.auth.signInAnonymously()` succeeds in browser / Dashboard console
-- [ ] 4.4 `refreshSession()` returns JWT with `app_metadata.auth_level === 0` (no sessions row — expected)
-- [ ] 4.5 Sentry catch-all confirmed: error appears in Sentry Issues
+- [x] 4.3 `supabase.auth.signInAnonymously()` succeeds in browser / Dashboard console
+- [x] 4.4 `refreshSession()` returns JWT with `app_metadata.auth_level === 0` (no sessions row — expected)
+- [x] 4.5 Sentry catch-all confirmed: error appears in Sentry Issues
