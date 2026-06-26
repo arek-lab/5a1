@@ -233,12 +233,12 @@ Note on `init_token` for room QR: the DB default (`gen_random_uuid()`) applies. 
 
 #### Automated
 
-- [x] 3.1 `npm run test` — all tests pass (≥9 test cases)
-- [x] 3.2 `npm run typecheck` passes
-- [x] 3.3 `npm run lint` passes
+- [x] 3.1 `npm run test` — all tests pass (≥9 test cases) — c31b180
+- [x] 3.2 `npm run typecheck` passes — c31b180
+- [x] 3.3 `npm run lint` passes — c31b180
 
 #### Manual
 
-- [x] 3.4 Reception QR record has correct fields; previously active records have `is_active=false` with `init_token` intact
-- [x] 3.5 Room QR record has `is_active=true`, `expires_at=null`, `room_id` populated
-- [x] 3.6 DPA gate throws `DpaNotSignedError` when `dpa_signed_at IS NULL`
+- [x] 3.4 Reception QR record has correct fields; previously active records have `is_active=false` with `init_token` intact — c31b180
+- [x] 3.5 Room QR record has `is_active=true`, `expires_at=null`, `room_id` populated — c31b180
+- [x] 3.6 DPA gate throws `DpaNotSignedError` when `dpa_signed_at IS NULL` — c31b180

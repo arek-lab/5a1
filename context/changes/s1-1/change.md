@@ -1,7 +1,7 @@
 ---
 change_id: s1-1
 title: QR code generation — reception rotating token + room static token
-status: implementing
+status: implemented
 created: 2026-06-26
 updated: 2026-06-26
 archived_at: null
