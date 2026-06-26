@@ -442,24 +442,24 @@ psql "postgresql://postgres.<password>@db.<project-ref>.supabase.co:5432/postgre
 
 #### Automated
 
-- [x] 2.1 `npx supabase db lint` exits 0
+- [x] 2.1 `npx supabase db lint` exits 0 — f3f0606
 
 #### Manual
 
-- [x] 2.2 Migration file reviewed: all 12 tables, correct FKs, `dpa_signed_at` on properties, `embedding vector(1536)` on knowledge_chunks, all indexes present
+- [x] 2.2 Migration file reviewed: all 12 tables, correct FKs, `dpa_signed_at` on properties, `embedding vector(1536)` on knowledge_chunks, all indexes present — f3f0606
 
 ### Phase 3: Migration 002 — RLS Policies + `set_tenant_context` Function
 
 #### Automated
 
-- [ ] 3.1 `npx supabase db push` exits 0 (both migrations applied)
-- [ ] 3.2 `npm run typecheck` exits 0
+- [x] 3.1 `npx supabase db push` exits 0 (both migrations applied)
+- [x] 3.2 `npm run typecheck` exits 0
 
 #### Manual
 
-- [ ] 3.3 Supabase dashboard: RLS active (🔒) on all 9 tenant tables
-- [ ] 3.4 SQL editor: `pg_policies` returns guest + staff rows for `services`
-- [ ] 3.5 SQL editor: `set_tenant_context` appears in `information_schema.routines`
+- [x] 3.3 Supabase dashboard: RLS active (🔒) on all 9 tenant tables
+- [x] 3.4 SQL editor: `pg_policies` returns guest + staff rows for `services`
+- [x] 3.5 SQL editor: `set_tenant_context` appears in `information_schema.routines`
 
 ### Phase 4: Apply Migrations + TypeScript Types + IT-3 Verification
 
