@@ -465,22 +465,22 @@ Migration 004 is additive (new index + new function). No data changes. Safe to a
 
 #### Automated
 
-- [x] 2.1 `npm run typecheck` passes with no errors
-- [x] 2.2 `npm run lint` passes on all new files
-- [x] 2.3 `npm run build` exits 0
+- [x] 2.1 `npm run typecheck` passes with no errors — 48f30b9
+- [x] 2.2 `npm run lint` passes on all new files — 48f30b9
+- [x] 2.3 `npm run build` exits 0 — 48f30b9
 
 #### Manual
 
-- [x] 2.4 `npm run dev` — no console errors about cookie handling on any page
-- [x] 2.5 Middleware matcher verified via request logs (static assets excluded)
+- [x] 2.4 `npm run dev` — no console errors about cookie handling on any page — 48f30b9
+- [x] 2.5 Middleware matcher verified via request logs (static assets excluded) — 48f30b9
 
 ### Phase 3: Monitoring Init
 
 #### Automated
 
-- [ ] 3.1 `npm run build` exits 0 with Sentry wrapper applied
-- [ ] 3.2 `npm run typecheck` passes after adding posthog packages
-- [ ] 3.3 `npm run lint` passes on all new/modified files
+- [x] 3.1 `npm run build` exits 0 with Sentry wrapper applied
+- [x] 3.2 `npm run typecheck` passes after adding posthog packages
+- [x] 3.3 `npm run lint` passes on all new/modified files
 
 #### Manual
 
