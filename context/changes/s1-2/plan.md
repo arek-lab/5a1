@@ -364,16 +364,16 @@ After applying the migration, **regenerate database types**: `npx supabase gen t
 
 #### Automated
 
-- [x] 2.1 `npm run typecheck` passes on lib/scan/ files
-- [x] 2.2 `npm run lint` passes on lib/scan/ files
+- [x] 2.1 `npm run typecheck` passes on lib/scan/ files — 27cbd9e
+- [x] 2.2 `npm run lint` passes on lib/scan/ files — 27cbd9e
 
 ### Phase 3: Route Handlers
 
 #### Automated
 
-- [ ] 3.1 `npm run typecheck` passes on new route handler files
-- [ ] 3.2 `npm run lint` passes on new route handler files
-- [ ] 3.3 `npm run build` exits 0
+- [x] 3.1 `npm run typecheck` passes on new route handler files
+- [x] 3.2 `npm run lint` passes on new route handler files
+- [x] 3.3 `npm run build` exits 0
 
 #### Manual
 
