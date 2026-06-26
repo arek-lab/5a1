@@ -452,24 +452,24 @@ psql "postgresql://postgres.<password>@db.<project-ref>.supabase.co:5432/postgre
 
 #### Automated
 
-- [x] 3.1 `npx supabase db push` exits 0 (both migrations applied)
-- [x] 3.2 `npm run typecheck` exits 0
+- [x] 3.1 `npx supabase db push` exits 0 (both migrations applied) — 27fd4df
+- [x] 3.2 `npm run typecheck` exits 0 — 27fd4df
 
 #### Manual
 
-- [x] 3.3 Supabase dashboard: RLS active (🔒) on all 9 tenant tables
-- [x] 3.4 SQL editor: `pg_policies` returns guest + staff rows for `services`
-- [x] 3.5 SQL editor: `set_tenant_context` appears in `information_schema.routines`
+- [x] 3.3 Supabase dashboard: RLS active (🔒) on all 9 tenant tables — 27fd4df
+- [x] 3.4 SQL editor: `pg_policies` returns guest + staff rows for `services` — 27fd4df
+- [x] 3.5 SQL editor: `set_tenant_context` appears in `information_schema.routines` — 27fd4df
 
 ### Phase 4: Apply Migrations + TypeScript Types + IT-3 Verification
 
 #### Automated
 
-- [ ] 4.1 `npx supabase db push` idempotent (second run: "No changes found")
-- [ ] 4.2 `lib/supabase/database.types.ts` exists and is non-empty
-- [ ] 4.3 `npm run typecheck` exits 0
+- [x] 4.1 `npx supabase db push` idempotent (second run: "No changes found")
+- [x] 4.2 `lib/supabase/database.types.ts` exists and is non-empty
+- [x] 4.3 `npm run typecheck` exits 0
 
 #### Manual
 
-- [ ] 4.4 IT-3 SQL script prints "IT-3 PASSED: tenant isolation verified across 9 tables"
-- [ ] 4.5 Supabase Table Editor: all 12 tables visible with correct columns
+- [x] 4.4 IT-3 SQL script prints "IT-3 PASSED: tenant isolation verified across 9 tables"
+- [x] 4.5 Supabase Table Editor: all 12 tables visible with correct columns
