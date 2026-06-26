@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       audit_logs: {
@@ -559,7 +584,7 @@ export type Database = {
           last_asn: number | null
           property_id: string
           reception_scan_at: string | null
-          reservation_id: string
+          reservation_id: string | null
           revoked: boolean
           room_id: string | null
           room_scan_at: string | null
@@ -574,7 +599,7 @@ export type Database = {
           last_asn?: number | null
           property_id: string
           reception_scan_at?: string | null
-          reservation_id: string
+          reservation_id?: string | null
           revoked?: boolean
           room_id?: string | null
           room_scan_at?: string | null
@@ -589,7 +614,7 @@ export type Database = {
           last_asn?: number | null
           property_id?: string
           reception_scan_at?: string | null
-          reservation_id?: string
+          reservation_id?: string | null
           revoked?: boolean
           room_id?: string | null
           room_scan_at?: string | null
@@ -623,6 +648,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auth_user_property_ids: { Args: never; Returns: string[] }
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
       set_tenant_context: {
         Args: { p_property_id: string; p_session_id?: string }
         Returns: undefined
@@ -758,6 +785,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       hotel_role: ["owner", "admin", "staff", "viewer"],
