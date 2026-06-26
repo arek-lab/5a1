@@ -25,12 +25,14 @@
     "next-intl": "^4.13.0",
     "posthog-js": "^1.393.5",
     "posthog-node": "^5.38.5",
+    "qrcode": "^1.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^3.2.6",

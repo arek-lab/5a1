@@ -218,16 +218,16 @@ Note on `init_token` for room QR: the DB default (`gen_random_uuid()`) applies. 
 
 #### Automated
 
-- [x] 1.1 `npm run test` exits 0
-- [x] 1.2 `npm run typecheck` passes
+- [x] 1.1 `npm run test` exits 0 — 70fa907
+- [x] 1.2 `npm run typecheck` passes — 70fa907
 
 ### Phase 2: QR Image Utility
 
 #### Automated
 
-- [ ] 2.1 `npm run test` — image utility tests pass (3 tests)
-- [ ] 2.2 `npm run typecheck` passes
-- [ ] 2.3 `npm run lint` passes
+- [x] 2.1 `npm run test` — image utility tests pass (3 tests)
+- [x] 2.2 `npm run typecheck` passes
+- [x] 2.3 `npm run lint` passes
 
 ### Phase 3: QR Generation Logic
 
