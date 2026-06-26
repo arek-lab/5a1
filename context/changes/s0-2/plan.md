@@ -429,24 +429,24 @@ psql "postgresql://postgres.<password>@db.<project-ref>.supabase.co:5432/postgre
 
 #### Automated
 
-- [x] 1.1 `npx supabase status` exits 0, prints linked project ref
-- [x] 1.2 `npm run build` exits 0
-- [x] 1.3 `npm run lint` exits 0
+- [x] 1.1 `npx supabase status` exits 0, prints linked project ref — 3da4d01
+- [x] 1.2 `npm run build` exits 0 — 3da4d01
+- [x] 1.3 `npm run lint` exits 0 — 3da4d01
 
 #### Manual
 
-- [x] 1.4 Supabase dashboard shows project in EU West (Frankfurt) region
-- [x] 1.5 `.env.local` is not tracked by git
+- [x] 1.4 Supabase dashboard shows project in EU West (Frankfurt) region — 3da4d01
+- [x] 1.5 `.env.local` is not tracked by git — 3da4d01
 
 ### Phase 2: Migration 001 — ENUMs + Tables + Indexes
 
 #### Automated
 
-- [ ] 2.1 `npx supabase db lint` exits 0
+- [x] 2.1 `npx supabase db lint` exits 0
 
 #### Manual
 
-- [ ] 2.2 Migration file reviewed: all 12 tables, correct FKs, `dpa_signed_at` on properties, `embedding vector(1536)` on knowledge_chunks, all indexes present
+- [x] 2.2 Migration file reviewed: all 12 tables, correct FKs, `dpa_signed_at` on properties, `embedding vector(1536)` on knowledge_chunks, all indexes present
 
 ### Phase 3: Migration 002 — RLS Policies + `set_tenant_context` Function
 
