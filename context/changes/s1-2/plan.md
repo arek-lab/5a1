@@ -353,19 +353,19 @@ After applying the migration, **regenerate database types**: `npx supabase gen t
 
 #### Automated
 
-- [x] 1.1 `npx supabase db push` exits 0 for migration 005
-- [x] 1.2 `npm run typecheck` passes after regenerating database.types.ts
+- [x] 1.1 `npx supabase db push` exits 0 for migration 005 — fdfb556
+- [x] 1.2 `npm run typecheck` passes after regenerating database.types.ts — fdfb556
 
 #### Manual
 
-- [x] 1.3 `\d sessions` in psql shows `reservation_id uuid` without `not null`
+- [x] 1.3 `\d sessions` in psql shows `reservation_id uuid` without `not null` — fdfb556
 
 ### Phase 2: Scan Library
 
 #### Automated
 
-- [ ] 2.1 `npm run typecheck` passes on lib/scan/ files
-- [ ] 2.2 `npm run lint` passes on lib/scan/ files
+- [x] 2.1 `npm run typecheck` passes on lib/scan/ files
+- [x] 2.2 `npm run lint` passes on lib/scan/ files
 
 ### Phase 3: Route Handlers
 
