@@ -465,11 +465,11 @@ psql "postgresql://postgres.<password>@db.<project-ref>.supabase.co:5432/postgre
 
 #### Automated
 
-- [x] 4.1 `npx supabase db push` idempotent (second run: "No changes found")
-- [x] 4.2 `lib/supabase/database.types.ts` exists and is non-empty
-- [x] 4.3 `npm run typecheck` exits 0
+- [x] 4.1 `npx supabase db push` idempotent (second run: "No changes found") — dc19094
+- [x] 4.2 `lib/supabase/database.types.ts` exists and is non-empty — dc19094
+- [x] 4.3 `npm run typecheck` exits 0 — dc19094
 
 #### Manual
 
-- [x] 4.4 IT-3 SQL script prints "IT-3 PASSED: tenant isolation verified across 9 tables"
-- [x] 4.5 Supabase Table Editor: all 12 tables visible with correct columns
+- [x] 4.4 IT-3 SQL script prints "IT-3 PASSED: tenant isolation verified across 9 tables" — dc19094
+- [x] 4.5 Supabase Table Editor: all 12 tables visible with correct columns — dc19094
