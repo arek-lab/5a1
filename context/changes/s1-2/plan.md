@@ -385,9 +385,9 @@ After applying the migration, **regenerate database types**: `npx supabase gen t
 
 #### Automated
 
-- [x] 4.1 `npm run test -- lib/scan/__tests__/it-2.test.ts` exits 0 — 4 tests pass
+- [x] 4.1 `npm run test -- lib/scan/__tests__/it-2.test.ts` exits 0 — 4 tests pass — 56e9c9f
 
 #### Manual
 
-- [x] 4.2 Test output shows "4 passed", no skipped — confirmed running against real Supabase
+- [x] 4.2 Test output shows "4 passed", no skipped — confirmed running against real Supabase — 56e9c9f
 

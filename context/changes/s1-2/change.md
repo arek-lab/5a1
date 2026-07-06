@@ -1,9 +1,9 @@
 ---
 change_id: s1-2
 title: QR scan route handler, token exchange, and session cookie
-status: implementing
+status: implemented
 created: 2026-06-26
-updated: 2026-06-26
+updated: 2026-07-06
 archived_at: null
 ---
 
