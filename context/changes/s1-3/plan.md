@@ -506,15 +506,15 @@ Migration 006 is additive — it creates a new function, touches no existing col
 
 #### Automated
 
-- [x] 4.1 `npx supabase db push` exits 0 for migration 006
-- [x] 4.2 `npm run typecheck` passes on lib/checkout/, app/api/panel/, and test file
-- [x] 4.3 `npm run lint` passes on all new files
-- [x] 4.4 `npm run build` exits 0
-- [x] 4.5 `npm run test -- lib/checkout/__tests__/it-4.test.ts` exits 0 — 4 tests pass
+- [x] 4.1 `npx supabase db push` exits 0 for migration 006 — fbdda3b
+- [x] 4.2 `npm run typecheck` passes on lib/checkout/, app/api/panel/, and test file — fbdda3b
+- [x] 4.3 `npm run lint` passes on all new files — fbdda3b
+- [x] 4.4 `npm run build` exits 0 — fbdda3b
+- [x] 4.5 `npm run test -- lib/checkout/__tests__/it-4.test.ts` exits 0 — 4 tests pass — fbdda3b
 
 #### Manual
 
-- [x] 4.6 POST /api/panel/reservations/<id>/checkout → 200 {"ok":true}; all 5 DB changes visible in Studio
-- [x] 4.7 Browser with revoked session cookie → /error?type=session_revoked; cookie cleared
-- [x] 4.8 Room QR scan with revoked session → /error?type=session_revoked redirect
-- [x] 4.9 POST with non-existent reservation ID → 404 response
+- [x] 4.6 POST /api/panel/reservations/<id>/checkout → 200 {"ok":true}; all 5 DB changes visible in Studio — fbdda3b
+- [x] 4.7 Browser with revoked session cookie → /error?type=session_revoked; cookie cleared — fbdda3b
+- [x] 4.8 Room QR scan with revoked session → /error?type=session_revoked redirect — fbdda3b
+- [x] 4.9 POST with non-existent reservation ID → 404 response — fbdda3b

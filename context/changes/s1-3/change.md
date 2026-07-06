@@ -1,7 +1,7 @@
 ---
 change_id: s1-3
 title: Rate limiting, anomaly detection, and early check-out for scan API
-status: implementing
+status: implemented
 created: 2026-07-06
 updated: 2026-07-06
 archived_at: null
