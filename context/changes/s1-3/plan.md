@@ -492,29 +492,29 @@ Migration 006 is additive — it creates a new function, touches no existing col
 
 #### Automated
 
-- [x] 3.1 `npm run typecheck` passes on proxy.ts
-- [x] 3.2 `npm run lint` passes
-- [x] 3.3 `npm run build` exits 0
-- [x] 3.4 IT-2 still passes: `npm run test -- lib/scan/__tests__/it-2.test.ts` — 4 tests pass
+- [x] 3.1 `npm run typecheck` passes on proxy.ts — 458cfb8
+- [x] 3.2 `npm run lint` passes — 458cfb8
+- [x] 3.3 `npm run build` exits 0 — 458cfb8
+- [x] 3.4 IT-2 still passes: `npm run test -- lib/scan/__tests__/it-2.test.ts` — 4 tests pass — 458cfb8
 
 #### Manual
 
-- [x] 3.5 Manually revoked session → next page load redirects to /error?type=session_revoked and clears cookie
-- [x] 3.6 Expired session (expires_at in the past) → same 401/redirect behaviour
+- [x] 3.5 Manually revoked session → next page load redirects to /error?type=session_revoked and clears cookie — 458cfb8
+- [x] 3.6 Expired session (expires_at in the past) → same 401/redirect behaviour — 458cfb8
 
 ### Phase 4: Early Checkout + IT-4
 
 #### Automated
 
-- [ ] 4.1 `npx supabase db push` exits 0 for migration 006
-- [ ] 4.2 `npm run typecheck` passes on lib/checkout/, app/api/panel/, and test file
-- [ ] 4.3 `npm run lint` passes on all new files
-- [ ] 4.4 `npm run build` exits 0
-- [ ] 4.5 `npm run test -- lib/checkout/__tests__/it-4.test.ts` exits 0 — 4 tests pass
+- [x] 4.1 `npx supabase db push` exits 0 for migration 006
+- [x] 4.2 `npm run typecheck` passes on lib/checkout/, app/api/panel/, and test file
+- [x] 4.3 `npm run lint` passes on all new files
+- [x] 4.4 `npm run build` exits 0
+- [x] 4.5 `npm run test -- lib/checkout/__tests__/it-4.test.ts` exits 0 — 4 tests pass
 
 #### Manual
 
-- [ ] 4.6 POST /api/panel/reservations/<id>/checkout → 200 {"ok":true}; all 5 DB changes visible in Studio
-- [ ] 4.7 Browser with revoked session cookie → /error?type=session_revoked; cookie cleared
-- [ ] 4.8 Room QR scan with revoked session → /error?type=session_revoked redirect
-- [ ] 4.9 POST with non-existent reservation ID → 404 response
+- [x] 4.6 POST /api/panel/reservations/<id>/checkout → 200 {"ok":true}; all 5 DB changes visible in Studio
+- [x] 4.7 Browser with revoked session cookie → /error?type=session_revoked; cookie cleared
+- [x] 4.8 Room QR scan with revoked session → /error?type=session_revoked redirect
+- [x] 4.9 POST with non-existent reservation ID → 404 response

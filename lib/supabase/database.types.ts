@@ -650,6 +650,10 @@ export type Database = {
     Functions: {
       auth_user_property_ids: { Args: never; Returns: string[] }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      process_early_checkout: {
+        Args: { p_reservation_id: string }
+        Returns: undefined
+      }
       set_tenant_context: {
         Args: { p_property_id: string; p_session_id?: string }
         Returns: undefined
