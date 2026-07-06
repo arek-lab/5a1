@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { processEarlyCheckout } from '@/lib/checkout/early-checkout'
+import { getHotelUser } from '@/lib/panel/auth'
+import { canPerform } from '@/lib/panel/rbac'
 
-// TODO(S2.1): add RBAC guard — only owner/admin/staff may trigger early checkout
 export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
+  const hotelUser = await getHotelUser()
+  if (!hotelUser) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+  if (!canPerform(hotelUser.role, 'qr_manage', 'full')) {
+    return NextResponse.json({ error: 'forbidden' }, { status: 403 })
+  }
+
   const { id } = await params
   try {
     await processEarlyCheckout(id)

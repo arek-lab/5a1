@@ -456,27 +456,27 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npm run typecheck`
-- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.1 Type checking passes: `npm run typecheck` — 7f89e07
+- [x] 4.2 Linting passes: `npm run lint` — 7f89e07
 
 #### Manual
 
-- [x] 4.3 Visiting `/dashboard` unauthenticated → redirects to `/login`
-- [x] 4.4 Visiting `/dashboard` as active hotel user → renders dashboard stub
-- [x] 4.5 Visiting `/dashboard` as deactivated user → redirects to `/login?error=no_access`
-- [x] 4.6 Sign-out button clears session and redirects to `/login`
-- [x] 4.7 Visiting `/unauthorized` as authenticated user shows access-denied page
+- [x] 4.3 Visiting `/dashboard` unauthenticated → redirects to `/login` — 7f89e07
+- [x] 4.4 Visiting `/dashboard` as active hotel user → renders dashboard stub — 7f89e07
+- [x] 4.5 Visiting `/dashboard` as deactivated user → redirects to `/login?error=no_access` — 7f89e07
+- [x] 4.6 Sign-out button clears session and redirects to `/login` — 7f89e07
+- [x] 4.7 Visiting `/unauthorized` as authenticated user shows access-denied page — 7f89e07
 
 ### Phase 5: Wire Checkout Route with RBAC Guard
 
 #### Automated
 
-- [ ] 5.1 Type checking passes: `npm run typecheck`
-- [ ] 5.2 Linting passes: `npm run lint`
-- [ ] 5.3 IT-4 still passes: `npm run test -- lib/checkout/__tests__/it-4.test.ts`
+- [x] 5.1 Type checking passes: `npm run typecheck`
+- [x] 5.2 Linting passes: `npm run lint`
+- [x] 5.3 IT-4 still passes: `npm run test -- lib/checkout/__tests__/it-4.test.ts`
 
 #### Manual
 
-- [ ] 5.4 `POST /api/panel/reservations/[id]/checkout` without session → 401
-- [ ] 5.5 `POST /api/panel/reservations/[id]/checkout` with viewer role → 403
-- [ ] 5.6 `POST /api/panel/reservations/[id]/checkout` with staff role → 200
+- [x] 5.4 `POST /api/panel/reservations/[id]/checkout` without session → 401
+- [x] 5.5 `POST /api/panel/reservations/[id]/checkout` with viewer role → 403
+- [x] 5.6 `POST /api/panel/reservations/[id]/checkout` with staff role → 200 (owner confirmed)
