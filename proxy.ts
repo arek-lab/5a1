@@ -2,11 +2,32 @@ import { createServerClient } from '@supabase/ssr'
 import createIntlMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import type { Database } from './lib/supabase/database.types'
 
 const handleI18nRouting = createIntlMiddleware(routing)
 
 export default async function proxy(request: NextRequest) {
+  const sessionId = request.cookies.get('__Host-session')?.value
+  if (sessionId) {
+    const admin = createServiceRoleClient()
+    const { data: session } = await admin
+      .from('sessions')
+      .select('id, revoked, expires_at')
+      .eq('id', sessionId)
+      .single()
+
+    const invalid = !session || session.revoked || new Date(session.expires_at) <= new Date()
+    if (invalid) {
+      if (request.nextUrl.pathname.startsWith('/api/')) {
+        return new NextResponse(null, { status: 401 })
+      }
+      const response = NextResponse.redirect(new URL('/error?type=session_revoked', request.url))
+      response.cookies.delete('__Host-session')
+      return response
+    }
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient<Database>(

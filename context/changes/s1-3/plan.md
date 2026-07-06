@@ -478,29 +478,29 @@ Migration 006 is additive — it creates a new function, touches no existing col
 
 #### Automated
 
-- [x] 2.1 `npm run typecheck` passes on lib/geo/, lib/anomaly/, and modified route handlers
-- [x] 2.2 `npm run lint` passes on all new/modified files
-- [x] 2.3 `npm run build` exits 0
+- [x] 2.1 `npm run typecheck` passes on lib/geo/, lib/anomaly/, and modified route handlers — 84d768c
+- [x] 2.2 `npm run lint` passes on all new/modified files — 84d768c
+- [x] 2.3 `npm run build` exits 0 — 84d768c
 
 #### Manual
 
-- [x] 2.4 Reception scan populates sessions.last_asn (visible in Supabase Studio)
-- [x] 2.5 ip-api.com result cached as geo:{ip} key in Upstash dashboard
-- [x] 2.6 Simulated country jump produces audit_logs entry and sessions.revoked=true
+- [x] 2.4 Reception scan populates sessions.last_asn (visible in Supabase Studio) — 84d768c
+- [x] 2.5 ip-api.com result cached as geo:{ip} key in Upstash dashboard — 84d768c
+- [x] 2.6 Simulated country jump produces audit_logs entry and sessions.revoked=true — 84d768c
 
 ### Phase 3: Middleware Session Revocation Check
 
 #### Automated
 
-- [ ] 3.1 `npm run typecheck` passes on proxy.ts
-- [ ] 3.2 `npm run lint` passes
-- [ ] 3.3 `npm run build` exits 0
-- [ ] 3.4 IT-2 still passes: `npm run test -- lib/scan/__tests__/it-2.test.ts` — 4 tests pass
+- [x] 3.1 `npm run typecheck` passes on proxy.ts
+- [x] 3.2 `npm run lint` passes
+- [x] 3.3 `npm run build` exits 0
+- [x] 3.4 IT-2 still passes: `npm run test -- lib/scan/__tests__/it-2.test.ts` — 4 tests pass
 
 #### Manual
 
-- [ ] 3.5 Manually revoked session → next page load redirects to /error?type=session_revoked and clears cookie
-- [ ] 3.6 Expired session (expires_at in the past) → same 401/redirect behaviour
+- [x] 3.5 Manually revoked session → next page load redirects to /error?type=session_revoked and clears cookie
+- [x] 3.6 Expired session (expires_at in the past) → same 401/redirect behaviour
 
 ### Phase 4: Early Checkout + IT-4
 
