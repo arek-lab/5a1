@@ -471,12 +471,12 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [x] 5.1 Type checking passes: `npm run typecheck`
-- [x] 5.2 Linting passes: `npm run lint`
-- [x] 5.3 IT-4 still passes: `npm run test -- lib/checkout/__tests__/it-4.test.ts`
+- [x] 5.1 Type checking passes: `npm run typecheck` — 496ea67
+- [x] 5.2 Linting passes: `npm run lint` — 496ea67
+- [x] 5.3 IT-4 still passes: `npm run test -- lib/checkout/__tests__/it-4.test.ts` — 496ea67
 
 #### Manual
 
-- [x] 5.4 `POST /api/panel/reservations/[id]/checkout` without session → 401
-- [x] 5.5 `POST /api/panel/reservations/[id]/checkout` with viewer role → 403
-- [x] 5.6 `POST /api/panel/reservations/[id]/checkout` with staff role → 200 (owner confirmed)
+- [x] 5.4 `POST /api/panel/reservations/[id]/checkout` without session → 401 — 496ea67
+- [x] 5.5 `POST /api/panel/reservations/[id]/checkout` with viewer role → 403 — 496ea67
+- [x] 5.6 `POST /api/panel/reservations/[id]/checkout` with staff role → 200 (owner confirmed) — 496ea67

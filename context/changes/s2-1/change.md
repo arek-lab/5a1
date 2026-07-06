@@ -1,7 +1,7 @@
 ---
 change_id: s2-1
 title: Hotel panel auth and RBAC middleware
-status: implementing
+status: implemented
 created: 2026-07-06
 updated: 2026-07-06
 archived_at: null
