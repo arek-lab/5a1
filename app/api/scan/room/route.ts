@@ -1,9 +1,22 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { validateRoomScan, upgradeSession } from '@/lib/scan/room'
+import { checkScanRateLimit } from '@/lib/rate-limit/scan'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
+  const rateLimit = await checkScanRateLimit(ip)
+  if (!rateLimit.allowed) {
+    return new NextResponse(null, {
+      status: 429,
+      headers: {
+        'Retry-After': String(rateLimit.retryAfter),
+        'X-RateLimit-Remaining': '0',
+      },
+    })
+  }
+
   const sessionId = request.cookies.get('__Host-session')?.value
   if (!sessionId) {
     return NextResponse.redirect(new URL('/error?type=missing_session_cookie', request.url))
