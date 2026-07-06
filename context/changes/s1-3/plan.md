@@ -465,28 +465,28 @@ Migration 006 is additive — it creates a new function, touches no existing col
 
 #### Automated
 
-- [x] 1.1 `npm install` exits 0 — @upstash/ratelimit and @upstash/redis in node_modules
-- [x] 1.2 `npm run typecheck` passes on lib/rate-limit/ and modified route handlers
-- [x] 1.3 `npm run lint` passes on all modified files
-- [x] 1.4 `npm run build` exits 0
+- [x] 1.1 `npm install` exits 0 — @upstash/ratelimit and @upstash/redis in node_modules — 2aa0558
+- [x] 1.2 `npm run typecheck` passes on lib/rate-limit/ and modified route handlers — 2aa0558
+- [x] 1.3 `npm run lint` passes on all modified files — 2aa0558
+- [x] 1.4 `npm run build` exits 0 — 2aa0558
 
 #### Manual
 
-- [x] 1.5 6th rapid request to /api/scan/reception returns 429 with Retry-After header
+- [x] 1.5 6th rapid request to /api/scan/reception returns 429 with Retry-After header — 2aa0558
 
 ### Phase 2: GeoIP + Anomaly Detection
 
 #### Automated
 
-- [ ] 2.1 `npm run typecheck` passes on lib/geo/, lib/anomaly/, and modified route handlers
-- [ ] 2.2 `npm run lint` passes on all new/modified files
-- [ ] 2.3 `npm run build` exits 0
+- [x] 2.1 `npm run typecheck` passes on lib/geo/, lib/anomaly/, and modified route handlers
+- [x] 2.2 `npm run lint` passes on all new/modified files
+- [x] 2.3 `npm run build` exits 0
 
 #### Manual
 
-- [ ] 2.4 Reception scan populates sessions.last_asn (visible in Supabase Studio)
-- [ ] 2.5 ip-api.com result cached as geo:{ip} key in Upstash dashboard
-- [ ] 2.6 Simulated country jump produces audit_logs entry and sessions.revoked=true
+- [x] 2.4 Reception scan populates sessions.last_asn (visible in Supabase Studio)
+- [x] 2.5 ip-api.com result cached as geo:{ip} key in Upstash dashboard
+- [x] 2.6 Simulated country jump produces audit_logs entry and sessions.revoked=true
 
 ### Phase 3: Middleware Session Revocation Check
 

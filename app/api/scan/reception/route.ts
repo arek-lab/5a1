@@ -2,6 +2,9 @@ import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { findAndConsumeToken, createReceptionSession } from '@/lib/scan/reception'
 import { checkScanRateLimit } from '@/lib/rate-limit/scan'
+import { resolveIpInfo } from '@/lib/geo/ip-info'
+import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -79,6 +82,24 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     sameSite: 'strict',
     path: '/',
   })
+
+  try {
+    const ipInfo = await resolveIpInfo(ip)
+    if (ipInfo.asn !== null) {
+      await createServiceRoleClient()
+        .from('sessions')
+        .update({ last_asn: ipInfo.asn })
+        .eq('id', session.id)
+    }
+    await trackAndDetectAnomaly({
+      sessionId: session.id,
+      propertyId: qr.property_id,
+      asn: ipInfo.asn,
+      country: ipInfo.country,
+    })
+  } catch {
+    // non-fatal: anomaly detection errors do not affect the scan result
+  }
 
   // TODO(S5.1): posthog.capture('guest_qr_scanned', { qr_type: 'reception', property_id: qr.property_id })
 

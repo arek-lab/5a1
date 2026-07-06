@@ -2,6 +2,9 @@ import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { validateRoomScan, upgradeSession } from '@/lib/scan/room'
 import { checkScanRateLimit } from '@/lib/rate-limit/scan'
+import { resolveIpInfo } from '@/lib/geo/ip-info'
+import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -42,6 +45,24 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     reservationId: reservation.id,
     checkOut: reservation.check_out,
   })
+
+  try {
+    const ipInfo = await resolveIpInfo(ip)
+    if (ipInfo.asn !== null) {
+      await createServiceRoleClient()
+        .from('sessions')
+        .update({ last_asn: ipInfo.asn })
+        .eq('id', sessionId)
+    }
+    await trackAndDetectAnomaly({
+      sessionId,
+      propertyId: validation.session.property_id,
+      asn: ipInfo.asn,
+      country: ipInfo.country,
+    })
+  } catch {
+    // non-fatal: anomaly detection errors do not affect the scan result
+  }
 
   // Supabase SSR client reads existing anonymous session from request cookies and
   // writes refreshed tokens to the redirect response.
