@@ -421,8 +421,8 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
+- [x] 1.1 Type checking passes: `npm run typecheck` — f344f3d
+- [x] 1.2 Linting passes: `npm run lint` — f344f3d
 
 #### Manual
 
@@ -436,13 +436,13 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.1 Type checking passes: `npm run typecheck`
 
 #### Manual
 
-- [ ] 2.2 `GET /api/auth/sign-out` clears auth cookie and redirects to `/login`
-- [ ] 2.3 `GET /api/auth/sign-out?error=no_access` redirects to `/login?error=no_access`
-- [ ] 2.4 `POST /api/auth/sign-out` clears session and redirects to `/login`
+- [x] 2.2 `GET /api/auth/sign-out` clears auth cookie and redirects to `/login`
+- [x] 2.3 `GET /api/auth/sign-out?error=no_access` redirects to `/login?error=no_access`
+- [x] 2.4 `POST /api/auth/sign-out` clears session and redirects to `/login`
 
 ### Phase 3: RBAC Permission Matrix + Unit Tests
 

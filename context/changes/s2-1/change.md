@@ -4,7 +4,6 @@ title: Hotel panel auth and RBAC middleware
 status: implementing
 created: 2026-07-06
 updated: 2026-07-06
-
 archived_at: null
 ---
 
