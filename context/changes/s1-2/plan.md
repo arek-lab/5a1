@@ -371,22 +371,23 @@ After applying the migration, **regenerate database types**: `npx supabase gen t
 
 #### Automated
 
-- [x] 3.1 `npm run typecheck` passes on new route handler files
-- [x] 3.2 `npm run lint` passes on new route handler files
-- [x] 3.3 `npm run build` exits 0
+- [x] 3.1 `npm run typecheck` passes on new route handler files — 591ee2e
+- [x] 3.2 `npm run lint` passes on new route handler files — 591ee2e
+- [x] 3.3 `npm run build` exits 0 — 591ee2e
 
 #### Manual
 
-- [ ] 3.4 Reception scan redirects to `/`; `__Host-session` cookie present with correct attributes in DevTools
-- [ ] 3.5 Replay of same token redirects to `/error?type=token_used`
-- [ ] 3.6 Room scan redirects to `/`; JWT `app_metadata.auth_level === 2`
+- [x] 3.4 Reception scan redirects to `/`; `__Host-session` cookie present with correct attributes in DevTools — 591ee2e
+- [x] 3.5 Replay of same token redirects to `/error?type=token_used` — 591ee2e
+- [x] 3.6 Room scan redirects to `/`; JWT `app_metadata.auth_level === 2` — 591ee2e
 
 ### Phase 4: IT-2 Integration Tests
 
 #### Automated
 
-- [ ] 4.1 `npm run test -- lib/scan/__tests__/it-2.test.ts` exits 0 — 4 tests pass
+- [x] 4.1 `npm run test -- lib/scan/__tests__/it-2.test.ts` exits 0 — 4 tests pass
 
 #### Manual
 
-- [ ] 4.2 Test output shows "4 passed", no skipped — confirmed running against real Supabase
+- [x] 4.2 Test output shows "4 passed", no skipped — confirmed running against real Supabase
+
