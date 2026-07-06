@@ -448,24 +448,24 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `npm run test -- lib/panel/__tests__/rbac.test.ts`
-- [x] 3.2 Type checking passes: `npm run typecheck`
-- [x] 3.3 All 48 resource × role cells have at least one assertion
+- [x] 3.1 Unit tests pass: `npm run test -- lib/panel/__tests__/rbac.test.ts` — 5075f91
+- [x] 3.2 Type checking passes: `npm run typecheck` — 5075f91
+- [x] 3.3 All 48 resource × role cells have at least one assertion — 5075f91
 
 ### Phase 4: (hotel) Layout Auth Guard + Unauthorized Page + RequirePermission Component
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npm run typecheck`
-- [ ] 4.2 Linting passes: `npm run lint`
+- [x] 4.1 Type checking passes: `npm run typecheck`
+- [x] 4.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.3 Visiting `/dashboard` unauthenticated → redirects to `/login`
-- [ ] 4.4 Visiting `/dashboard` as active hotel user → renders dashboard stub
-- [ ] 4.5 Visiting `/dashboard` as deactivated user → redirects to `/login?error=no_access`
-- [ ] 4.6 Sign-out button clears session and redirects to `/login`
-- [ ] 4.7 Visiting `/unauthorized` as authenticated user shows access-denied page
+- [x] 4.3 Visiting `/dashboard` unauthenticated → redirects to `/login`
+- [x] 4.4 Visiting `/dashboard` as active hotel user → renders dashboard stub
+- [x] 4.5 Visiting `/dashboard` as deactivated user → redirects to `/login?error=no_access`
+- [x] 4.6 Sign-out button clears session and redirects to `/login`
+- [x] 4.7 Visiting `/unauthorized` as authenticated user shows access-denied page
 
 ### Phase 5: Wire Checkout Route with RBAC Guard
 
