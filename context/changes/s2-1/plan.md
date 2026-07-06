@@ -436,21 +436,21 @@ No new integration tests in S2.1. IT-4 (early checkout) is an existing test that
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.1 Type checking passes: `npm run typecheck` — 19e5fa1
 
 #### Manual
 
-- [x] 2.2 `GET /api/auth/sign-out` clears auth cookie and redirects to `/login`
-- [x] 2.3 `GET /api/auth/sign-out?error=no_access` redirects to `/login?error=no_access`
-- [x] 2.4 `POST /api/auth/sign-out` clears session and redirects to `/login`
+- [x] 2.2 `GET /api/auth/sign-out` clears auth cookie and redirects to `/login` — 19e5fa1
+- [x] 2.3 `GET /api/auth/sign-out?error=no_access` redirects to `/login?error=no_access` — 19e5fa1
+- [x] 2.4 `POST /api/auth/sign-out` clears session and redirects to `/login` — 19e5fa1
 
 ### Phase 3: RBAC Permission Matrix + Unit Tests
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `npm run test -- lib/panel/__tests__/rbac.test.ts`
-- [ ] 3.2 Type checking passes: `npm run typecheck`
-- [ ] 3.3 All 48 resource × role cells have at least one assertion
+- [x] 3.1 Unit tests pass: `npm run test -- lib/panel/__tests__/rbac.test.ts`
+- [x] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.3 All 48 resource × role cells have at least one assertion
 
 ### Phase 4: (hotel) Layout Auth Guard + Unauthorized Page + RequirePermission Component
 
