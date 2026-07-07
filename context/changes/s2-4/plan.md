@@ -250,22 +250,22 @@ Brak nowej migracji SQL — schemat `knowledge_chunks` i polityki RLS już istni
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 `messages/pl.json` i `messages/en.json` mają identyczną strukturę kluczy
+- [x] 1.1 Type checking passes: `npm run typecheck` — edb93c3
+- [x] 1.2 Linting passes: `npm run lint` — edb93c3
+- [x] 1.3 `messages/pl.json` i `messages/en.json` mają identyczną strukturę kluczy — edb93c3
 
 #### Manual
 
-- [x] 1.4 Import `FAQ_TEMPLATES`/`KNOWLEDGE_CATEGORIES` potwierdza dokładnie 5 szablonów, 2 kategorie
-- [x] 1.5 `computeContentHash` zwraca deterministyczny 64-znakowy hex string
+- [x] 1.4 Import `FAQ_TEMPLATES`/`KNOWLEDGE_CATEGORIES` potwierdza dokładnie 5 szablonów, 2 kategorie — edb93c3
+- [x] 1.5 `computeContentHash` zwraca deterministyczny 64-znakowy hex string — edb93c3
 
 ### Phase 2: Server actions CRUD + hash + testy
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `npm run test`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_4_knowledge_staff_isolation.sql`
+- [x] 2.1 Unit tests pass: `npm run test`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_4_knowledge_staff_isolation.sql`
 
 #### Manual
 
