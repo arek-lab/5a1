@@ -416,13 +416,13 @@ No schema migration required — all columns already exist (see Current State An
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npm run typecheck`
-- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.1 Type checking passes: `npm run typecheck` — 233921f
+- [x] 4.2 Linting passes: `npm run lint` — 233921f
 
 #### Manual
 
-- [x] 4.3 Owner/admin with `setup_completed=false` sees banner linking to `/onboarding`
-- [x] 4.4 Owner/admin with `setup_completed=true` sees no banner
-- [x] 4.5 Staff/viewer never sees the banner
-- [x] 4.6 Staff/viewer retains normal `/dashboard` access
-- [x] 4.7 Staff/viewer visiting `/onboarding` directly sees read-only view, not `/unauthorized`
+- [x] 4.3 Owner/admin with `setup_completed=false` sees banner linking to `/onboarding` — 233921f
+- [x] 4.4 Owner/admin with `setup_completed=true` sees no banner — 233921f
+- [x] 4.5 Staff/viewer never sees the banner — 233921f
+- [x] 4.6 Staff/viewer retains normal `/dashboard` access — 233921f
+- [x] 4.7 Staff/viewer visiting `/onboarding` directly sees read-only view, not `/unauthorized` — 233921f

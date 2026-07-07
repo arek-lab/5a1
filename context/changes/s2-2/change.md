@@ -1,7 +1,7 @@
 ---
 change_id: s2-2
 title: Guided wizard + hotel profile (Module 1)
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null
