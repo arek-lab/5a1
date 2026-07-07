@@ -1,7 +1,7 @@
 ---
 change_id: s2-3
 title: Services CRUD + template library (staff panel)
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null

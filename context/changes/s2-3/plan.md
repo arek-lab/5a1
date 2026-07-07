@@ -248,20 +248,20 @@ Brak nowej migracji SQL — schemat `services` i polityki RLS już istnieją od 
 
 #### Manual
 
-- [x] 2.4 Próba przypięcia 4. usługi zwraca błąd walidacji, nie modyfikuje bazy
+- [x] 2.4 Próba przypięcia 4. usługi zwraca błąd walidacji, nie modyfikuje bazy — 4f5c105
 
 ### Phase 3: UI panelu + wpięcie w wizard onboardingowy
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run typecheck`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Unit tests pass: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck` — 4f5c105
+- [x] 3.2 Linting passes: `npm run lint` — 4f5c105
+- [x] 3.3 Unit tests pass: `npm run test` — 4f5c105
 
 #### Manual
 
-- [x] 3.4 Staff dodaje usługę z szablonu — widoczna na liście z poprawną kategorią
-- [x] 3.5 Przypięcie 3 usług OK, 4. zwraca błąd w UI
-- [x] 3.6 Toggle `is_active` aktualizuje listę bez przeładowania strony
-- [x] 3.7 Viewer widzi listę, nie widzi przycisków edycji
-- [x] 3.8 Krok „Usługi" w wizardzie klikalny; aktywacja ≥3 usług podnosi gotowość o 25 p.p.
+- [x] 3.4 Staff dodaje usługę z szablonu — widoczna na liście z poprawną kategorią — 4f5c105
+- [x] 3.5 Przypięcie 3 usług OK, 4. zwraca błąd w UI — 4f5c105
+- [x] 3.6 Toggle `is_active` aktualizuje listę bez przeładowania strony — 4f5c105
+- [x] 3.7 Viewer widzi listę, nie widzi przycisków edycji — 4f5c105
+- [x] 3.8 Krok „Usługi" w wizardzie klikalny; aktywacja ≥3 usług podnosi gotowość o 25 p.p. — 4f5c105
