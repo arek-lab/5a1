@@ -11,6 +11,7 @@ import RequirePermission from '@/components/panel/require-permission'
 import ProfileStepForm from './profile-step-form'
 import ProfileReadonly from './profile-readonly'
 import ServicesStep from './services-step'
+import KnowledgeStep from './knowledge-step'
 
 const STEP_KEYS = ONBOARDING_STEPS.map(s => s.key)
 
@@ -42,6 +43,7 @@ export default async function OnboardingPage({
 
   const canWrite = canPerform(hotelUser.role, 'hotel_profile', 'write')
   const canWriteServices = canPerform(hotelUser.role, 'services', 'write')
+  const canWriteKnowledge = canPerform(hotelUser.role, 'knowledge', 'write')
   const t = await getTranslations('onboarding.wizard')
 
   let activeServices: { id: string; name: string }[] = []
@@ -53,6 +55,17 @@ export default async function OnboardingPage({
       .eq('is_active', true)
       .order('name')
     activeServices = data ?? []
+  }
+
+  let faqEntries: { id: string; question: string | null }[] = []
+  if (activeStepKey === 'knowledge') {
+    const { data } = await supabase
+      .from('knowledge_chunks')
+      .select('id, question')
+      .eq('property_id', hotelUser.propertyId)
+      .eq('category', 'faq')
+      .order('created_at')
+    faqEntries = data ?? []
   }
 
   return (
@@ -70,6 +83,8 @@ export default async function OnboardingPage({
           )
         ) : activeStepKey === 'services' ? (
           <ServicesStep activeServices={activeServices} canEdit={canWriteServices} />
+        ) : activeStepKey === 'knowledge' ? (
+          <KnowledgeStep faqEntries={faqEntries} canEdit={canWriteKnowledge} />
         ) : (
           <p className="italic text-gray-500">{t('comingSoon')}</p>
         )}

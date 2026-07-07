@@ -33,6 +33,10 @@
       "empty": "No services added yet.",
       "manageButton": "Manage services"
     },
+    "knowledge": {
+      "empty": "No FAQ entries added yet.",
+      "manageButton": "Manage knowledge base"
+    },
     "readiness": {
       "label": "Hotel is {percent}% ready"
     },
@@ -129,6 +133,10 @@
         "invalidDateRange": "The valid-from date cannot be later than the valid-until date.",
         "forbidden": "You don't have permission to edit the knowledge base."
       }
+    },
+    "categories": {
+      "faq": "FAQ",
+      "local": "Local area"
     }
   },
   "serviceTemplates": {

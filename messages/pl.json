@@ -33,6 +33,10 @@
       "empty": "Nie dodano jeszcze żadnych usług.",
       "manageButton": "Zarządzaj usługami"
     },
+    "knowledge": {
+      "empty": "Nie dodano jeszcze żadnych wpisów FAQ.",
+      "manageButton": "Zarządzaj bazą wiedzy"
+    },
     "readiness": {
       "label": "Hotel jest gotowy w {percent}%"
     },
@@ -129,6 +133,10 @@
         "invalidDateRange": "Data ważne od nie może być późniejsza niż data ważne do.",
         "forbidden": "Nie masz uprawnień do edycji bazy wiedzy."
       }
+    },
+    "categories": {
+      "faq": "FAQ",
+      "local": "Okolica"
     }
   },
   "serviceTemplates": {

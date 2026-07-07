@@ -263,29 +263,29 @@ Brak nowej migracji SQL — schemat `knowledge_chunks` i polityki RLS już istni
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `npm run test`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_4_knowledge_staff_isolation.sql`
+- [x] 2.1 Unit tests pass: `npm run test` — 0bf65d0
+- [x] 2.2 Type checking passes: `npm run typecheck` — 0bf65d0
+- [x] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_4_knowledge_staff_isolation.sql` — 0bf65d0
 
 #### Manual
 
-- [ ] 2.4 Utworzenie wpisu FAQ potwierdza niepusty `content_hash` w bazie
-- [ ] 2.5 Edycja treści zmienia `content_hash` na nową wartość
+- [x] 2.4 Utworzenie wpisu FAQ potwierdza niepusty `content_hash` w bazie
+- [x] 2.5 Edycja treści zmienia `content_hash` na nową wartość
 
 ### Phase 3: UI panelu + wpięcie w wizard onboardingowy
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run typecheck`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Unit tests pass: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Unit tests pass: `npm run test`
 
 #### Manual
 
-- [ ] 3.4 Staff dodaje wpis FAQ z szablonu — widoczny na liście z poprawną kategorią
-- [ ] 3.5 Edycja treści zmienia `content_hash` w bazie (widoczne przez SQL/REPL)
-- [ ] 3.6 Usunięcie wpisu FAQ znika z listy i z bazy
-- [ ] 3.7 Dodanie/edycja wpisu „Okolica" działa bez pola „pytanie"
-- [ ] 3.8 `valid_from`/`valid_until` zapisuje się i jest widoczne po odświeżeniu
-- [ ] 3.9 Viewer widzi listę, nie widzi przycisków edycji/dodawania/usuwania
-- [ ] 3.10 Krok „Baza wiedzy" w wizardzie klikalny; dodanie ≥1 wpisu podnosi gotowość o 25 p.p.
+- [x] 3.4 Staff dodaje wpis FAQ z szablonu — widoczny na liście z poprawną kategorią
+- [x] 3.5 Edycja treści zmienia `content_hash` w bazie (widoczne przez SQL/REPL)
+- [x] 3.6 Usunięcie wpisu FAQ znika z listy i z bazy
+- [x] 3.7 Dodanie/edycja wpisu „Okolica" działa bez pola „pytanie"
+- [x] 3.8 `valid_from`/`valid_until` zapisuje się i jest widoczne po odświeżeniu
+- [x] 3.9 Viewer widzi listę, nie widzi przycisków edycji/dodawania/usuwania
+- [x] 3.10 Krok „Baza wiedzy" w wizardzie klikalny; dodanie ≥1 wpisu podnosi gotowość o 25 p.p.
