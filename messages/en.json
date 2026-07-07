@@ -91,6 +91,46 @@
       "info": "Information"
     }
   },
+  "knowledge": {
+    "list": {
+      "title": "Knowledge base",
+      "empty": "No FAQ entries added yet.",
+      "addFromTemplate": "Add from template",
+      "addCustom": "Add custom"
+    },
+    "local": {
+      "title": "Local area",
+      "empty": "No local area information added yet.",
+      "addCustom": "Add entry"
+    },
+    "form": {
+      "fields": {
+        "question": "Question",
+        "content": "Answer",
+        "category": "Category",
+        "language": "Language",
+        "validFrom": "Valid from",
+        "validUntil": "Valid until"
+      },
+      "actions": {
+        "save": "Save",
+        "saving": "Saving...",
+        "saved": "Saved",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirm": "Are you sure you want to delete this entry?"
+      },
+      "errors": {
+        "questionRequired": "A question is required for an FAQ entry.",
+        "contentRequired": "Answer content is required.",
+        "invalidCategory": "Select a valid category.",
+        "invalidLanguage": "Select a valid language.",
+        "invalidDateRange": "The valid-from date cannot be later than the valid-until date.",
+        "forbidden": "You don't have permission to edit the knowledge base."
+      }
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Breakfast in room",
@@ -171,6 +211,28 @@
     "city_tour_info": {
       "name": "City tour information",
       "description": "Information and recommendations for exploring the city."
+    }
+  },
+  "faqTemplates": {
+    "check_in_out_hours": {
+      "question": "What are the check-in and check-out times?",
+      "content": "Check-in is from 3:00 PM and check-out is until 11:00 AM. Early check-in or late check-out may be arranged in advance with the reception, subject to availability."
+    },
+    "parking": {
+      "question": "Does the hotel offer parking?",
+      "content": "The hotel provides parking for guests. Spaces are limited, so we recommend requesting parking in advance when booking."
+    },
+    "wifi": {
+      "question": "Is WiFi available at the hotel?",
+      "content": "Free WiFi is available in all rooms and common areas of the hotel. Access details are provided in the welcome materials in your room."
+    },
+    "late_checkout": {
+      "question": "Can I check out later than the standard time?",
+      "content": "Late check-out is available subject to room availability and may involve an additional fee. Please request late check-out at the reception in advance."
+    },
+    "pets": {
+      "question": "Can I bring my dog or cat?",
+      "content": "Pets are welcome at our hotel. Please inform the reception about your pet in advance, as additional rules or fees may apply."
     }
   }
 }

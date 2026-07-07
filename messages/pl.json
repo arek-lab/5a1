@@ -91,6 +91,46 @@
       "info": "Informacje"
     }
   },
+  "knowledge": {
+    "list": {
+      "title": "Baza wiedzy",
+      "empty": "Nie dodano jeszcze żadnych wpisów FAQ.",
+      "addFromTemplate": "Dodaj z szablonu",
+      "addCustom": "Dodaj własne"
+    },
+    "local": {
+      "title": "Okolica",
+      "empty": "Nie dodano jeszcze informacji o okolicy.",
+      "addCustom": "Dodaj wpis"
+    },
+    "form": {
+      "fields": {
+        "question": "Pytanie",
+        "content": "Odpowiedź",
+        "category": "Kategoria",
+        "language": "Język",
+        "validFrom": "Ważne od",
+        "validUntil": "Ważne do"
+      },
+      "actions": {
+        "save": "Zapisz",
+        "saving": "Zapisywanie...",
+        "saved": "Zapisano",
+        "cancel": "Anuluj",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "deleteConfirm": "Czy na pewno chcesz usunąć ten wpis?"
+      },
+      "errors": {
+        "questionRequired": "Pytanie jest wymagane dla wpisu FAQ.",
+        "contentRequired": "Treść odpowiedzi jest wymagana.",
+        "invalidCategory": "Wybierz prawidłową kategorię.",
+        "invalidLanguage": "Wybierz prawidłowy język.",
+        "invalidDateRange": "Data ważne od nie może być późniejsza niż data ważne do.",
+        "forbidden": "Nie masz uprawnień do edycji bazy wiedzy."
+      }
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Śniadanie do pokoju",
@@ -171,6 +211,28 @@
     "city_tour_info": {
       "name": "Informacja o wycieczkach po mieście",
       "description": "Informacje i rekomendacje dotyczące zwiedzania miasta."
+    }
+  },
+  "faqTemplates": {
+    "check_in_out_hours": {
+      "question": "Jakie są godziny zameldowania i wymeldowania?",
+      "content": "Zameldowanie odbywa się od godziny 15:00, a wymeldowanie do godziny 11:00. W miarę dostępności możliwe jest wcześniejsze zameldowanie lub późniejsze wymeldowanie po wcześniejszym uzgodnieniu z recepcją."
+    },
+    "parking": {
+      "question": "Czy hotel zapewnia parking?",
+      "content": "Hotel dysponuje parkingiem dla gości. Liczba miejsc jest ograniczona, dlatego zalecamy wcześniejsze zgłoszenie chęci skorzystania z parkingu podczas rezerwacji."
+    },
+    "wifi": {
+      "question": "Czy w hotelu jest dostępne WiFi?",
+      "content": "Bezpłatne WiFi jest dostępne we wszystkich pokojach oraz w częściach wspólnych hotelu. Dane dostępowe do sieci znajdują się w materiałach powitalnych w pokoju."
+    },
+    "late_checkout": {
+      "question": "Czy mogę wymeldować się później niż standardowo?",
+      "content": "Późne wymeldowanie jest możliwe w miarę dostępności pokoi i może wiązać się z dodatkową opłatą. Prosimy o zgłoszenie chęci późnego wymeldowania na recepcji z wyprzedzeniem."
+    },
+    "pets": {
+      "question": "Czy mogę przyjechać z psem lub kotem?",
+      "content": "Zwierzęta domowe są mile widziane w naszym hotelu. Prosimy o wcześniejsze poinformowanie recepcji o zwierzęciu, ponieważ mogą obowiązywać dodatkowe zasady lub opłaty."
     }
   }
 }
