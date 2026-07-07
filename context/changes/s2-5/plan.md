@@ -197,10 +197,10 @@ Brak migracji schematu — wszystkie wymagane kolumny (`qr_codes.*`, `properties
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Unit/integration tests pass: `npm run test` (obejmuje nowy `it-6.test.ts`)
-- [x] 1.4 SQL izolacja RLS: `psql "$DATABASE_URL" -f supabase/tests/s2_5_qr_staff_isolation.sql` kończy się `S2.5 PASSED`
+- [x] 1.1 Type checking passes: `npm run typecheck` — adbe58c
+- [x] 1.2 Linting passes: `npm run lint` — adbe58c
+- [x] 1.3 Unit/integration tests pass: `npm run test` (obejmuje nowy `it-6.test.ts`) — adbe58c
+- [x] 1.4 SQL izolacja RLS: `psql "$DATABASE_URL" -f supabase/tests/s2_5_qr_staff_isolation.sql` kończy się `S2.5 PASSED` — adbe58c
 
 #### Manual
 
@@ -212,15 +212,15 @@ Brak migracji schematu — wszystkie wymagane kolumny (`qr_codes.*`, `properties
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 Wejście na `/qr` jako Owner/Admin/Staff pokazuje kartę QR recepcji, listę pokoi i licznik sesji
-- [ ] 2.5 Wejście na `/qr` gdy `dpa_signed_at IS NULL` pokazuje komunikat blokady zamiast UI
-- [ ] 2.6 Kliknięcie "Rotuj teraz" generuje nowy QR recepcji i poprzedni staje się `is_active=false`
-- [ ] 2.7 Po 5 minutach QR recepcji rotuje automatycznie bez akcji użytkownika
-- [ ] 2.8 Dezaktywacja QR pokoju → kolejny skan `/api/scan/room` dla tego pokoju zwraca błąd `room_qr_not_found`
-- [ ] 2.9 Viewer widzi stronę w trybie tylko-odczyt (brak przycisków rotacji/przełączników)
+- [x] 2.4 Wejście na `/qr` jako Owner/Admin/Staff pokazuje kartę QR recepcji, listę pokoi i licznik sesji
+- [x] 2.5 Wejście na `/qr` gdy `dpa_signed_at IS NULL` pokazuje komunikat blokady zamiast UI
+- [x] 2.6 Kliknięcie "Rotuj teraz" generuje nowy QR recepcji i poprzedni staje się `is_active=false`
+- [x] 2.7 Po 5 minutach QR recepcji rotuje automatycznie bez akcji użytkownika
+- [x] 2.8 Dezaktywacja QR pokoju → kolejny skan `/api/scan/room` dla tego pokoju zwraca błąd `room_qr_not_found`
+- [x] 2.9 Viewer widzi stronę w trybie tylko-odczyt (brak przycisków rotacji/przełączników)

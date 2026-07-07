@@ -139,6 +139,33 @@
       "local": "Local area"
     }
   },
+  "qr": {
+    "page": {
+      "title": "QR management"
+    },
+    "reception": {
+      "title": "Reception QR",
+      "countdown": "Next rotation in",
+      "sessionCount": "Active sessions on this code",
+      "rotateNow": "Rotate now",
+      "empty": "No active reception QR code."
+    },
+    "rooms": {
+      "title": "Rooms",
+      "empty": "No rooms in this hotel.",
+      "activeLabel": "QR active",
+      "inactiveLabel": "QR inactive",
+      "activate": "Activate QR",
+      "deactivate": "Deactivate QR"
+    },
+    "dpaBlocked": {
+      "message": "The QR module is locked until the Data Processing Agreement (DPA) is signed."
+    },
+    "errors": {
+      "forbidden": "You don't have permission to manage QR codes.",
+      "dpaNotSigned": "The Data Processing Agreement (DPA) has not been signed."
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Breakfast in room",

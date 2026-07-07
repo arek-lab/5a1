@@ -139,6 +139,33 @@
       "local": "Okolica"
     }
   },
+  "qr": {
+    "page": {
+      "title": "Zarządzanie QR"
+    },
+    "reception": {
+      "title": "QR recepcji",
+      "countdown": "Następna rotacja za",
+      "sessionCount": "Aktywne sesje na tym kodzie",
+      "rotateNow": "Rotuj teraz",
+      "empty": "Brak aktywnego kodu QR recepcji."
+    },
+    "rooms": {
+      "title": "Pokoje",
+      "empty": "Brak pokoi w tym hotelu.",
+      "activeLabel": "QR aktywny",
+      "inactiveLabel": "QR nieaktywny",
+      "activate": "Aktywuj QR",
+      "deactivate": "Dezaktywuj QR"
+    },
+    "dpaBlocked": {
+      "message": "Moduł QR jest zablokowany, dopóki umowa powierzenia danych (DPA) nie zostanie podpisana."
+    },
+    "errors": {
+      "forbidden": "Nie masz uprawnień do zarządzania kodami QR.",
+      "dpaNotSigned": "Umowa powierzenia danych (DPA) nie została podpisana."
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Śniadanie do pokoju",
