@@ -1,7 +1,7 @@
 ---
 change_id: s2-5
 title: Zarządzanie QR — auto-rotacja, dezaktywacja, licznik sesji (Moduł 4)
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null

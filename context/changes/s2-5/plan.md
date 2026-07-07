@@ -204,23 +204,23 @@ Brak migracji schematu — wszystkie wymagane kolumny (`qr_codes.*`, `properties
 
 #### Manual
 
-- [ ] 1.5 Wywołanie `rotateReceptionQR()` jako viewer zwraca `{error: 'forbidden'}`
-- [ ] 1.6 Wywołanie `rotateReceptionQR()` na property bez DPA zwraca `{error: 'dpaNotSigned'}`
-- [ ] 1.7 `getActiveReceptionSessionCount` zwraca poprawną liczbę po ręcznym seedzie sesji w lokalnej bazie Supabase
+- [x] 1.5 Wywołanie `rotateReceptionQR()` jako viewer zwraca `{error: 'forbidden'}` — adbe58c
+- [x] 1.6 Wywołanie `rotateReceptionQR()` na property bez DPA zwraca `{error: 'dpaNotSigned'}` — adbe58c
+- [x] 1.7 `getActiveReceptionSessionCount` zwraca poprawną liczbę po ręcznym seedzie sesji w lokalnej bazie Supabase — adbe58c
 
 ### Phase 2: UI panelu QR
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npm run typecheck` — 4fb0405
+- [x] 2.2 Linting passes: `npm run lint` — 4fb0405
+- [x] 2.3 Build passes: `npm run build` — 4fb0405
 
 #### Manual
 
-- [x] 2.4 Wejście na `/qr` jako Owner/Admin/Staff pokazuje kartę QR recepcji, listę pokoi i licznik sesji
-- [x] 2.5 Wejście na `/qr` gdy `dpa_signed_at IS NULL` pokazuje komunikat blokady zamiast UI
-- [x] 2.6 Kliknięcie "Rotuj teraz" generuje nowy QR recepcji i poprzedni staje się `is_active=false`
-- [x] 2.7 Po 5 minutach QR recepcji rotuje automatycznie bez akcji użytkownika
-- [x] 2.8 Dezaktywacja QR pokoju → kolejny skan `/api/scan/room` dla tego pokoju zwraca błąd `room_qr_not_found`
-- [x] 2.9 Viewer widzi stronę w trybie tylko-odczyt (brak przycisków rotacji/przełączników)
+- [x] 2.4 Wejście na `/qr` jako Owner/Admin/Staff pokazuje kartę QR recepcji, listę pokoi i licznik sesji — 4fb0405
+- [x] 2.5 Wejście na `/qr` gdy `dpa_signed_at IS NULL` pokazuje komunikat blokady zamiast UI — 4fb0405
+- [x] 2.6 Kliknięcie "Rotuj teraz" generuje nowy QR recepcji i poprzedni staje się `is_active=false` — 4fb0405
+- [x] 2.7 Po 5 minutach QR recepcji rotuje automatycznie bez akcji użytkownika — 4fb0405
+- [x] 2.8 Dezaktywacja QR pokoju → kolejny skan `/api/scan/room` dla tego pokoju zwraca błąd `room_qr_not_found` — 4fb0405
+- [x] 2.9 Viewer widzi stronę w trybie tylko-odczyt (brak przycisków rotacji/przełączników) — 4fb0405
