@@ -38,5 +38,135 @@
     "banner": {
       "cta": "Dokończ konfigurację"
     }
+  },
+  "services": {
+    "list": {
+      "title": "Usługi",
+      "empty": "Brak usług. Dodaj usługę z szablonu lub od zera.",
+      "activeLabel": "Aktywna",
+      "inactiveLabel": "Nieaktywna",
+      "pinnedLabel": "Polecane",
+      "includedLabel": "W cenie",
+      "addFromTemplate": "Dodaj z szablonu",
+      "addCustom": "Dodaj własną"
+    },
+    "form": {
+      "fields": {
+        "name": "Nazwa",
+        "description": "Opis",
+        "category": "Kategoria",
+        "priceCents": "Cena",
+        "included": "W cenie (bez dopłaty)",
+        "imageUrl": "URL zdjęcia"
+      },
+      "actions": {
+        "save": "Zapisz",
+        "saving": "Zapisywanie...",
+        "saved": "Zapisano",
+        "cancel": "Anuluj",
+        "edit": "Edytuj",
+        "activate": "Aktywuj",
+        "deactivate": "Dezaktywuj",
+        "pin": "Przypnij do Polecamy",
+        "unpin": "Odepnij z Polecamy"
+      },
+      "errors": {
+        "nameRequired": "Nazwa usługi jest wymagana.",
+        "invalidCategory": "Wybierz prawidłową kategorię.",
+        "invalidPrice": "Cena musi być nieujemną liczbą całkowitą.",
+        "invalidUrl": "URL zdjęcia musi być prawidłowym adresem URL.",
+        "pinLimitExceeded": "Można przypiąć maksymalnie 3 usługi do sekcji Polecamy.",
+        "forbidden": "Nie masz uprawnień do edycji usług."
+      }
+    },
+    "categories": {
+      "restaurant": "Restauracja & Bar",
+      "room_service": "Usługi pokojowe",
+      "spa": "Spa & Wellness",
+      "transport": "Transport",
+      "info": "Informacje"
+    }
+  },
+  "serviceTemplates": {
+    "breakfast_in_room": {
+      "name": "Śniadanie do pokoju",
+      "description": "Dostawa śniadania bezpośrednio do pokoju gościa."
+    },
+    "dinner_a_la_carte": {
+      "name": "Kolacja à la carte",
+      "description": "Zamówienie kolacji z menu à la carte."
+    },
+    "minibar_restock": {
+      "name": "Uzupełnienie minibaru",
+      "description": "Doładowanie minibaru wybranymi produktami."
+    },
+    "room_service_snacks": {
+      "name": "Przekąski do pokoju",
+      "description": "Zestaw przekąsek dostarczany do pokoju."
+    },
+    "daily_cleaning": {
+      "name": "Codzienne sprzątanie",
+      "description": "Standardowe sprzątanie pokoju każdego dnia."
+    },
+    "extra_towels": {
+      "name": "Dodatkowe ręczniki",
+      "description": "Dostawa dodatkowego kompletu ręczników."
+    },
+    "laundry": {
+      "name": "Pranie",
+      "description": "Usługa prania i czyszczenia odzieży gościa."
+    },
+    "ironing_service": {
+      "name": "Prasowanie",
+      "description": "Prasowanie odzieży gościa na życzenie."
+    },
+    "massage": {
+      "name": "Masaż",
+      "description": "Masaż relaksacyjny lub leczniczy w strefie spa."
+    },
+    "sauna_session": {
+      "name": "Sesja w saunie",
+      "description": "Wejście do sauny na wybrany czas."
+    },
+    "pool_access": {
+      "name": "Wstęp na basen",
+      "description": "Dostęp do strefy basenowej hotelu."
+    },
+    "yoga_class": {
+      "name": "Zajęcia jogi",
+      "description": "Grupowe lub indywidualne zajęcia jogi."
+    },
+    "airport_transfer": {
+      "name": "Transfer lotniskowy",
+      "description": "Transport z/do lotniska zorganizowany przez hotel."
+    },
+    "bike_rental": {
+      "name": "Wynajem roweru",
+      "description": "Wypożyczenie roweru na wybrany okres."
+    },
+    "car_rental": {
+      "name": "Wynajem samochodu",
+      "description": "Wypożyczenie samochodu na wybrany okres."
+    },
+    "taxi_booking": {
+      "name": "Zamówienie taksówki",
+      "description": "Rezerwacja taksówki na życzenie gościa."
+    },
+    "early_checkin": {
+      "name": "Wczesne zameldowanie",
+      "description": "Możliwość zameldowania przed standardową godziną."
+    },
+    "late_checkout": {
+      "name": "Późne wymeldowanie",
+      "description": "Możliwość wymeldowania po standardowej godzinie."
+    },
+    "luggage_storage": {
+      "name": "Przechowalnia bagażu",
+      "description": "Bezpieczne przechowanie bagażu gościa."
+    },
+    "city_tour_info": {
+      "name": "Informacja o wycieczkach po mieście",
+      "description": "Informacje i rekomendacje dotyczące zwiedzania miasta."
+    }
   }
 }

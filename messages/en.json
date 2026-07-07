@@ -38,5 +38,135 @@
     "banner": {
       "cta": "Complete setup"
     }
+  },
+  "services": {
+    "list": {
+      "title": "Services",
+      "empty": "No services yet. Add one from a template or from scratch.",
+      "activeLabel": "Active",
+      "inactiveLabel": "Inactive",
+      "pinnedLabel": "Featured",
+      "includedLabel": "Included",
+      "addFromTemplate": "Add from template",
+      "addCustom": "Add custom"
+    },
+    "form": {
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "category": "Category",
+        "priceCents": "Price",
+        "included": "Included (no extra charge)",
+        "imageUrl": "Image URL"
+      },
+      "actions": {
+        "save": "Save",
+        "saving": "Saving...",
+        "saved": "Saved",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "pin": "Pin to Featured",
+        "unpin": "Unpin from Featured"
+      },
+      "errors": {
+        "nameRequired": "Service name is required.",
+        "invalidCategory": "Select a valid category.",
+        "invalidPrice": "Price must be a non-negative integer.",
+        "invalidUrl": "Image URL must be a valid URL.",
+        "pinLimitExceeded": "You can pin at most 3 services to Featured.",
+        "forbidden": "You don't have permission to edit services."
+      }
+    },
+    "categories": {
+      "restaurant": "Restaurant & Bar",
+      "room_service": "Room Service",
+      "spa": "Spa & Wellness",
+      "transport": "Transport",
+      "info": "Information"
+    }
+  },
+  "serviceTemplates": {
+    "breakfast_in_room": {
+      "name": "Breakfast in room",
+      "description": "Breakfast delivered directly to the guest's room."
+    },
+    "dinner_a_la_carte": {
+      "name": "À la carte dinner",
+      "description": "Dinner ordered from the à la carte menu."
+    },
+    "minibar_restock": {
+      "name": "Minibar restock",
+      "description": "Refill the minibar with selected items."
+    },
+    "room_service_snacks": {
+      "name": "Room service snacks",
+      "description": "A snack selection delivered to the room."
+    },
+    "daily_cleaning": {
+      "name": "Daily cleaning",
+      "description": "Standard room cleaning performed daily."
+    },
+    "extra_towels": {
+      "name": "Extra towels",
+      "description": "Delivery of an additional set of towels."
+    },
+    "laundry": {
+      "name": "Laundry",
+      "description": "Laundry and clothing cleaning service."
+    },
+    "ironing_service": {
+      "name": "Ironing service",
+      "description": "Ironing of guest clothing on request."
+    },
+    "massage": {
+      "name": "Massage",
+      "description": "Relaxing or therapeutic massage in the spa area."
+    },
+    "sauna_session": {
+      "name": "Sauna session",
+      "description": "Sauna access for a selected duration."
+    },
+    "pool_access": {
+      "name": "Pool access",
+      "description": "Access to the hotel pool area."
+    },
+    "yoga_class": {
+      "name": "Yoga class",
+      "description": "Group or individual yoga session."
+    },
+    "airport_transfer": {
+      "name": "Airport transfer",
+      "description": "Transport to/from the airport arranged by the hotel."
+    },
+    "bike_rental": {
+      "name": "Bike rental",
+      "description": "Bicycle rental for a selected period."
+    },
+    "car_rental": {
+      "name": "Car rental",
+      "description": "Car rental for a selected period."
+    },
+    "taxi_booking": {
+      "name": "Taxi booking",
+      "description": "Taxi booking on guest request."
+    },
+    "early_checkin": {
+      "name": "Early check-in",
+      "description": "Ability to check in before the standard time."
+    },
+    "late_checkout": {
+      "name": "Late check-out",
+      "description": "Ability to check out after the standard time."
+    },
+    "luggage_storage": {
+      "name": "Luggage storage",
+      "description": "Secure storage of guest luggage."
+    },
+    "city_tour_info": {
+      "name": "City tour information",
+      "description": "Information and recommendations for exploring the city."
+    }
   }
 }
