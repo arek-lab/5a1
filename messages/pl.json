@@ -1,5 +1,38 @@
 {
   "common": {
     "loading": "Ładowanie..."
+  },
+  "onboarding": {
+    "steps": {
+      "profile": "Profil hotelu",
+      "services": "Usługi",
+      "knowledge": "Baza wiedzy"
+    },
+    "profile": {
+      "fields": {
+        "name": "Nazwa hotelu",
+        "address": "Adres",
+        "phone": "Telefon recepcji",
+        "timezone": "Strefa czasowa",
+        "checkIn": "Godzina zameldowania",
+        "checkOut": "Godzina wymeldowania",
+        "logoUrl": "URL logo"
+      },
+      "actions": {
+        "save": "Zapisz",
+        "saving": "Zapisywanie..."
+      },
+      "errors": {
+        "nameRequired": "Nazwa hotelu jest wymagana.",
+        "invalidUrl": "URL logo musi być prawidłowym adresem URL.",
+        "forbidden": "Nie masz uprawnień do edycji profilu hotelu."
+      }
+    },
+    "readiness": {
+      "label": "Hotel jest gotowy w {percent}%"
+    },
+    "banner": {
+      "cta": "Dokończ konfigurację"
+    }
   }
 }

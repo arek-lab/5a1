@@ -1,5 +1,38 @@
 {
   "common": {
     "loading": "Loading..."
+  },
+  "onboarding": {
+    "steps": {
+      "profile": "Hotel profile",
+      "services": "Services",
+      "knowledge": "Knowledge base"
+    },
+    "profile": {
+      "fields": {
+        "name": "Hotel name",
+        "address": "Address",
+        "phone": "Reception phone",
+        "timezone": "Timezone",
+        "checkIn": "Check-in time",
+        "checkOut": "Check-out time",
+        "logoUrl": "Logo URL"
+      },
+      "actions": {
+        "save": "Save",
+        "saving": "Saving..."
+      },
+      "errors": {
+        "nameRequired": "Hotel name is required.",
+        "invalidUrl": "Logo URL must be a valid URL.",
+        "forbidden": "You don't have permission to edit the hotel profile."
+      }
+    },
+    "readiness": {
+      "label": "Hotel is {percent}% ready"
+    },
+    "banner": {
+      "cta": "Complete setup"
+    }
   }
 }
