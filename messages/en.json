@@ -20,7 +20,8 @@
       },
       "actions": {
         "save": "Save",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "saved": "Saved"
       },
       "errors": {
         "nameRequired": "Hotel name is required.",

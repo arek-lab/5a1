@@ -378,24 +378,24 @@ No schema migration required — all columns already exist (see Current State An
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm run test -- lib/panel/__tests__/readiness.test.ts lib/panel/__tests__/onboarding-resume.test.ts`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Unit tests pass: `npm run test -- lib/panel/__tests__/readiness.test.ts lib/panel/__tests__/onboarding-resume.test.ts` — 2de6021
+- [x] 1.2 Type checking passes: `npm run typecheck` — 2de6021
+- [x] 1.3 Linting passes: `npm run lint` — 2de6021
 
 ### Phase 2: Hotel Profile Form + Save Server Action
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Owner/admin: full valid submit saves `properties` and sets `setup_completed=true`
-- [ ] 2.4 Owner/admin: invalid `logo_url` shows inline error, no write
-- [ ] 2.5 Owner/admin: empty `name` shows inline error
-- [ ] 2.6 Staff/viewer: profile renders read-only, no submit button
-- [ ] 2.7 Re-visiting form after save shows pre-filled values
+- [x] 2.3 Owner/admin: full valid submit saves `properties` and sets `setup_completed=true`
+- [x] 2.4 Owner/admin: invalid `logo_url` shows inline error, no write
+- [x] 2.5 Owner/admin: empty `name` shows inline error
+- [x] 2.6 Staff/viewer: profile renders read-only, no submit button
+- [x] 2.7 Re-visiting form after save shows pre-filled values
 
 ### Phase 3: Wizard Shell UI
 

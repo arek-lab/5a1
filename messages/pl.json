@@ -20,7 +20,8 @@
       },
       "actions": {
         "save": "Zapisz",
-        "saving": "Zapisywanie..."
+        "saving": "Zapisywanie...",
+        "saved": "Zapisano"
       },
       "errors": {
         "nameRequired": "Nazwa hotelu jest wymagana.",
