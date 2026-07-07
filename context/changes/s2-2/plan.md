@@ -401,28 +401,28 @@ No schema migration required — all columns already exist (see Current State An
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run typecheck`
-- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npm run typecheck` — d9bfd80
+- [x] 3.2 Linting passes: `npm run lint` — d9bfd80
 
 #### Manual
 
-- [x] 3.3 Empty profile → wizard lands on "Hotel profile" step
-- [x] 3.4 Progress bar shows 0% before save, 25% after complete profile save
-- [x] 3.5 Placeholder steps are visibly disabled and unclickable
-- [x] 3.6 After profile completion, re-visit lands on first placeholder step
-- [x] 3.7 All text renders from PL/EN message files
+- [x] 3.3 Empty profile → wizard lands on "Hotel profile" step — d9bfd80
+- [x] 3.4 Progress bar shows 0% before save, 25% after complete profile save — d9bfd80
+- [x] 3.5 Placeholder steps are visibly disabled and unclickable — d9bfd80
+- [x] 3.6 After profile completion, re-visit lands on first placeholder step — d9bfd80
+- [x] 3.7 All text renders from PL/EN message files — d9bfd80
 
 ### Phase 4: RBAC Gating, Dashboard Banner & Entry Routing
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npm run typecheck`
-- [ ] 4.2 Linting passes: `npm run lint`
+- [x] 4.1 Type checking passes: `npm run typecheck`
+- [x] 4.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.3 Owner/admin with `setup_completed=false` sees banner linking to `/onboarding`
-- [ ] 4.4 Owner/admin with `setup_completed=true` sees no banner
-- [ ] 4.5 Staff/viewer never sees the banner
-- [ ] 4.6 Staff/viewer retains normal `/dashboard` access
-- [ ] 4.7 Staff/viewer visiting `/onboarding` directly sees read-only view, not `/unauthorized`
+- [x] 4.3 Owner/admin with `setup_completed=false` sees banner linking to `/onboarding`
+- [x] 4.4 Owner/admin with `setup_completed=true` sees no banner
+- [x] 4.5 Staff/viewer never sees the banner
+- [x] 4.6 Staff/viewer retains normal `/dashboard` access
+- [x] 4.7 Staff/viewer visiting `/onboarding` directly sees read-only view, not `/unauthorized`

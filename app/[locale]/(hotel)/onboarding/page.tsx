@@ -7,6 +7,7 @@ import { isProfileComplete, getReadiness } from '@/lib/panel/readiness'
 import { resumeStepKey } from '@/lib/panel/onboarding-resume'
 import { ONBOARDING_STEPS, type OnboardingStepKey } from '@/lib/panel/onboarding-steps'
 import OnboardingWizardShell from '@/components/panel/onboarding-wizard-shell'
+import RequirePermission from '@/components/panel/require-permission'
 import ProfileStepForm from './profile-step-form'
 import ProfileReadonly from './profile-readonly'
 
@@ -42,20 +43,22 @@ export default async function OnboardingPage({
   const t = await getTranslations('onboarding.wizard')
 
   return (
-    <OnboardingWizardShell
-      steps={ONBOARDING_STEPS}
-      activeStepKey={activeStepKey}
-      readinessPercentage={readiness.percentage}
-    >
-      {activeStepKey === 'profile' ? (
-        canWrite ? (
-          <ProfileStepForm initialValues={property} />
+    <RequirePermission role={hotelUser.role} resource="hotel_profile" level="read">
+      <OnboardingWizardShell
+        steps={ONBOARDING_STEPS}
+        activeStepKey={activeStepKey}
+        readinessPercentage={readiness.percentage}
+      >
+        {activeStepKey === 'profile' ? (
+          canWrite ? (
+            <ProfileStepForm initialValues={property} />
+          ) : (
+            <ProfileReadonly initialValues={property} />
+          )
         ) : (
-          <ProfileReadonly initialValues={property} />
-        )
-      ) : (
-        <p>{t('comingSoon')}</p>
-      )}
-    </OnboardingWizardShell>
+          <p>{t('comingSoon')}</p>
+        )}
+      </OnboardingWizardShell>
+    </RequirePermission>
   )
 }
