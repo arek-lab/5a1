@@ -32,6 +32,9 @@
     "readiness": {
       "label": "Hotel jest gotowy w {percent}%"
     },
+    "wizard": {
+      "comingSoon": "Wkrótce"
+    },
     "banner": {
       "cta": "Dokończ konfigurację"
     }

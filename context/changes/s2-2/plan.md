@@ -386,31 +386,31 @@ No schema migration required — all columns already exist (see Current State An
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npm run typecheck` — b051ca3
+- [x] 2.2 Linting passes: `npm run lint` — b051ca3
 
 #### Manual
 
-- [x] 2.3 Owner/admin: full valid submit saves `properties` and sets `setup_completed=true`
-- [x] 2.4 Owner/admin: invalid `logo_url` shows inline error, no write
-- [x] 2.5 Owner/admin: empty `name` shows inline error
-- [x] 2.6 Staff/viewer: profile renders read-only, no submit button
-- [x] 2.7 Re-visiting form after save shows pre-filled values
+- [x] 2.3 Owner/admin: full valid submit saves `properties` and sets `setup_completed=true` — b051ca3
+- [x] 2.4 Owner/admin: invalid `logo_url` shows inline error, no write — b051ca3
+- [x] 2.5 Owner/admin: empty `name` shows inline error — b051ca3
+- [x] 2.6 Staff/viewer: profile renders read-only, no submit button — b051ca3
+- [x] 2.7 Re-visiting form after save shows pre-filled values — b051ca3
 
 ### Phase 3: Wizard Shell UI
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run typecheck`
-- [ ] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npm run typecheck`
+- [x] 3.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Empty profile → wizard lands on "Hotel profile" step
-- [ ] 3.4 Progress bar shows 0% before save, 25% after complete profile save
-- [ ] 3.5 Placeholder steps are visibly disabled and unclickable
-- [ ] 3.6 After profile completion, re-visit lands on first placeholder step
-- [ ] 3.7 All text renders from PL/EN message files
+- [x] 3.3 Empty profile → wizard lands on "Hotel profile" step
+- [x] 3.4 Progress bar shows 0% before save, 25% after complete profile save
+- [x] 3.5 Placeholder steps are visibly disabled and unclickable
+- [x] 3.6 After profile completion, re-visit lands on first placeholder step
+- [x] 3.7 All text renders from PL/EN message files
 
 ### Phase 4: RBAC Gating, Dashboard Banner & Entry Routing
 

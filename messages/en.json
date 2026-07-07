@@ -32,6 +32,9 @@
     "readiness": {
       "label": "Hotel is {percent}% ready"
     },
+    "wizard": {
+      "comingSoon": "Coming soon"
+    },
     "banner": {
       "cta": "Complete setup"
     }
