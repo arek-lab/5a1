@@ -8,6 +8,6 @@ export type OnboardingStep = {
 
 export const ONBOARDING_STEPS: OnboardingStep[] = [
   { key: 'profile', labelKey: 'steps.profile', interactive: true },
-  { key: 'services', labelKey: 'steps.services', interactive: false },
+  { key: 'services', labelKey: 'steps.services', interactive: true },
   { key: 'knowledge', labelKey: 'steps.knowledge', interactive: false },
 ]

@@ -10,6 +10,7 @@ import OnboardingWizardShell from '@/components/panel/onboarding-wizard-shell'
 import RequirePermission from '@/components/panel/require-permission'
 import ProfileStepForm from './profile-step-form'
 import ProfileReadonly from './profile-readonly'
+import ServicesStep from './services-step'
 
 const STEP_KEYS = ONBOARDING_STEPS.map(s => s.key)
 
@@ -40,7 +41,19 @@ export default async function OnboardingPage({
     : resumedStep
 
   const canWrite = canPerform(hotelUser.role, 'hotel_profile', 'write')
+  const canWriteServices = canPerform(hotelUser.role, 'services', 'write')
   const t = await getTranslations('onboarding.wizard')
+
+  let activeServices: { id: string; name: string }[] = []
+  if (activeStepKey === 'services') {
+    const { data } = await supabase
+      .from('services')
+      .select('id, name')
+      .eq('property_id', hotelUser.propertyId)
+      .eq('is_active', true)
+      .order('name')
+    activeServices = data ?? []
+  }
 
   return (
     <RequirePermission role={hotelUser.role} resource="hotel_profile" level="read">
@@ -55,8 +68,10 @@ export default async function OnboardingPage({
           ) : (
             <ProfileReadonly initialValues={property} />
           )
+        ) : activeStepKey === 'services' ? (
+          <ServicesStep activeServices={activeServices} canEdit={canWriteServices} />
         ) : (
-          <p>{t('comingSoon')}</p>
+          <p className="italic text-gray-500">{t('comingSoon')}</p>
         )}
       </OnboardingWizardShell>
     </RequirePermission>

@@ -29,6 +29,10 @@
         "forbidden": "Nie masz uprawnień do edycji profilu hotelu."
       }
     },
+    "services": {
+      "empty": "Nie dodano jeszcze żadnych usług.",
+      "manageButton": "Zarządzaj usługami"
+    },
     "readiness": {
       "label": "Hotel jest gotowy w {percent}%"
     },

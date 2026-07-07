@@ -18,9 +18,14 @@ export default async function HotelLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <header>
+      <header className="flex justify-end border-b bg-white p-4 text-gray-900">
         <form action="/api/auth/sign-out" method="POST">
-          <button type="submit">Sign out</button>
+          <button
+            type="submit"
+            className="rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
+          >
+            Sign out
+          </button>
         </form>
       </header>
       {children}

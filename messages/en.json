@@ -29,6 +29,10 @@
         "forbidden": "You don't have permission to edit the hotel profile."
       }
     },
+    "services": {
+      "empty": "No services added yet.",
+      "manageButton": "Manage services"
+    },
     "readiness": {
       "label": "Hotel is {percent}% ready"
     },

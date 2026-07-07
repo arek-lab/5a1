@@ -57,43 +57,68 @@ export default function ProfileStepForm({ initialValues }: Props) {
     })
   }
 
+  const inputClass = 'w-full rounded border px-2 py-1'
+  const labelClass = 'flex flex-col gap-1 text-sm font-medium'
+
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p role="alert">{t(`errors.${error}`)}</p>}
-      {saved && <p>{t('actions.saved')}</p>}
-      <label>
+    <form onSubmit={handleSubmit} className="space-y-3">
+      {error && (
+        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+          {t(`errors.${error}`)}
+        </p>
+      )}
+      {saved && (
+        <p className="rounded border border-green-300 bg-green-50 px-3 py-2 text-sm text-green-800">
+          {t('actions.saved')}
+        </p>
+      )}
+      <label className={labelClass}>
         {t('fields.name')}
-        <input value={name} onChange={e => setName(e.target.value)} required />
+        <input className={inputClass} value={name} onChange={e => setName(e.target.value)} required />
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.address')}
-        <input value={address} onChange={e => setAddress(e.target.value)} />
+        <input className={inputClass} value={address} onChange={e => setAddress(e.target.value)} />
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.phone')}
-        <input value={phoneReception} onChange={e => setPhoneReception(e.target.value)} />
+        <input className={inputClass} value={phoneReception} onChange={e => setPhoneReception(e.target.value)} />
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.timezone')}
-        <select value={timezone} onChange={e => setTimezone(e.target.value)}>
+        <select className={inputClass} value={timezone} onChange={e => setTimezone(e.target.value)}>
           {TIMEZONES.map(tz => (
             <option key={tz} value={tz}>{tz}</option>
           ))}
         </select>
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.checkIn')}
-        <input type="time" value={checkInTime} onChange={e => setCheckInTime(e.target.value)} />
+        <input
+          className={inputClass}
+          type="time"
+          value={checkInTime}
+          onChange={e => setCheckInTime(e.target.value)}
+        />
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.checkOut')}
-        <input type="time" value={checkOutTime} onChange={e => setCheckOutTime(e.target.value)} />
+        <input
+          className={inputClass}
+          type="time"
+          value={checkOutTime}
+          onChange={e => setCheckOutTime(e.target.value)}
+        />
       </label>
-      <label>
+      <label className={labelClass}>
         {t('fields.logoUrl')}
-        <input value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
+        <input className={inputClass} value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
       </label>
-      <button type="submit" disabled={isPending}>
+      <button
+        type="submit"
+        disabled={isPending}
+        className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+      >
         {isPending ? t('actions.saving') : t('actions.save')}
       </button>
     </form>
