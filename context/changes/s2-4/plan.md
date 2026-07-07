@@ -269,23 +269,23 @@ Brak nowej migracji SQL — schemat `knowledge_chunks` i polityki RLS już istni
 
 #### Manual
 
-- [x] 2.4 Utworzenie wpisu FAQ potwierdza niepusty `content_hash` w bazie
-- [x] 2.5 Edycja treści zmienia `content_hash` na nową wartość
+- [x] 2.4 Utworzenie wpisu FAQ potwierdza niepusty `content_hash` w bazie — 69e3f91
+- [x] 2.5 Edycja treści zmienia `content_hash` na nową wartość — 69e3f91
 
 ### Phase 3: UI panelu + wpięcie w wizard onboardingowy
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run typecheck`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Unit tests pass: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck` — 69e3f91
+- [x] 3.2 Linting passes: `npm run lint` — 69e3f91
+- [x] 3.3 Unit tests pass: `npm run test` — 69e3f91
 
 #### Manual
 
-- [x] 3.4 Staff dodaje wpis FAQ z szablonu — widoczny na liście z poprawną kategorią
-- [x] 3.5 Edycja treści zmienia `content_hash` w bazie (widoczne przez SQL/REPL)
-- [x] 3.6 Usunięcie wpisu FAQ znika z listy i z bazy
-- [x] 3.7 Dodanie/edycja wpisu „Okolica" działa bez pola „pytanie"
-- [x] 3.8 `valid_from`/`valid_until` zapisuje się i jest widoczne po odświeżeniu
-- [x] 3.9 Viewer widzi listę, nie widzi przycisków edycji/dodawania/usuwania
-- [x] 3.10 Krok „Baza wiedzy" w wizardzie klikalny; dodanie ≥1 wpisu podnosi gotowość o 25 p.p.
+- [x] 3.4 Staff dodaje wpis FAQ z szablonu — widoczny na liście z poprawną kategorią — 69e3f91
+- [x] 3.5 Edycja treści zmienia `content_hash` w bazie (widoczne przez SQL/REPL) — 69e3f91
+- [x] 3.6 Usunięcie wpisu FAQ znika z listy i z bazy — 69e3f91
+- [x] 3.7 Dodanie/edycja wpisu „Okolica" działa bez pola „pytanie" — 69e3f91
+- [x] 3.8 `valid_from`/`valid_until` zapisuje się i jest widoczne po odświeżeniu — 69e3f91
+- [x] 3.9 Viewer widzi listę, nie widzi przycisków edycji/dodawania/usuwania — 69e3f91
+- [x] 3.10 Krok „Baza wiedzy" w wizardzie klikalny; dodanie ≥1 wpisu podnosi gotowość o 25 p.p. — 69e3f91

@@ -1,7 +1,7 @@
 ---
 change_id: s2-4
 title: Baza wiedzy AI — FAQ editor (Moduł 3)
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null
