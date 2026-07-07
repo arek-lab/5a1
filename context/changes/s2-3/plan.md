@@ -230,21 +230,21 @@ Brak nowej migracji SQL — schemat `services` i polityki RLS już istnieją od 
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 `messages/pl.json` i `messages/en.json` mają identyczną strukturę kluczy
+- [x] 1.1 Type checking passes: `npm run typecheck` — d7ebdba
+- [x] 1.2 Linting passes: `npm run lint` — d7ebdba
+- [x] 1.3 `messages/pl.json` i `messages/en.json` mają identyczną strukturę kluczy — d7ebdba
 
 #### Manual
 
-- [x] 1.4 Import `SERVICE_TEMPLATES`/`SERVICE_CATEGORIES` potwierdza min. 15 szablonów, 5 kategorii pokrytych
+- [x] 1.4 Import `SERVICE_TEMPLATES`/`SERVICE_CATEGORIES` potwierdza min. 15 szablonów, 5 kategorii pokrytych — d7ebdba
 
 ### Phase 2: Server actions CRUD + walidacja pin + testy
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `npm run test`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_3_services_staff_isolation.sql`
+- [x] 2.1 Unit tests pass: `npm run test`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 RLS staff isolation test passes: `psql -f supabase/tests/s2_3_services_staff_isolation.sql`
 
 #### Manual
 
