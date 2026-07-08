@@ -5,9 +5,11 @@ let _ratelimit: Ratelimit | undefined
 
 function getRatelimit(): Ratelimit {
   if (!_ratelimit) {
+    const max = Number(process.env.SCAN_RATE_LIMIT_MAX ?? 5)
+    const window = process.env.SCAN_RATE_LIMIT_WINDOW ?? '15 m'
     _ratelimit = new Ratelimit({
       redis: getRedis(),
-      limiter: Ratelimit.slidingWindow(5, '15 m'),
+      limiter: Ratelimit.slidingWindow(max, window as `${number} ${'ms' | 's' | 'm' | 'h' | 'd'}`),
       prefix: 'rl:scan',
     })
   }

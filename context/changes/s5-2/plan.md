@@ -298,23 +298,23 @@ The FK constraint change is additive in effect (existing `orders` rows are untou
 
 #### Automated
 
-- [x] 3.1 npm run typecheck passes
-- [x] 3.2 npm run lint passes
-- [x] 3.3 proxy.ts admin-auth redirect unit test passes
+- [x] 3.1 npm run typecheck passes — 539c4b1
+- [x] 3.2 npm run lint passes — 539c4b1
+- [x] 3.3 proxy.ts admin-auth redirect unit test passes — 539c4b1
 
 #### Manual
 
-- [ ] 3.4 /admin without cookie redirects to /admin/login
-- [ ] 3.5 Correct token logs in and persists across visits
-- [ ] 3.6 Wrong token shows error, no cookie set
+- [x] 3.4 /admin without cookie redirects to /admin/login
+- [x] 3.5 Correct token logs in and persists across visits
+- [x] 3.6 Wrong token shows error, no cookie set
 
 ### Phase 4: Pulse dashboard + final hardening
 
 #### Automated
 
-- [ ] 4.1 Full vitest suite passes (incl. IT-8)
-- [ ] 4.2 npm run typecheck passes
-- [ ] 4.3 npm run lint passes
+- [x] 4.1 Full vitest suite passes (incl. IT-8)
+- [x] 4.2 npm run typecheck passes
+- [x] 4.3 npm run lint passes
 
 #### Manual
 

@@ -10,6 +10,10 @@ export default defineConfig(({ mode }) => {
       environment: 'node',
       globals: true,
       env,
+      // Retention IT tests (sweep.test.ts, it-8.test.ts) both mutate the
+      // sessions/audit_logs tables globally (no property_id scoping) — running
+      // test files in parallel races their fixtures against each other.
+      fileParallelism: false,
     },
     resolve: {
       alias: {
