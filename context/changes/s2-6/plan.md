@@ -302,16 +302,16 @@ Jedna nowa migracja SQL (`20260707000001_orders_notify_trigger.sql`) dodająca t
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Testy przechodzą: `npm run test` (obejmuje `it-7.test.ts`)
-- [x] 2.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_sse_tenant_isolation.sql` kończy się `S2.6 SSE PASSED`
+- [x] 2.1 Type checking passes: `npm run typecheck` — 63384ef
+- [x] 2.2 Linting passes: `npm run lint` — 63384ef
+- [x] 2.3 Testy przechodzą: `npm run test` (obejmuje `it-7.test.ts`) — 63384ef
+- [x] 2.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_sse_tenant_isolation.sql` kończy się `S2.6 SSE PASSED` — 63384ef
 
 #### Manual
 
-- [x] 2.5 Otwarcie `/api/orders/stream` jako Viewer zwraca strumień (nie 403)
-- [x] 2.6 Otwarcie `/api/orders/stream` bez sesji zwraca 401
-- [x] 2.7 Dwa okna przeglądarki (dwa property) — zmiana statusu w A nie pojawia się w B
+- [x] 2.5 Otwarcie `/api/orders/stream` jako Viewer zwraca strumień (nie 403) — 63384ef
+- [x] 2.6 Otwarcie `/api/orders/stream` bez sesji zwraca 401 — 63384ef
+- [x] 2.7 Dwa okna przeglądarki (dwa property) — zmiana statusu w A nie pojawia się w B — 63384ef
 
 ### Phase 3: UI panelu i eksport CSV
 
