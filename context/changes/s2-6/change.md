@@ -1,7 +1,7 @@
 ---
 change_id: s2-6
 title: Inbox zamówień (Moduł 5) — statusy, SSE live update, eksport CSV
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-08
 archived_at: null
