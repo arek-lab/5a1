@@ -344,9 +344,9 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 2.1 npm run typecheck przechodzi
-- [x] 2.2 Unit test lib/invites/__tests__/send-invite.test.ts
-- [x] 2.3 Unit test app/[locale]/(hotel)/users/__tests__/actions.test.ts (inviteUser)
+- [x] 2.1 npm run typecheck przechodzi — 0d3ef4f
+- [x] 2.2 Unit test lib/invites/__tests__/send-invite.test.ts — 0d3ef4f
+- [x] 2.3 Unit test app/[locale]/(hotel)/users/__tests__/actions.test.ts (inviteUser) — 0d3ef4f
 
 #### Manual
 
