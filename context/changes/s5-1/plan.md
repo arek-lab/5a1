@@ -318,15 +318,15 @@ Fill any remaining test gaps from Phases 1–3 and do the final end-to-end manua
 
 #### Automated
 
-- [x] 3.1 npm run typecheck passes
-- [x] 3.2 npm run lint passes
-- [x] 3.3 DNT gate unit test passes
+- [x] 3.1 npm run typecheck passes — cabbd1e
+- [x] 3.2 npm run lint passes — cabbd1e
+- [x] 3.3 DNT gate unit test passes — cabbd1e
 
 #### Manual
 
-- [x] 3.4 Banner shows on first visit, dismiss persists across reload
-- [x] 3.5 DNT enabled → no banner, no PostHog request
-- [x] 3.6 Banner text correct in PL and EN
+- [x] 3.4 Banner shows on first visit, dismiss persists across reload — cabbd1e
+- [x] 3.5 DNT enabled → no banner, no PostHog request — cabbd1e
+- [x] 3.6 Banner text correct in PL and EN — cabbd1e
 
 ### Phase 4: Test hardening + manual PostHog verification
 
