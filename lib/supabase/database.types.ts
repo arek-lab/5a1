@@ -582,6 +582,7 @@ export type Database = {
           expires_at: string
           id: string
           last_asn: number | null
+          last_seen_at: string
           property_id: string
           reception_scan_at: string | null
           reservation_id: string | null
@@ -597,6 +598,7 @@ export type Database = {
           expires_at: string
           id?: string
           last_asn?: number | null
+          last_seen_at?: string
           property_id: string
           reception_scan_at?: string | null
           reservation_id?: string | null
@@ -612,6 +614,7 @@ export type Database = {
           expires_at?: string
           id?: string
           last_asn?: number | null
+          last_seen_at?: string
           property_id?: string
           reception_scan_at?: string | null
           reservation_id?: string | null
