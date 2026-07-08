@@ -312,7 +312,7 @@ Fill any remaining test gaps from Phases 1–3 and do the final end-to-end manua
 - [x] 2.5 guest_qr_scanned appears in PostHog Live Events on reception scan — 45b855e
 - [x] 2.6 hotel_login appears in Live Events on panel login — 45b855e
 - [x] 2.7 hotel_settings_updated appears with correct area on profile/service/knowledge save — 45b855e
-- [ ] 2.8 guest_session_returned fires only after >30 min gap, not on every navigation
+- [x] 2.8 guest_session_returned fires only after >30 min gap, not on every navigation
 
 ### Phase 3: Consent banner + doNotTrack
 
@@ -332,11 +332,11 @@ Fill any remaining test gaps from Phases 1–3 and do the final end-to-end manua
 
 #### Automated
 
-- [ ] 4.1 Full vitest suite passes
-- [ ] 4.2 npm run typecheck passes
-- [ ] 4.3 npm run lint passes
+- [x] 4.1 Full vitest suite passes
+- [x] 4.2 npm run typecheck passes
+- [x] 4.3 npm run lint passes
 
 #### Manual
 
-- [ ] 4.4 All 4 wired events visible in PostHog EU Live Events with correct hotel_id group
-- [ ] 4.5 No PII present in any event's properties
+- [x] 4.4 All 4 wired events visible in PostHog EU Live Events with correct hotel_id group
+- [x] 4.5 No PII present in any event's properties
