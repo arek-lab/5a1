@@ -22,6 +22,14 @@ async function requireUsersWriteAccess(): Promise<HotelUser | null> {
   return hotelUser
 }
 
+async function requireTransferAccess(): Promise<HotelUser | null> {
+  const hotelUser = await getHotelUser()
+  if (!hotelUser || !canPerform(hotelUser.role, 'transfer_ownership', 'full')) {
+    return null
+  }
+  return hotelUser
+}
+
 function inviteRedirectUrl(): string {
   return `${process.env.NEXT_PUBLIC_APP_URL}/invite/accept`
 }
@@ -138,6 +146,26 @@ export async function deactivateUser(userId: string): Promise<ActionResult> {
     .eq('id', userId)
     .eq('property_id', hotelUser.propertyId)
   if (updateError) throw new Error(updateError.message)
+
+  revalidatePath('/users')
+  return {}
+}
+
+export async function transferOwnership(targetUserId: string): Promise<ActionResult> {
+  const hotelUser = await requireTransferAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  const serviceRole = createServiceRoleClient()
+  const { error } = await serviceRole.rpc('transfer_hotel_ownership', {
+    p_property_id: hotelUser.propertyId,
+    p_current_owner_id: hotelUser.id,
+    p_new_owner_id: targetUserId,
+  })
+  if (error) {
+    if (error.message.includes('target_not_active')) return { error: 'target_not_active' }
+    if (error.message.includes('not_current_owner')) return { error: 'forbidden' }
+    throw new Error(error.message)
+  }
 
   revalidatePath('/users')
   return {}

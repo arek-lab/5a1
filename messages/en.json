@@ -149,6 +149,24 @@
         "already_registered": "This email is already registered with an account.",
         "send_failed": "Failed to send the invite email. Please try again."
       }
+    },
+    "transfer": {
+      "toggle": "Transfer ownership",
+      "title": "Transfer ownership",
+      "warning": "This will make the selected user the new Owner and demote you to Admin. This action cannot be undone from here.",
+      "fields": {
+        "target": "New owner",
+        "confirmation": "Type \"{email}\" to confirm"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "confirm": "Transfer ownership",
+        "sending": "Transferring..."
+      },
+      "errors": {
+        "forbidden": "You don't have permission to transfer ownership.",
+        "target_not_active": "The selected user must be active to receive ownership."
+      }
     }
   },
   "knowledge": {

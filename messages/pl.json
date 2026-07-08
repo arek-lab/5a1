@@ -149,6 +149,24 @@
         "already_registered": "Ten adres e-mail ma już zarejestrowane konto.",
         "send_failed": "Nie udało się wysłać e-maila z zaproszeniem. Spróbuj ponownie."
       }
+    },
+    "transfer": {
+      "toggle": "Przenieś własność",
+      "title": "Przenieś własność",
+      "warning": "Wybrany użytkownik zostanie nowym Ownerem, a Ty zostaniesz zdegradowany do Admina. Tej akcji nie można cofnąć z tego miejsca.",
+      "fields": {
+        "target": "Nowy właściciel",
+        "confirmation": "Wpisz \"{email}\", aby potwierdzić"
+      },
+      "actions": {
+        "cancel": "Anuluj",
+        "confirm": "Przenieś własność",
+        "sending": "Przenoszenie..."
+      },
+      "errors": {
+        "forbidden": "Nie masz uprawnień do przeniesienia własności.",
+        "target_not_active": "Wybrany użytkownik musi być aktywny, aby otrzymać własność."
+      }
     }
   },
   "knowledge": {

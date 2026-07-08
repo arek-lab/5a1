@@ -11,8 +11,9 @@ vi.mock('@/lib/invites/send-invite', () => ({
 
 const mockInsert = vi.fn()
 const mockFrom = vi.fn()
+const mockRpc = vi.fn()
 vi.mock('@/lib/supabase/service-role', () => ({
-  createServiceRoleClient: vi.fn(() => ({ from: mockFrom })),
+  createServiceRoleClient: vi.fn(() => ({ from: mockFrom, rpc: mockRpc })),
 }))
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -20,7 +21,7 @@ vi.mock('next/cache', () => ({
 
 import { getHotelUser } from '@/lib/panel/auth'
 import { sendInviteEmail } from '@/lib/invites/send-invite'
-import { inviteUser, changeRole, deactivateUser, reactivateUser } from '../actions'
+import { inviteUser, changeRole, deactivateUser, reactivateUser, transferOwnership } from '../actions'
 
 const mockGetHotelUser = vi.mocked(getHotelUser)
 const mockSendInviteEmail = vi.mocked(sendInviteEmail)
@@ -263,6 +264,43 @@ describe('users actions — reactivateUser', () => {
       .mockImplementationOnce(() => chainWith({ error: null }))
 
     const result = await reactivateUser('user-2')
+
+    expect(result).toEqual({})
+  })
+})
+
+describe('users actions — transferOwnership', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'owner-1', role: 'owner' }))
+  })
+
+  it('rejects admin caller with forbidden', async () => {
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'admin-1', role: 'admin' }))
+
+    const result = await transferOwnership('user-2')
+
+    expect(result).toEqual({ error: 'forbidden' })
+    expect(mockRpc).not.toHaveBeenCalled()
+  })
+
+  it('rejects a non-active target', async () => {
+    mockRpc.mockResolvedValue({ error: { message: 'target_not_active: user-2' } })
+
+    const result = await transferOwnership('user-2')
+
+    expect(result).toEqual({ error: 'target_not_active' })
+    expect(mockRpc).toHaveBeenCalledWith('transfer_hotel_ownership', {
+      p_property_id: PROP,
+      p_current_owner_id: 'owner-1',
+      p_new_owner_id: 'user-2',
+    })
+  })
+
+  it('transfers ownership on success', async () => {
+    mockRpc.mockResolvedValue({ error: null })
+
+    const result = await transferOwnership('user-2')
 
     expect(result).toEqual({})
   })

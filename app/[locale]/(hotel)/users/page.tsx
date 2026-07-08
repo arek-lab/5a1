@@ -19,6 +19,7 @@ export default async function UsersPage() {
     .order('email')
 
   const canEdit = canPerform(hotelUser.role, 'users', 'write')
+  const canTransferOwnership = canPerform(hotelUser.role, 'transfer_ownership', 'full')
   const t = await getTranslations('users.list')
 
   return (
@@ -29,6 +30,7 @@ export default async function UsersPage() {
           users={(users ?? []) as HotelUserRecord[]}
           canEdit={canEdit}
           currentUserId={hotelUser.id}
+          canTransferOwnership={canTransferOwnership}
         />
       </main>
     </RequirePermission>

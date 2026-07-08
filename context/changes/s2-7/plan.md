@@ -371,25 +371,25 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 4.1 Unit test: self-deactivate → cannot_deactivate_self
-- [x] 4.2 Unit test: dezaktywacja jedynego Ownera → last_owner_requires_transfer
-- [x] 4.3 Unit test: dezaktywacja Ownera z drugim aktywnym Ownerem → sukces
-- [x] 4.4 Unit test: dezaktywacja Staff → sukces, rekord zachowany
-- [x] 4.7 Rozszerzenie zakresu (na życzenie): akcja `reactivateUser` + przycisk w UI dla `status='deactivated'`, unit testy (staff→403, nie-deactivated→not_found, happy path)
+- [x] 4.1 Unit test: self-deactivate → cannot_deactivate_self — 77ebf39
+- [x] 4.2 Unit test: dezaktywacja jedynego Ownera → last_owner_requires_transfer — 77ebf39
+- [x] 4.3 Unit test: dezaktywacja Ownera z drugim aktywnym Ownerem → sukces — 77ebf39
+- [x] 4.4 Unit test: dezaktywacja Staff → sukces, rekord zachowany — 77ebf39
+- [x] 4.7 Rozszerzenie zakresu (na życzenie): akcja `reactivateUser` + przycisk w UI dla `status='deactivated'`, unit testy (staff→403, nie-deactivated→not_found, happy path) — 77ebf39
 
 #### Manual
 
-- [ ] 4.5 Zdezaktywowany user → login → no_access
-- [ ] 4.6 Powiązane dane nienaruszone
-- [ ] 4.8 Reaktywacja z UI: zdezaktywowany user → przycisk "Aktywuj ponownie" → status='active' → login znów działa
+- [x] 4.5 Zdezaktywowany user → login → no_access — 77ebf39
+- [x] 4.6 Powiązane dane nienaruszone — 77ebf39
+- [x] 4.8 Reaktywacja z UI: zdezaktywowany user → przycisk "Aktywuj ponownie" → status='active' → login znów działa — 77ebf39
 
 ### Phase 5: Transfer ownership
 
 #### Automated
 
-- [ ] 5.1 Test: po transferze dokładnie jeden owner
-- [ ] 5.2 Test: transfer do nie-active usera odrzucony
-- [ ] 5.3 Test: transfer wołany przez admin → 403
+- [x] 5.1 Test: po transferze dokładnie jeden owner
+- [x] 5.2 Test: transfer do nie-active usera odrzucony
+- [x] 5.3 Test: transfer wołany przez admin → 403
 
 #### Manual
 

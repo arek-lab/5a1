@@ -661,6 +661,10 @@ export type Database = {
         Args: { p_property_id: string; p_session_id?: string }
         Returns: undefined
       }
+      transfer_hotel_ownership: {
+        Args: { p_property_id: string; p_current_owner_id: string; p_new_owner_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       hotel_role: "owner" | "admin" | "staff" | "viewer"

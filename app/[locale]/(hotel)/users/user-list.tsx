@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import type { HotelRole } from '@/lib/panel/rbac'
 import { changeRole, resendInvite, deactivateUser, reactivateUser } from './actions'
 import InviteForm from './invite-form'
+import TransferOwnershipModal from './transfer-ownership-modal'
 
 export type HotelUserRecord = {
   id: string
@@ -20,6 +21,7 @@ interface Props {
   users: HotelUserRecord[]
   canEdit: boolean
   currentUserId: string
+  canTransferOwnership: boolean
 }
 
 const ASSIGNABLE_ROLES: HotelRole[] = ['admin', 'staff', 'viewer']
@@ -37,11 +39,15 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default function UserList({ users, canEdit, currentUserId }: Props) {
+export default function UserList({ users, canEdit, currentUserId, canTransferOwnership }: Props) {
   const t = useTranslations('users')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [inviting, setInviting] = useState(false)
+
+  const transferCandidates = users
+    .filter(u => u.status === 'active' && u.id !== currentUserId)
+    .map(u => ({ id: u.id, email: u.email }))
 
   function handleChangeRole(userId: string, newRole: HotelRole) {
     setError(null)
@@ -84,7 +90,7 @@ export default function UserList({ users, canEdit, currentUserId }: Props) {
       )}
 
       {canEdit && (
-        <div>
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
             className={`rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 ${inviting ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}`}
@@ -92,6 +98,7 @@ export default function UserList({ users, canEdit, currentUserId }: Props) {
           >
             {t('invite.toggle')}
           </button>
+          {canTransferOwnership && <TransferOwnershipModal candidates={transferCandidates} />}
         </div>
       )}
 
