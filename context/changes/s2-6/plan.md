@@ -287,10 +287,10 @@ Jedna nowa migracja SQL (`20260707000001_orders_notify_trigger.sql`) dodająca t
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Unit tests pass: `npm run test`
-- [x] 1.4 Migracja aplikuje się czysto: `supabase db push` / lokalny `supabase migration up`
+- [x] 1.1 Type checking passes: `npm run typecheck` — ae1c819
+- [x] 1.2 Linting passes: `npm run lint` — ae1c819
+- [x] 1.3 Unit tests pass: `npm run test` — ae1c819
+- [x] 1.4 Migracja aplikuje się czysto: `supabase db push` / lokalny `supabase migration up` — ae1c819
 
 #### Manual
 
@@ -302,16 +302,16 @@ Jedna nowa migracja SQL (`20260707000001_orders_notify_trigger.sql`) dodająca t
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Testy przechodzą: `npm run test` (obejmuje `it-7.test.ts`)
-- [ ] 2.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_sse_tenant_isolation.sql` kończy się `S2.6 SSE PASSED`
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Testy przechodzą: `npm run test` (obejmuje `it-7.test.ts`)
+- [x] 2.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_sse_tenant_isolation.sql` kończy się `S2.6 SSE PASSED`
 
 #### Manual
 
-- [ ] 2.5 Otwarcie `/api/orders/stream` jako Viewer zwraca strumień (nie 403)
-- [ ] 2.6 Otwarcie `/api/orders/stream` bez sesji zwraca 401
-- [ ] 2.7 Dwa okna przeglądarki (dwa property) — zmiana statusu w A nie pojawia się w B
+- [x] 2.5 Otwarcie `/api/orders/stream` jako Viewer zwraca strumień (nie 403)
+- [x] 2.6 Otwarcie `/api/orders/stream` bez sesji zwraca 401
+- [x] 2.7 Dwa okna przeglądarki (dwa property) — zmiana statusu w A nie pojawia się w B
 
 ### Phase 3: UI panelu i eksport CSV
 
