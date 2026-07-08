@@ -8,6 +8,13 @@ vi.mock('@/lib/analytics/capture', () => ({
   captureEvent: vi.fn(),
 }))
 
+const mockEq = vi.fn().mockResolvedValue({ error: null })
+const mockUpdate = vi.fn(() => ({ eq: mockEq }))
+const mockFrom = vi.fn(() => ({ update: mockUpdate }))
+vi.mock('@/lib/supabase/service-role', () => ({
+  createServiceRoleClient: vi.fn(() => ({ from: mockFrom })),
+}))
+
 import { getHotelUser } from '@/lib/panel/auth'
 import { captureEvent } from '@/lib/analytics/capture'
 import { POST } from '../route'
@@ -40,6 +47,9 @@ describe('POST /api/panel/auth/login-event', () => {
       { name: 'hotel_login', properties: {} },
       { distinctId: 'user-1', propertyId: 'prop-abc' }
     )
+    expect(mockFrom).toHaveBeenCalledWith('hotel_users')
+    expect(mockUpdate).toHaveBeenCalledWith({ last_login_at: expect.any(String) })
+    expect(mockEq).toHaveBeenCalledWith('id', 'user-1')
   })
 
   it('returns 401 and does not fire the event when unauthenticated', async () => {
