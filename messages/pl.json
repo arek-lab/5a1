@@ -101,6 +101,52 @@
       "info": "Informacje"
     }
   },
+  "users": {
+    "list": {
+      "title": "Użytkownicy",
+      "empty": "Brak użytkowników.",
+      "neverLoggedIn": "Nigdy się nie zalogował",
+      "resendInvite": "Wyślij ponownie",
+      "status": {
+        "active": "Aktywny",
+        "invited": "Zaproszony",
+        "deactivated": "Zdezaktywowany"
+      },
+      "roles": {
+        "owner": "Właściciel",
+        "admin": "Admin",
+        "staff": "Personel",
+        "viewer": "Podgląd"
+      },
+      "errors": {
+        "forbidden": "Nie masz uprawnień do zarządzania użytkownikami.",
+        "not_found": "Nie znaleziono użytkownika.",
+        "use_transfer_ownership": "Użyj przepływu transferu własności, aby zmienić właściciela.",
+        "already_invited": "Ten adres e-mail został już zaproszony.",
+        "already_registered": "Ten adres e-mail ma już zarejestrowane konto.",
+        "send_failed": "Nie udało się wysłać e-maila z zaproszeniem. Spróbuj ponownie."
+      }
+    },
+    "invite": {
+      "toggle": "Zaproś użytkownika",
+      "fields": {
+        "email": "E-mail",
+        "role": "Rola"
+      },
+      "actions": {
+        "send": "Wyślij zaproszenie",
+        "sending": "Wysyłanie..."
+      },
+      "errors": {
+        "forbidden": "Nie masz uprawnień do zapraszania użytkowników.",
+        "email_required": "E-mail jest wymagany.",
+        "invalid_role": "Wybierz prawidłową rolę.",
+        "already_invited": "Ten adres e-mail został już zaproszony.",
+        "already_registered": "Ten adres e-mail ma już zarejestrowane konto.",
+        "send_failed": "Nie udało się wysłać e-maila z zaproszeniem. Spróbuj ponownie."
+      }
+    }
+  },
   "knowledge": {
     "list": {
       "title": "Baza wiedzy",

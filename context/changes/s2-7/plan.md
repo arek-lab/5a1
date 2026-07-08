@@ -17,7 +17,7 @@ S2.7 buduje Moduł 6 (§4.1) panelu hotelowego: zapraszanie nowych użytkownikó
 
 ## Desired End State
 
-Owner/Admin zaprasza nowego użytkownika e-mailem (Supabase mailer, 72h), zaproszony ustawia hasło i staje się `active`. Owner/Admin zmienia role (poza nadaniem/odebraniem `owner`), dezaktywuje konta (treści zachowane, nie własne konto, nie ostatniego Ownera bez transferu). Transfer ownership to dedykowany, potwierdzany osobno flow. RLS na `hotel_users` dopuszcza mutacje tylko dla `owner`/`admin`. IT-5 przechodzi z aktywnym RLS.
+Owner/Admin zaprasza nowego użytkownika e-mailem (Supabase mailer, 24h — patrz decyzja 2026-07-08), zaproszony ustawia hasło i staje się `active`. Owner/Admin zmienia role (poza nadaniem/odebraniem `owner`), dezaktywuje konta (treści zachowane, nie własne konto, nie ostatniego Ownera bez transferu). Transfer ownership to dedykowany, potwierdzany osobno flow. RLS na `hotel_users` dopuszcza mutacje tylko dla `owner`/`admin`. IT-5 przechodzi z aktywnym RLS.
 
 ### Key Discoveries:
 
@@ -41,9 +41,9 @@ Sześć faz: (1) hardening schematu/RLS + last_login_at, (2) invite flow oparty 
 
 ### Invite token: Supabase-owned link, nasze kolumny to bookkeeping
 
-Zamiast budować własną walidację `invite_token` (osobny route sprawdzający UUID+expiry), zaproszenie idzie przez `supabase.auth.admin.inviteUserByEmail(email, { redirectTo })` — Supabase generuje **własny** magic-link token, wysyła e-mail przez wbudowany mailer, i po kliknięciu ustanawia sesję auth pod `redirectTo`. Nasze kolumny `hotel_users.invite_token`/`invite_expires_at` są ustawiane wyłącznie do wyświetlania w UI listy ("zaproszenie wygasa za X dni", przycisk resend) — nie są źródłem prawdy dla walidacji linku. `invite_expires_at = now() + 72h` przy tworzeniu zaproszenia.
+Zamiast budować własną walidację `invite_token` (osobny route sprawdzający UUID+expiry), zaproszenie idzie przez `supabase.auth.admin.inviteUserByEmail(email, { redirectTo })` — Supabase generuje **własny** magic-link token, wysyła e-mail przez wbudowany mailer, i po kliknięciu ustanawia sesję auth pod `redirectTo`. Nasze kolumny `hotel_users.invite_token`/`invite_expires_at` są ustawiane wyłącznie do wyświetlania w UI listy ("zaproszenie wygasa za X dni", przycisk resend) — nie są źródłem prawdy dla walidacji linku. `invite_expires_at = now() + 24h` przy tworzeniu zaproszenia.
 
-**Uwaga operacyjna (manualna, poza zakresem kodu):** faktyczny czas życia linku Supabase kontroluje ustawienie projektu (Dashboard → Auth → Email OTP expiry), nie parametr per-wywołanie. Aby zbliżyć się do 72h z DoD, trzeba ręcznie ustawić tę wartość w hostowanym Supabase (manual verification w Fazie 2) — kod nie może tego wymusić per-invite.
+**Uwaga operacyjna (manualna, poza zakresem kodu):** faktyczny czas życia linku Supabase kontroluje ustawienie projektu (Dashboard → Auth → Email OTP expiry), nie parametr per-wywołanie. **Decyzja z 2026-07-08:** Supabase Cloud Dashboard ma twardy sufit 24h na to ustawienie — 72h z pierwotnego DoD nie jest osiągalne bez budowy własnej infrastruktury tokenu (odrzucone jako sprzeczne z decyzją HITL o braku własnego e-mail stacku). DoD i kod zaktualizowane na 24h — patrz `session-plan.md` S2.7.
 
 ### Wrapper na wysyłkę zaproszenia — łatwy switch na Resend później
 
@@ -136,7 +136,7 @@ Owner/Admin zaprasza nowego użytkownika; zaproszony ustawia hasło i staje się
 
 - Zaproszenie e-mail faktycznie dociera (hostowany Supabase, sprawdzić skrzynkę testową)
 - Kliknięcie linku → formularz hasła → po submicie `status='active'`, login działa
-- Ustawić w Supabase Dashboard → Auth → Email OTP expiry na wartość odpowiadającą 72h (manualny krok, poza kodem)
+- Ustawić w Supabase Dashboard → Auth → Email OTP expiry na 24h/86400s (sufit platformy Supabase Cloud — 72h z pierwotnego DoD nieosiągalne, patrz decyzja 2026-07-08 w Critical Implementation Details i session-plan.md)
 - Kliknięcie wygasłego linku → branded strona błędu, nie generic Supabase error
 
 ---
@@ -359,13 +359,13 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [ ] 3.1 npm run typecheck przechodzi
-- [ ] 3.2 Unit test: changeRole odrzuca newRole='owner' i zmianę roli aktualnego ownera
+- [x] 3.1 npm run typecheck przechodzi
+- [x] 3.2 Unit test: changeRole odrzuca newRole='owner' i zmianę roli aktualnego ownera
 
 #### Manual
 
-- [ ] 3.3 Lista pokazuje poprawny last_login_at
-- [ ] 3.4 Viewer nie widzi akcji zmiany roli i dostaje 403 przy bezpośrednim wywołaniu
+- [x] 3.3 Lista pokazuje poprawny last_login_at
+- [x] 3.4 Viewer nie widzi akcji zmiany roli i dostaje 403 przy bezpośrednim wywołaniu
 
 ### Phase 4: Dezaktywacja + guardy
 

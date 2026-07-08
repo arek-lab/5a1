@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { getHotelUser, type HotelUser } from '@/lib/panel/auth'
 import { canPerform, type HotelRole } from '@/lib/panel/rbac'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
@@ -8,7 +9,10 @@ import { sendInviteEmail } from '@/lib/invites/send-invite'
 type ActionResult = { error?: string }
 
 const INVITABLE_ROLES: HotelRole[] = ['admin', 'staff', 'viewer']
-const INVITE_TTL_MS = 72 * 60 * 60 * 1000
+const CHANGEABLE_ROLES: HotelRole[] = ['admin', 'staff', 'viewer']
+// Supabase Cloud caps Email OTP expiry at 24h (Dashboard hard limit) — the
+// original 72h DoD isn't achievable without a custom invite-token flow.
+const INVITE_TTL_MS = 24 * 60 * 60 * 1000
 
 async function requireUsersWriteAccess(): Promise<HotelUser | null> {
   const hotelUser = await getHotelUser()
@@ -47,6 +51,7 @@ export async function inviteUser(formData: FormData): Promise<ActionResult> {
   const { error: sendError } = await sendInviteEmail(email, inviteRedirectUrl())
   if (sendError) return { error: sendError }
 
+  revalidatePath('/users')
   return {}
 }
 
@@ -72,5 +77,32 @@ export async function resendInvite(userId: string): Promise<ActionResult> {
   const { error: sendError } = await sendInviteEmail(target.email, inviteRedirectUrl())
   if (sendError) return { error: sendError }
 
+  return {}
+}
+
+export async function changeRole(userId: string, newRole: HotelRole): Promise<ActionResult> {
+  const hotelUser = await requireUsersWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  if (!CHANGEABLE_ROLES.includes(newRole)) return { error: 'use_transfer_ownership' }
+
+  const serviceRole = createServiceRoleClient()
+  const { data: target } = await serviceRole
+    .from('hotel_users')
+    .select('role')
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+    .single()
+  if (!target) return { error: 'not_found' }
+  if (target.role === 'owner') return { error: 'use_transfer_ownership' }
+
+  const { error: updateError } = await serviceRole
+    .from('hotel_users')
+    .update({ role: newRole })
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+  if (updateError) throw new Error(updateError.message)
+
+  revalidatePath('/users')
   return {}
 }

@@ -29,7 +29,7 @@ export default function LoginForm({ initialError }: Props) {
       return
     }
 
-    void fetch('/api/panel/auth/login-event', { method: 'POST' })
+    await fetch('/api/panel/auth/login-event', { method: 'POST' })
 
     router.push('/dashboard')
   }

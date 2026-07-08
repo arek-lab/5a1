@@ -23,11 +23,21 @@ describe('sendInviteEmail', () => {
     })
   })
 
-  it('returns the Supabase error message on failure', async () => {
-    mockInviteUserByEmail.mockResolvedValue({ error: { message: 'boom' } })
+  it('maps email_exists to already_registered', async () => {
+    mockInviteUserByEmail.mockResolvedValue({
+      error: { message: 'A user with this email address has already been registered', code: 'email_exists' },
+    })
 
     const result = await sendInviteEmail('new@example.com', 'https://app.example.com/invite/accept')
 
-    expect(result).toEqual({ error: 'boom' })
+    expect(result).toEqual({ error: 'already_registered' })
+  })
+
+  it('maps other Supabase errors to a generic send_failed code', async () => {
+    mockInviteUserByEmail.mockResolvedValue({ error: { message: 'boom', code: 'unexpected_failure' } })
+
+    const result = await sendInviteEmail('new@example.com', 'https://app.example.com/invite/accept')
+
+    expect(result).toEqual({ error: 'send_failed' })
   })
 })

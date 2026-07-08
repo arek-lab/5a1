@@ -103,8 +103,9 @@ S0.1 → S0.2 → S0.3
 **Blokery:** S2.1, S1.2.
 
 ### S2.7 — Użytkownicy panelu + offboarding (Moduł 6)
-**Scope:** zaproszenie tokenem email (72h, rola Staff). Dezaktywacja (NIE DELETE). Lista + ostatnie logowanie. Transfer ownership przed dezaktywacją Ownera (HITL #3). Test IT-5.
-**DoD:** IT-5 przechodzi; blokada dezaktywacji ostatniego Ownera; invite wygasa po 72h.
+**Scope:** zaproszenie tokenem email (24h — patrz adnotacja DoD, rola Staff). Dezaktywacja (NIE DELETE). Lista + ostatnie logowanie. Transfer ownership przed dezaktywacją Ownera (HITL #3). Test IT-5.
+**DoD:** IT-5 przechodzi; blokada dezaktywacji ostatniego Ownera; invite wygasa po 24h.
+**Adnotacja (2026-07-08, odkryte podczas manualnej weryfikacji Fazy 2/3):** pierwotny DoD zakładał 72h. Supabase Cloud Dashboard (Auth → Email OTP expiry) ma twardy sufit 24h — link zaproszenia jest w całości walidowany przez Supabase (decyzja: żadnej własnej infrastruktury tokenu/e-mail), więc 72h nie jest osiągalne bez cofnięcia tamtej decyzji. Zaakceptowano 24h jako realny limit; `invite_expires_at`/UI/TTL w kodzie ustawione na 24h.
 **Blokery:** S2.1.
 
 ---

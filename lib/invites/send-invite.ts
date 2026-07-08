@@ -7,6 +7,9 @@ export async function sendInviteEmail(
   const { error } = await createServiceRoleClient().auth.admin.inviteUserByEmail(email, {
     redirectTo,
   })
-  if (error) return { error: error.message }
+  if (error) {
+    if (error.code === 'email_exists') return { error: 'already_registered' }
+    return { error: 'send_failed' }
+  }
   return {}
 }

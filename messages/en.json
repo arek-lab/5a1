@@ -101,6 +101,52 @@
       "info": "Information"
     }
   },
+  "users": {
+    "list": {
+      "title": "Users",
+      "empty": "No users yet.",
+      "neverLoggedIn": "Never logged in",
+      "resendInvite": "Resend invite",
+      "status": {
+        "active": "Active",
+        "invited": "Invited",
+        "deactivated": "Deactivated"
+      },
+      "roles": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "staff": "Staff",
+        "viewer": "Viewer"
+      },
+      "errors": {
+        "forbidden": "You don't have permission to manage users.",
+        "not_found": "User not found.",
+        "use_transfer_ownership": "Use the ownership transfer flow to change the owner.",
+        "already_invited": "This email has already been invited.",
+        "already_registered": "This email is already registered with an account.",
+        "send_failed": "Failed to send the invite email. Please try again."
+      }
+    },
+    "invite": {
+      "toggle": "Invite user",
+      "fields": {
+        "email": "Email",
+        "role": "Role"
+      },
+      "actions": {
+        "send": "Send invite",
+        "sending": "Sending..."
+      },
+      "errors": {
+        "forbidden": "You don't have permission to invite users.",
+        "email_required": "Email is required.",
+        "invalid_role": "Select a valid role.",
+        "already_invited": "This email has already been invited.",
+        "already_registered": "This email is already registered with an account.",
+        "send_failed": "Failed to send the invite email. Please try again."
+      }
+    }
+  },
   "knowledge": {
     "list": {
       "title": "Knowledge base",
