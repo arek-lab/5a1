@@ -331,22 +331,22 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się bez błędów na Supabase
-- [x] 1.2 npm run typecheck przechodzi
-- [x] 1.3 Istniejące testy login-event/__tests__/route.test.ts nadal przechodzą
+- [x] 1.1 Migracja aplikuje się bez błędów na Supabase — ca81afc
+- [x] 1.2 npm run typecheck przechodzi — ca81afc
+- [x] 1.3 Istniejące testy login-event/__tests__/route.test.ts nadal przechodzą — ca81afc
 
 #### Manual
 
-- [x] 1.4 Ręczny SQL: viewer → UPDATE odrzucony przez RLS
-- [x] 1.5 Ręczny SQL: admin → UPDATE przechodzi
+- [x] 1.4 Ręczny SQL: viewer → UPDATE odrzucony przez RLS — ca81afc
+- [x] 1.5 Ręczny SQL: admin → UPDATE przechodzi — ca81afc
 
 ### Phase 2: Invite flow
 
 #### Automated
 
-- [ ] 2.1 npm run typecheck przechodzi
-- [ ] 2.2 Unit test lib/invites/__tests__/send-invite.test.ts
-- [ ] 2.3 Unit test app/[locale]/(hotel)/users/__tests__/actions.test.ts (inviteUser)
+- [x] 2.1 npm run typecheck przechodzi
+- [x] 2.2 Unit test lib/invites/__tests__/send-invite.test.ts
+- [x] 2.3 Unit test app/[locale]/(hotel)/users/__tests__/actions.test.ts (inviteUser)
 
 #### Manual
 
