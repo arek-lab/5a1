@@ -172,6 +172,42 @@
       "dpaNotSigned": "Umowa powierzenia danych (DPA) nie została podpisana."
     }
   },
+  "orders": {
+    "page": {
+      "title": "Zamówienia"
+    },
+    "tabs": {
+      "active": "Aktywne",
+      "history": "Historia"
+    },
+    "status": {
+      "new": "Nowe",
+      "confirmed": "Potwierdzone",
+      "fulfilled": "Zrealizowane",
+      "rejected": "Odrzucone"
+    },
+    "actions": {
+      "confirm": "Potwierdź",
+      "reject": "Odrzuć",
+      "fulfill": "Zrealizuj",
+      "export": "Eksportuj CSV"
+    },
+    "connection": {
+      "lost": "Połączenie przerwane. Trwa ponowne łączenie...",
+      "restored": "Połączenie przywrócone."
+    },
+    "list": {
+      "empty": "Brak zamówień w tej zakładce.",
+      "room": "Pokój",
+      "noRoom": "Bez pokoju"
+    },
+    "errors": {
+      "forbidden": "Nie masz uprawnień do zmiany statusu zamówienia.",
+      "invalidTransition": "Ta zmiana statusu nie jest dozwolona.",
+      "notFound": "Zamówienie nie zostało znalezione.",
+      "updateFailed": "Nie udało się zaktualizować statusu zamówienia."
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Śniadanie do pokoju",

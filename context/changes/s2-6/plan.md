@@ -294,9 +294,9 @@ Jedna nowa migracja SQL (`20260707000001_orders_notify_trigger.sql`) dodająca t
 
 #### Manual
 
-- [ ] 1.5 Ręczny `UPDATE orders SET status = 'confirmed'` po `LISTEN orders_changed` pokazuje notification z pełnym JSON wiersza
-- [ ] 1.6 `updateOrderStatus` jako Staff z `new`→`confirmed` zwraca sukces; z `new`→`fulfilled` zwraca `{error: 'invalidTransition'}`
-- [ ] 1.7 `updateOrderStatus` jako Viewer zwraca `{error: 'forbidden'}`
+- [x] 1.5 Ręczny `UPDATE orders SET status = 'confirmed'` po `LISTEN orders_changed` pokazuje notification z pełnym JSON wiersza
+- [x] 1.6 `updateOrderStatus` jako Staff z `new`→`confirmed` zwraca sukces; z `new`→`fulfilled` zwraca `{error: 'invalidTransition'}`
+- [x] 1.7 `updateOrderStatus` jako Viewer zwraca `{error: 'forbidden'}`
 
 ### Phase 2: Endpoint SSE i testy bezpieczeństwa
 
@@ -317,16 +317,16 @@ Jedna nowa migracja SQL (`20260707000001_orders_notify_trigger.sql`) dodająca t
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run typecheck`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Build passes: `npm run build`
-- [ ] 3.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_orders_staff_isolation.sql` kończy się `S2.6 PASSED`
+- [x] 3.1 Type checking passes: `npm run typecheck`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Build passes: `npm run build`
+- [x] 3.4 `psql "$DATABASE_URL" -f supabase/tests/s2_6_orders_staff_isolation.sql` kończy się `S2.6 PASSED`
 
 #### Manual
 
-- [ ] 3.5 Wejście na `/orders` jako Staff pokazuje zakładkę "Aktywne" z zamówieniami `new`/`confirmed`
-- [ ] 3.6 Kliknięcie przycisku zmiany statusu wykonuje dozwolone przejście i UI aktualizuje się natychmiast
-- [ ] 3.7 Nowe zamówienie gościa pojawia się na liście operatora bez odświeżania strony
-- [ ] 3.8 Rozłączenie sieci pokazuje banner "połączenie przerwane"; przywrócenie chowa banner i wznawia aktualizacje
-- [ ] 3.9 Viewer widzi listę tylko-do-odczytu + przycisk eksportu; Staff odwrotnie
-- [ ] 3.10 Eksport CSV z zakładki "Historia" zwraca plik z wyłącznie `fulfilled`/`rejected`
+- [x] 3.5 Wejście na `/orders` jako Staff pokazuje zakładkę "Aktywne" z zamówieniami `new`/`confirmed`
+- [x] 3.6 Kliknięcie przycisku zmiany statusu wykonuje dozwolone przejście i UI aktualizuje się natychmiast
+- [x] 3.7 Nowe zamówienie gościa pojawia się na liście operatora bez odświeżania strony
+- [x] 3.8 Rozłączenie sieci pokazuje banner "połączenie przerwane"; przywrócenie chowa banner i wznawia aktualizacje
+- [x] 3.9 Viewer widzi listę tylko-do-odczytu + przycisk eksportu; Staff odwrotnie
+- [x] 3.10 Eksport CSV z zakładki "Historia" zwraca plik z wyłącznie `fulfilled`/`rejected`

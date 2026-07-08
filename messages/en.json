@@ -172,6 +172,42 @@
       "dpaNotSigned": "The Data Processing Agreement (DPA) has not been signed."
     }
   },
+  "orders": {
+    "page": {
+      "title": "Orders"
+    },
+    "tabs": {
+      "active": "Active",
+      "history": "History"
+    },
+    "status": {
+      "new": "New",
+      "confirmed": "Confirmed",
+      "fulfilled": "Fulfilled",
+      "rejected": "Rejected"
+    },
+    "actions": {
+      "confirm": "Confirm",
+      "reject": "Reject",
+      "fulfill": "Fulfill",
+      "export": "Export CSV"
+    },
+    "connection": {
+      "lost": "Connection lost. Reconnecting...",
+      "restored": "Connection restored."
+    },
+    "list": {
+      "empty": "No orders in this tab.",
+      "room": "Room",
+      "noRoom": "No room"
+    },
+    "errors": {
+      "forbidden": "You don't have permission to change the order status.",
+      "invalidTransition": "This status change is not allowed.",
+      "notFound": "Order not found.",
+      "updateFailed": "Failed to update the order status."
+    }
+  },
   "serviceTemplates": {
     "breakfast_in_room": {
       "name": "Breakfast in room",
