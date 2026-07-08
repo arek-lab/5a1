@@ -275,19 +275,19 @@ The FK constraint change is additive in effect (existing `orders` rows are untou
 
 #### Automated
 
-- [x] 1.1 npm run typecheck passes
-- [x] 1.2 npm run lint passes
-- [x] 1.3 Migration applies cleanly
-- [x] 1.4 Sweep function tests pass (backdated fixtures, real Supabase)
+- [x] 1.1 npm run typecheck passes — 1353e10
+- [x] 1.2 npm run lint passes — 1353e10
+- [x] 1.3 Migration applies cleanly — 1353e10
+- [x] 1.4 Sweep function tests pass (backdated fixtures, real Supabase) — 1353e10
 
 ### Phase 2: Cron endpoint + scheduled trigger
 
 #### Automated
 
-- [ ] 2.1 npm run typecheck passes
-- [ ] 2.2 npm run lint passes
-- [ ] 2.3 Cron route secret-validation unit test passes
-- [ ] 2.4 Existing IT-4 test still passes unmodified
+- [x] 2.1 npm run typecheck passes
+- [x] 2.2 npm run lint passes
+- [x] 2.3 Cron route secret-validation unit test passes
+- [x] 2.4 Existing IT-4 test still passes unmodified
 
 #### Manual
 

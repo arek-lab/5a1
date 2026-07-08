@@ -1,0 +1,14 @@
+name: Retention cron
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  sweep:
+    name: Trigger retention sweep
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}" ${{ secrets.APP_URL }}/api/cron/retention --fail
