@@ -1,7 +1,7 @@
 ---
 change_id: s5-2
 title: Retention automation (cron) + founder dashboard
-status: implementing
+status: implemented
 created: 2026-07-08
 updated: 2026-07-08
 archived_at: null

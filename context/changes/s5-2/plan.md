@@ -312,11 +312,11 @@ The FK constraint change is additive in effect (existing `orders` rows are untou
 
 #### Automated
 
-- [x] 4.1 Full vitest suite passes (incl. IT-8)
-- [x] 4.2 npm run typecheck passes
-- [x] 4.3 npm run lint passes
+- [x] 4.1 Full vitest suite passes (incl. IT-8) — e751777
+- [x] 4.2 npm run typecheck passes — e751777
+- [x] 4.3 npm run lint passes — e751777
 
 #### Manual
 
-- [ ] 4.4 Pulse numbers match manual Supabase counts; escalation rate reads as not-yet-available
-- [ ] 4.5 Manual cron run against seeded data produces expected before/after state
+- [x] 4.4 Pulse numbers match manual Supabase counts; escalation rate reads as not-yet-available — e751777
+- [x] 4.5 Manual cron run against seeded data produces expected before/after state — e751777
