@@ -107,6 +107,8 @@
       "empty": "Brak użytkowników.",
       "neverLoggedIn": "Nigdy się nie zalogował",
       "resendInvite": "Wyślij ponownie",
+      "deactivate": "Dezaktywuj",
+      "reactivate": "Aktywuj ponownie",
       "status": {
         "active": "Aktywny",
         "invited": "Zaproszony",
@@ -124,7 +126,9 @@
         "use_transfer_ownership": "Użyj przepływu transferu własności, aby zmienić właściciela.",
         "already_invited": "Ten adres e-mail został już zaproszony.",
         "already_registered": "Ten adres e-mail ma już zarejestrowane konto.",
-        "send_failed": "Nie udało się wysłać e-maila z zaproszeniem. Spróbuj ponownie."
+        "send_failed": "Nie udało się wysłać e-maila z zaproszeniem. Spróbuj ponownie.",
+        "cannot_deactivate_self": "Nie możesz dezaktywować własnego konta.",
+        "last_owner_requires_transfer": "Przed dezaktywacją ostatniego Ownera przenieś własność na innego użytkownika."
       }
     },
     "invite": {

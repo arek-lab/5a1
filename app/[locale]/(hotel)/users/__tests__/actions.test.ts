@@ -20,7 +20,7 @@ vi.mock('next/cache', () => ({
 
 import { getHotelUser } from '@/lib/panel/auth'
 import { sendInviteEmail } from '@/lib/invites/send-invite'
-import { inviteUser, changeRole } from '../actions'
+import { inviteUser, changeRole, deactivateUser, reactivateUser } from '../actions'
 
 const mockGetHotelUser = vi.mocked(getHotelUser)
 const mockSendInviteEmail = vi.mocked(sendInviteEmail)
@@ -157,6 +157,112 @@ describe('users actions — changeRole', () => {
     )
 
     const result = await changeRole('user-2', 'admin')
+
+    expect(result).toEqual({})
+  })
+})
+
+function chainWith(resolution: unknown) {
+  const chain: Record<string, unknown> = {}
+  chain.select = vi.fn(() => chain)
+  chain.update = vi.fn(() => chain)
+  chain.eq = vi.fn(() => chain)
+  chain.single = vi.fn(() => Promise.resolve(resolution))
+  chain.then = (resolve: (value: unknown) => void) => resolve(resolution)
+  return chain
+}
+
+describe('users actions — deactivateUser', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'user-1' }))
+  })
+
+  it('rejects self-deactivation', async () => {
+    const result = await deactivateUser('user-1')
+
+    expect(result).toEqual({ error: 'cannot_deactivate_self' })
+    expect(mockFrom).not.toHaveBeenCalled()
+  })
+
+  it('rejects staff caller with forbidden', async () => {
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'user-1', role: 'staff' }))
+
+    const result = await deactivateUser('user-2')
+
+    expect(result).toEqual({ error: 'forbidden' })
+    expect(mockFrom).not.toHaveBeenCalled()
+  })
+
+  it('rejects deactivating the only active owner', async () => {
+    mockFrom
+      .mockImplementationOnce(() => chainWith({ data: { role: 'owner' } }))
+      .mockImplementationOnce(() => chainWith({ count: 1 }))
+
+    const result = await deactivateUser('user-2')
+
+    expect(result).toEqual({ error: 'last_owner_requires_transfer' })
+  })
+
+  it('deactivates an owner when a second active owner exists', async () => {
+    mockFrom
+      .mockImplementationOnce(() => chainWith({ data: { role: 'owner' } }))
+      .mockImplementationOnce(() => chainWith({ count: 2 }))
+      .mockImplementationOnce(() => chainWith({ error: null }))
+
+    const result = await deactivateUser('user-2')
+
+    expect(result).toEqual({})
+  })
+
+  it('deactivates a staff member without touching the owner count', async () => {
+    mockFrom
+      .mockImplementationOnce(() => chainWith({ data: { role: 'staff' } }))
+      .mockImplementationOnce(() => chainWith({ error: null }))
+
+    const result = await deactivateUser('user-2')
+
+    expect(result).toEqual({})
+  })
+
+  it('returns not_found for a missing target', async () => {
+    mockFrom.mockImplementationOnce(() => chainWith({ data: null }))
+
+    const result = await deactivateUser('user-2')
+
+    expect(result).toEqual({ error: 'not_found' })
+  })
+})
+
+describe('users actions — reactivateUser', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'user-1' }))
+  })
+
+  it('rejects staff caller with forbidden', async () => {
+    mockGetHotelUser.mockResolvedValue(makeUser({ id: 'user-1', role: 'staff' }))
+
+    const result = await reactivateUser('user-2')
+
+    expect(result).toEqual({ error: 'forbidden' })
+    expect(mockFrom).not.toHaveBeenCalled()
+  })
+
+  it('returns not_found when the target is not deactivated', async () => {
+    mockFrom.mockImplementationOnce(() => chainWith({ data: { status: 'active' } }))
+
+    const result = await reactivateUser('user-2')
+
+    expect(result).toEqual({ error: 'not_found' })
+  })
+
+  it('reactivates a deactivated user', async () => {
+    mockFrom
+      .mockImplementationOnce(() => chainWith({ data: { status: 'deactivated' } }))
+      .mockImplementationOnce(() => chainWith({ error: null }))
+
+    const result = await reactivateUser('user-2')
 
     expect(result).toEqual({})
   })

@@ -106,3 +106,63 @@ export async function changeRole(userId: string, newRole: HotelRole): Promise<Ac
   revalidatePath('/users')
   return {}
 }
+
+export async function deactivateUser(userId: string): Promise<ActionResult> {
+  const hotelUser = await requireUsersWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  if (userId === hotelUser.id) return { error: 'cannot_deactivate_self' }
+
+  const serviceRole = createServiceRoleClient()
+  const { data: target } = await serviceRole
+    .from('hotel_users')
+    .select('role')
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+    .single()
+  if (!target) return { error: 'not_found' }
+
+  if (target.role === 'owner') {
+    const { count } = await serviceRole
+      .from('hotel_users')
+      .select('id', { count: 'exact', head: true })
+      .eq('property_id', hotelUser.propertyId)
+      .eq('role', 'owner')
+      .eq('status', 'active')
+    if ((count ?? 0) <= 1) return { error: 'last_owner_requires_transfer' }
+  }
+
+  const { error: updateError } = await serviceRole
+    .from('hotel_users')
+    .update({ status: 'deactivated' })
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+  if (updateError) throw new Error(updateError.message)
+
+  revalidatePath('/users')
+  return {}
+}
+
+export async function reactivateUser(userId: string): Promise<ActionResult> {
+  const hotelUser = await requireUsersWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  const serviceRole = createServiceRoleClient()
+  const { data: target } = await serviceRole
+    .from('hotel_users')
+    .select('status')
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+    .single()
+  if (!target || target.status !== 'deactivated') return { error: 'not_found' }
+
+  const { error: updateError } = await serviceRole
+    .from('hotel_users')
+    .update({ status: 'active' })
+    .eq('id', userId)
+    .eq('property_id', hotelUser.propertyId)
+  if (updateError) throw new Error(updateError.message)
+
+  revalidatePath('/users')
+  return {}
+}

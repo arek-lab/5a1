@@ -107,6 +107,8 @@
       "empty": "No users yet.",
       "neverLoggedIn": "Never logged in",
       "resendInvite": "Resend invite",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
       "status": {
         "active": "Active",
         "invited": "Invited",
@@ -124,7 +126,9 @@
         "use_transfer_ownership": "Use the ownership transfer flow to change the owner.",
         "already_invited": "This email has already been invited.",
         "already_registered": "This email is already registered with an account.",
-        "send_failed": "Failed to send the invite email. Please try again."
+        "send_failed": "Failed to send the invite email. Please try again.",
+        "cannot_deactivate_self": "You can't deactivate your own account.",
+        "last_owner_requires_transfer": "Transfer ownership to another user before deactivating the last owner."
       }
     },
     "invite": {

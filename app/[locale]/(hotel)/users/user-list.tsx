@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import type { HotelRole } from '@/lib/panel/rbac'
-import { changeRole, resendInvite } from './actions'
+import { changeRole, resendInvite, deactivateUser, reactivateUser } from './actions'
 import InviteForm from './invite-form'
 
 export type HotelUserRecord = {
@@ -37,7 +37,7 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default function UserList({ users, canEdit }: Props) {
+export default function UserList({ users, canEdit, currentUserId }: Props) {
   const t = useTranslations('users')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
@@ -55,6 +55,22 @@ export default function UserList({ users, canEdit }: Props) {
     setError(null)
     startTransition(async () => {
       const result = await resendInvite(userId)
+      if (result.error) setError(result.error)
+    })
+  }
+
+  function handleDeactivate(userId: string) {
+    setError(null)
+    startTransition(async () => {
+      const result = await deactivateUser(userId)
+      if (result.error) setError(result.error)
+    })
+  }
+
+  function handleReactivate(userId: string) {
+    setError(null)
+    startTransition(async () => {
+      const result = await reactivateUser(userId)
       if (result.error) setError(result.error)
     })
   }
@@ -129,6 +145,26 @@ export default function UserList({ users, canEdit }: Props) {
                     onClick={() => handleResendInvite(user.id)}
                   >
                     {t('list.resendInvite')}
+                  </button>
+                )}
+                {canEdit && user.status === 'active' && user.id !== currentUserId && (
+                  <button
+                    type="button"
+                    className="rounded border border-red-300 px-2 py-1 text-sm text-red-700 hover:bg-red-50 disabled:opacity-50"
+                    disabled={isPending}
+                    onClick={() => handleDeactivate(user.id)}
+                  >
+                    {t('list.deactivate')}
+                  </button>
+                )}
+                {canEdit && user.status === 'deactivated' && (
+                  <button
+                    type="button"
+                    className="rounded border border-green-300 px-2 py-1 text-sm text-green-700 hover:bg-green-50 disabled:opacity-50"
+                    disabled={isPending}
+                    onClick={() => handleReactivate(user.id)}
+                  >
+                    {t('list.reactivate')}
                   </button>
                 )}
               </div>

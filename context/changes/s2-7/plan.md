@@ -359,27 +359,29 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 3.1 npm run typecheck przechodzi
-- [x] 3.2 Unit test: changeRole odrzuca newRole='owner' i zmianę roli aktualnego ownera
+- [x] 3.1 npm run typecheck przechodzi — 88443ca
+- [x] 3.2 Unit test: changeRole odrzuca newRole='owner' i zmianę roli aktualnego ownera — 88443ca
 
 #### Manual
 
-- [x] 3.3 Lista pokazuje poprawny last_login_at
-- [x] 3.4 Viewer nie widzi akcji zmiany roli i dostaje 403 przy bezpośrednim wywołaniu
+- [x] 3.3 Lista pokazuje poprawny last_login_at — 88443ca
+- [x] 3.4 Viewer nie widzi akcji zmiany roli i dostaje 403 przy bezpośrednim wywołaniu — 88443ca
 
 ### Phase 4: Dezaktywacja + guardy
 
 #### Automated
 
-- [ ] 4.1 Unit test: self-deactivate → cannot_deactivate_self
-- [ ] 4.2 Unit test: dezaktywacja jedynego Ownera → last_owner_requires_transfer
-- [ ] 4.3 Unit test: dezaktywacja Ownera z drugim aktywnym Ownerem → sukces
-- [ ] 4.4 Unit test: dezaktywacja Staff → sukces, rekord zachowany
+- [x] 4.1 Unit test: self-deactivate → cannot_deactivate_self
+- [x] 4.2 Unit test: dezaktywacja jedynego Ownera → last_owner_requires_transfer
+- [x] 4.3 Unit test: dezaktywacja Ownera z drugim aktywnym Ownerem → sukces
+- [x] 4.4 Unit test: dezaktywacja Staff → sukces, rekord zachowany
+- [x] 4.7 Rozszerzenie zakresu (na życzenie): akcja `reactivateUser` + przycisk w UI dla `status='deactivated'`, unit testy (staff→403, nie-deactivated→not_found, happy path)
 
 #### Manual
 
 - [ ] 4.5 Zdezaktywowany user → login → no_access
 - [ ] 4.6 Powiązane dane nienaruszone
+- [ ] 4.8 Reaktywacja z UI: zdezaktywowany user → przycisk "Aktywuj ponownie" → status='active' → login znów działa
 
 ### Phase 5: Transfer ownership
 
