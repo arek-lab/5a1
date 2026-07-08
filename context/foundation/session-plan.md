@@ -97,9 +97,9 @@ S0.1 → S0.2 → S0.3
 **DoD:** IT-6 przechodzi; dezaktywacja → nowe skany odrzucone; licznik działa.
 **Blokery:** S2.1, S1.1.
 
-### S2.6 — Inbox zamówień + email (Moduł 5)
-**Scope:** lista zamówień. Zmiana statusu new→confirmed→fulfilled/rejected (Staff+). Email przy nowym zamówieniu (Resend/Nodemailer). SSE live update (LISTEN/NOTIFY). Export CSV.
-**DoD:** zmiana statusu z RBAC; email wysyła; SSE aktualizuje; CSV generuje.
+### S2.6 — Inbox zamówień (Moduł 5)
+**Scope:** lista zamówień. Zmiana statusu new→confirmed→fulfilled/rejected (Staff+). SSE live update (LISTEN/NOTIFY). Export CSV.
+**DoD:** zmiana statusu z RBAC; SSE aktualizuje; CSV generuje.
 **Blokery:** S2.1, S1.2.
 
 ### S2.7 — Użytkownicy panelu + offboarding (Moduł 6)
