@@ -11,6 +11,20 @@ const handleI18nRouting = createIntlMiddleware(routing)
 const GUEST_RETURN_GAP_MS = 30 * 60 * 1000
 
 export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Admin area lives outside [locale] entirely — single shared-token gate, no
+  // guest-session or intl routing logic applies here.
+  if (pathname.startsWith('/admin')) {
+    if (pathname !== '/admin/login') {
+      const adminToken = request.cookies.get('admin_token')?.value
+      if (!adminToken || adminToken !== process.env.ADMIN_ACCESS_TOKEN) {
+        return NextResponse.redirect(new URL('/admin/login', request.url))
+      }
+    }
+    return NextResponse.next()
+  }
+
   const sessionId = request.cookies.get('__Host-session')?.value
   if (sessionId) {
     const admin = createServiceRoleClient()

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { NextRequest, NextResponse } from 'next/server'
 
 vi.mock('@supabase/ssr', () => ({
@@ -53,6 +53,12 @@ function requestWithSession(url: string) {
   return new NextRequest(url, { headers: { cookie: `__Host-session=${SESSION_ID}` } })
 }
 
+function requestWithAdminCookie(url: string, token?: string) {
+  return new NextRequest(url, {
+    headers: token ? { cookie: `admin_token=${token}` } : {},
+  })
+}
+
 describe('proxy: guest_session_returned', () => {
   beforeEach(() => vi.resetAllMocks())
 
@@ -89,5 +95,44 @@ describe('proxy: guest_session_returned', () => {
 
     expect(mockCaptureEvent).not.toHaveBeenCalled()
     expect(admin.update).not.toHaveBeenCalled()
+  })
+})
+
+describe('proxy: admin auth', () => {
+  const ORIGINAL_TOKEN = process.env.ADMIN_ACCESS_TOKEN
+
+  beforeEach(() => {
+    vi.resetAllMocks()
+    process.env.ADMIN_ACCESS_TOKEN = 'correct-token'
+  })
+
+  afterEach(() => {
+    process.env.ADMIN_ACCESS_TOKEN = ORIGINAL_TOKEN
+  })
+
+  it('redirects /admin to /admin/login when cookie is missing', async () => {
+    const response = await proxy(requestWithAdminCookie('http://localhost/admin'))
+
+    expect(response.status).toBe(307)
+    expect(response.headers.get('location')).toBe('http://localhost/admin/login')
+  })
+
+  it('redirects /admin to /admin/login when cookie is wrong', async () => {
+    const response = await proxy(requestWithAdminCookie('http://localhost/admin', 'wrong-token'))
+
+    expect(response.status).toBe(307)
+    expect(response.headers.get('location')).toBe('http://localhost/admin/login')
+  })
+
+  it('allows /admin through when cookie matches ADMIN_ACCESS_TOKEN', async () => {
+    const response = await proxy(requestWithAdminCookie('http://localhost/admin', 'correct-token'))
+
+    expect(response.status).toBe(200)
+  })
+
+  it('allows /admin/login through without checking the cookie', async () => {
+    const response = await proxy(requestWithAdminCookie('http://localhost/admin/login'))
+
+    expect(response.status).toBe(200)
   })
 })

@@ -284,23 +284,23 @@ The FK constraint change is additive in effect (existing `orders` rows are untou
 
 #### Automated
 
-- [x] 2.1 npm run typecheck passes
-- [x] 2.2 npm run lint passes
-- [x] 2.3 Cron route secret-validation unit test passes
-- [x] 2.4 Existing IT-4 test still passes unmodified
+- [x] 2.1 npm run typecheck passes — f5a158c
+- [x] 2.2 npm run lint passes — f5a158c
+- [x] 2.3 Cron route secret-validation unit test passes — f5a158c
+- [x] 2.4 Existing IT-4 test still passes unmodified — f5a158c
 
 #### Manual
 
-- [ ] 2.5 Manual workflow_dispatch run returns 200 summary
-- [ ] 2.6 Missing/incorrect secret returns 401
+- [x] 2.5 Manual workflow_dispatch run returns 200 summary
+- [x] 2.6 Missing/incorrect secret returns 401
 
 ### Phase 3: Founder auth
 
 #### Automated
 
-- [ ] 3.1 npm run typecheck passes
-- [ ] 3.2 npm run lint passes
-- [ ] 3.3 proxy.ts admin-auth redirect unit test passes
+- [x] 3.1 npm run typecheck passes
+- [x] 3.2 npm run lint passes
+- [x] 3.3 proxy.ts admin-auth redirect unit test passes
 
 #### Manual
 
