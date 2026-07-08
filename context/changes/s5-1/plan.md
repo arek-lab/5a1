@@ -293,25 +293,25 @@ Fill any remaining test gaps from Phases 1–3 and do the final end-to-end manua
 
 #### Automated
 
-- [x] 1.1 npm run typecheck passes
-- [x] 1.2 npm run lint passes
-- [x] 1.3 Migration applies cleanly
-- [x] 1.4 captureEvent unit tests pass (mocked posthog-node)
+- [x] 1.1 npm run typecheck passes — d774ecf
+- [x] 1.2 npm run lint passes — d774ecf
+- [x] 1.3 Migration applies cleanly — d774ecf
+- [x] 1.4 captureEvent unit tests pass (mocked posthog-node) — d774ecf
 
 ### Phase 2: Wire instrumentation into existing hooks
 
 #### Automated
 
-- [ ] 2.1 npm run typecheck passes
-- [ ] 2.2 npm run lint passes
-- [ ] 2.3 Unit/integration tests pass for all 4 wired hook points
-- [ ] 2.4 Existing IT-2 test still passes unmodified
+- [x] 2.1 npm run typecheck passes
+- [x] 2.2 npm run lint passes
+- [x] 2.3 Unit/integration tests pass for all 4 wired hook points
+- [x] 2.4 Existing IT-2 test still passes unmodified
 
 #### Manual
 
-- [ ] 2.5 guest_qr_scanned appears in PostHog Live Events on reception scan
-- [ ] 2.6 hotel_login appears in Live Events on panel login
-- [ ] 2.7 hotel_settings_updated appears with correct area on profile/service/knowledge save
+- [x] 2.5 guest_qr_scanned appears in PostHog Live Events on reception scan
+- [x] 2.6 hotel_login appears in Live Events on panel login
+- [x] 2.7 hotel_settings_updated appears with correct area on profile/service/knowledge save
 - [ ] 2.8 guest_session_returned fires only after >30 min gap, not on every navigation
 
 ### Phase 3: Consent banner + doNotTrack

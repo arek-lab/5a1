@@ -6,6 +6,7 @@ import { getHotelUser, type HotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
 import { validateServiceInput, wouldExceedPinLimit } from '@/lib/panel/service-validation'
 import { SERVICE_TEMPLATES } from '@/lib/panel/service-templates'
+import { captureEvent } from '@/lib/analytics/capture'
 
 type ActionResult = { error?: string }
 
@@ -55,6 +56,11 @@ export async function createServiceFromTemplate(formData: FormData): Promise<Act
     throw new Error(error.message)
   }
 
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'services' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
+
   revalidateServicePaths()
   return {}
 }
@@ -84,6 +90,11 @@ export async function createCustomService(formData: FormData): Promise<ActionRes
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'services' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidateServicePaths()
   return {}
@@ -121,6 +132,11 @@ export async function updateService(formData: FormData): Promise<ActionResult> {
     throw new Error(error.message)
   }
 
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'services' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
+
   revalidateServicePaths()
   return {}
 }
@@ -139,6 +155,11 @@ export async function toggleServiceActive(id: string, isActive: boolean): Promis
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'services' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidateServicePaths()
   return {}
@@ -176,6 +197,11 @@ export async function toggleServicePin(id: string, isPinned: boolean): Promise<A
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'services' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidateServicePaths()
   return {}

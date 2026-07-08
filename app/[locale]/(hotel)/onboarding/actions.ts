@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
+import { captureEvent } from '@/lib/analytics/capture'
 
 export async function saveHotelProfile(formData: FormData): Promise<{ error?: string }> {
   const hotelUser = await getHotelUser()
@@ -49,6 +50,11 @@ export async function saveHotelProfile(formData: FormData): Promise<{ error?: st
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'profile' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidatePath('/onboarding')
   revalidatePath('/dashboard')

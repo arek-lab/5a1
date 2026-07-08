@@ -5,6 +5,7 @@ import { checkScanRateLimit } from '@/lib/rate-limit/scan'
 import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { captureEvent } from '@/lib/analytics/capture'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -91,7 +92,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.redirect(new URL('/error?type=auth_failed', request.url))
   }
 
-  // TODO(S5.1): posthog.capture('guest_qr_scanned', { qr_type: 'room' })
+  void captureEvent(
+    { name: 'guest_qr_scanned', properties: { qr_type: 'room' } },
+    { distinctId: sessionId, propertyId: validation.session.property_id }
+  )
 
   return response
 }

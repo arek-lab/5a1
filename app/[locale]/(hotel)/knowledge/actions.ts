@@ -7,6 +7,7 @@ import { canPerform } from '@/lib/panel/rbac'
 import { validateKnowledgeInput } from '@/lib/panel/knowledge-validation'
 import { computeContentHash } from '@/lib/panel/knowledge-hash'
 import { FAQ_TEMPLATES } from '@/lib/panel/faq-templates'
+import { captureEvent } from '@/lib/analytics/capture'
 
 type ActionResult = { error?: string }
 
@@ -59,6 +60,11 @@ export async function createKnowledgeFromTemplate(formData: FormData): Promise<A
     throw new Error(error.message)
   }
 
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'knowledge' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
+
   revalidateKnowledgePaths()
   return {}
 }
@@ -92,6 +98,11 @@ export async function createKnowledgeEntry(formData: FormData): Promise<ActionRe
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'knowledge' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidateKnowledgePaths()
   return {}
@@ -133,6 +144,11 @@ export async function updateKnowledgeEntry(formData: FormData): Promise<ActionRe
     throw new Error(error.message)
   }
 
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'knowledge' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
+
   revalidateKnowledgePaths()
   return {}
 }
@@ -151,6 +167,11 @@ export async function deleteKnowledgeEntry(id: string): Promise<ActionResult> {
   if (error) {
     throw new Error(error.message)
   }
+
+  void captureEvent(
+    { name: 'hotel_settings_updated', properties: { area: 'knowledge' } },
+    { distinctId: hotelUser.id, propertyId: hotelUser.propertyId }
+  )
 
   revalidateKnowledgePaths()
   return {}

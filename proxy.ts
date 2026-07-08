@@ -3,9 +3,12 @@ import createIntlMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { captureEvent } from '@/lib/analytics/capture'
 import type { Database } from './lib/supabase/database.types'
 
 const handleI18nRouting = createIntlMiddleware(routing)
+
+const GUEST_RETURN_GAP_MS = 30 * 60 * 1000
 
 export default async function proxy(request: NextRequest) {
   const sessionId = request.cookies.get('__Host-session')?.value
@@ -13,7 +16,7 @@ export default async function proxy(request: NextRequest) {
     const admin = createServiceRoleClient()
     const { data: session } = await admin
       .from('sessions')
-      .select('id, revoked, expires_at')
+      .select('id, revoked, expires_at, property_id, last_seen_at')
       .eq('id', sessionId)
       .single()
 
@@ -25,6 +28,23 @@ export default async function proxy(request: NextRequest) {
       const response = NextResponse.redirect(new URL('/error?type=session_revoked', request.url))
       response.cookies.delete('__Host-session')
       return response
+    }
+
+    // Guest page routes only: API calls under /api/ don't represent a "visit" for
+    // return-detection purposes, and the last_seen_at read must happen before the
+    // write below so a burst of concurrent requests can't erase the gap it measures.
+    if (!request.nextUrl.pathname.startsWith('/api/')) {
+      const gapMs = Date.now() - new Date(session.last_seen_at).getTime()
+      if (gapMs > GUEST_RETURN_GAP_MS) {
+        void captureEvent(
+          { name: 'guest_session_returned', properties: {} },
+          { distinctId: session.id, propertyId: session.property_id }
+        )
+      }
+      void admin
+        .from('sessions')
+        .update({ last_seen_at: new Date().toISOString() })
+        .eq('id', session.id)
     }
   }
 

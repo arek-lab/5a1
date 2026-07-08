@@ -5,6 +5,7 @@ import { checkScanRateLimit } from '@/lib/rate-limit/scan'
 import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { captureEvent } from '@/lib/analytics/capture'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -101,7 +102,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // non-fatal: anomaly detection errors do not affect the scan result
   }
 
-  // TODO(S5.1): posthog.capture('guest_qr_scanned', { qr_type: 'reception', property_id: qr.property_id })
+  void captureEvent(
+    { name: 'guest_qr_scanned', properties: { qr_type: 'reception' } },
+    { distinctId: session.id, propertyId: qr.property_id }
+  )
 
   return response
 }
