@@ -2,6 +2,12 @@
   "common": {
     "loading": "Ładowanie..."
   },
+  "analytics": {
+    "banner": {
+      "message": "Mierzymy użycie bez danych osobowych.",
+      "dismiss": "Rozumiem"
+    }
+  },
   "onboarding": {
     "steps": {
       "profile": "Profil hotelu",

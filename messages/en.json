@@ -2,6 +2,12 @@
   "common": {
     "loading": "Loading..."
   },
+  "analytics": {
+    "banner": {
+      "message": "We measure usage without personal data.",
+      "dismiss": "Got it"
+    }
+  },
   "onboarding": {
     "steps": {
       "profile": "Hotel profile",

@@ -302,31 +302,31 @@ Fill any remaining test gaps from Phases 1–3 and do the final end-to-end manua
 
 #### Automated
 
-- [x] 2.1 npm run typecheck passes
-- [x] 2.2 npm run lint passes
-- [x] 2.3 Unit/integration tests pass for all 4 wired hook points
-- [x] 2.4 Existing IT-2 test still passes unmodified
+- [x] 2.1 npm run typecheck passes — 45b855e
+- [x] 2.2 npm run lint passes — 45b855e
+- [x] 2.3 Unit/integration tests pass for all 4 wired hook points — 45b855e
+- [x] 2.4 Existing IT-2 test still passes unmodified — 45b855e
 
 #### Manual
 
-- [x] 2.5 guest_qr_scanned appears in PostHog Live Events on reception scan
-- [x] 2.6 hotel_login appears in Live Events on panel login
-- [x] 2.7 hotel_settings_updated appears with correct area on profile/service/knowledge save
+- [x] 2.5 guest_qr_scanned appears in PostHog Live Events on reception scan — 45b855e
+- [x] 2.6 hotel_login appears in Live Events on panel login — 45b855e
+- [x] 2.7 hotel_settings_updated appears with correct area on profile/service/knowledge save — 45b855e
 - [ ] 2.8 guest_session_returned fires only after >30 min gap, not on every navigation
 
 ### Phase 3: Consent banner + doNotTrack
 
 #### Automated
 
-- [ ] 3.1 npm run typecheck passes
-- [ ] 3.2 npm run lint passes
-- [ ] 3.3 DNT gate unit test passes
+- [x] 3.1 npm run typecheck passes
+- [x] 3.2 npm run lint passes
+- [x] 3.3 DNT gate unit test passes
 
 #### Manual
 
-- [ ] 3.4 Banner shows on first visit, dismiss persists across reload
-- [ ] 3.5 DNT enabled → no banner, no PostHog request
-- [ ] 3.6 Banner text correct in PL and EN
+- [x] 3.4 Banner shows on first visit, dismiss persists across reload
+- [x] 3.5 DNT enabled → no banner, no PostHog request
+- [x] 3.6 Banner text correct in PL and EN
 
 ### Phase 4: Test hardening + manual PostHog verification
 

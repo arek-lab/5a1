@@ -2,11 +2,13 @@
 
 import '@/sentry.client.config'; // explicit import needed for Turbopack (webpack plugin doesn't run in dev)
 import { posthog } from '@/lib/posthog/client';
+import { isDoNotTrackEnabled } from '@/lib/analytics/dnt';
 import { PostHogProvider } from 'posthog-js/react';
 import { useEffect } from 'react';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    if (isDoNotTrackEnabled()) return;
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
       person_profiles: 'never',
