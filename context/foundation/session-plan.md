@@ -14,7 +14,7 @@ S0.1 → S0.2 → S0.3
                 │
                 ├──► S1.1 → S1.2 → S1.3
                 │              │
-                ├──► S2.1 ─────┤
+                ├──► S2.8 ──► S2.1 ─────┤
                 │     │        │
                 │     ├─► S2.2 ─► S2.3 ┐
                 │     │          S2.4 ├─ (równolegle)
@@ -75,7 +75,7 @@ S0.1 → S0.2 → S0.3
 ### S2.1 — Auth panelu + RBAC middleware
 **Scope:** logowanie hotel_users (email+password). RBAC middleware: rola z `hotel_users` per route segment. Macierz §4.2 roadmapy. Guard komponenty server-side. Unit testy macierzy.
 **DoD:** unit testy przechodzą; viewer nie może POST; staff nie widzi billingu.
-**Blokery:** S0.3.
+**Blokery:** S0.3, S2.8 (potrzebny przynajmniej jeden owner+property, żeby było się czym logować).
 
 ### S2.2 — Guided wizard + profil hotelu (Moduł 1)
 **Scope:** wizard onboardingu (5–7 kroków, progress bar, `properties.setup_completed`). Formularz profilu (nazwa, adres, telefon, timezone, check-in/out, logo → Supabase Storage). Procent gotowości.
@@ -107,6 +107,12 @@ S0.1 → S0.2 → S0.3
 **DoD:** IT-5 przechodzi; blokada dezaktywacji ostatniego Ownera; invite wygasa po 24h.
 **Adnotacja (2026-07-08, odkryte podczas manualnej weryfikacji Fazy 2/3):** pierwotny DoD zakładał 72h. Supabase Cloud Dashboard (Auth → Email OTP expiry) ma twardy sufit 24h — link zaproszenia jest w całości walidowany przez Supabase (decyzja: żadnej własnej infrastruktury tokenu/e-mail), więc 72h nie jest osiągalne bez cofnięcia tamtej decyzji. Zaakceptowano 24h jako realny limit; `invite_expires_at`/UI/TTL w kodzie ustawione na 24h.
 **Blokery:** S2.1.
+
+### S2.8 — Self-service signup ownera + konta hotelu (Moduł onboarding, krok 1) [DRAFT — do doprecyzowania w /10x-plan]
+**Scope:** formularz signup (email, hasło, nazwa hotelu) → `auth.signUp` + insert `properties` (`setup_completed=false`) + insert `hotel_users` (`role='owner'`, `status='active'`) atomowo (RPC/transakcja, żeby uniknąć property bez ownera). Owner = billing = ADM (HITL #3) — brak wyboru roli przy signupie. Do potwierdzenia: czy DPA gate (dziś egzekwowany w S2.5 przed generowaniem QR) wchodzi w zakres tej sesji, czy zostaje jak jest.
+**DoD:** do doprecyzowania przy planowaniu; minimalnie: nowy hotel+owner powstają przez UI (nie przez service-role seed), RLS: nowo utworzony property widoczny wyłącznie nowemu ownerowi.
+**Blokery:** S0.2, S0.3.
+**Uwaga:** ta sesja była nieudokumentowaną luką — `implementation_roadmap.md` nazywa "Signup + konto hotelu (Owner = ADM)" jako MUST (krok 1 onboardingu), ale plan sesji jej nie miał; S2.1/S2.2 zakładają istniejące `properties`/`hotel_users`. Zarejestrowana 2026-07-10 podczas audytu invite flow — patrz `context/changes/s2-8/change.md`.
 
 ---
 
