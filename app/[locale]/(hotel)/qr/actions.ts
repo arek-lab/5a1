@@ -9,6 +9,16 @@ import {
   deactivateRoomQR as deactivateRoomQRLib,
   DpaNotSignedError,
 } from '@/lib/qr/generate'
+import {
+  checkInRoom,
+  RoomNotFoundError,
+  RoomOccupiedError,
+  InvalidCheckOutError,
+} from '@/lib/reservations/check-in'
+import {
+  updateReservationCheckOut,
+  ReservationNotFoundError,
+} from '@/lib/reservations/update-checkout'
 
 type ActionResult = { error?: string }
 
@@ -55,6 +65,44 @@ export async function deactivateRoomQR(roomId: string): Promise<ActionResult> {
   if (!hotelUser) return { error: 'forbidden' }
 
   await deactivateRoomQRLib(hotelUser.propertyId, roomId)
+
+  revalidatePath('/qr')
+  return {}
+}
+
+export async function checkInRoomAction(roomId: string, checkOut: string): Promise<ActionResult> {
+  const hotelUser = await requireQrWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  try {
+    await checkInRoom(hotelUser.propertyId, roomId, checkOut)
+  } catch (e) {
+    if (e instanceof DpaNotSignedError) return { error: 'dpaNotSigned' }
+    if (e instanceof RoomOccupiedError) return { error: 'roomOccupied' }
+    if (e instanceof InvalidCheckOutError) return { error: 'invalidCheckOut' }
+    if (e instanceof RoomNotFoundError) return { error: 'notFound' }
+    throw e
+  }
+
+  revalidatePath('/qr')
+  return {}
+}
+
+export async function updateCheckOutAction(
+  reservationId: string,
+  checkOut: string
+): Promise<ActionResult> {
+  const hotelUser = await requireQrWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  try {
+    await updateReservationCheckOut(hotelUser.propertyId, reservationId, checkOut)
+  } catch (e) {
+    if (e instanceof DpaNotSignedError) return { error: 'dpaNotSigned' }
+    if (e instanceof InvalidCheckOutError) return { error: 'invalidCheckOut' }
+    if (e instanceof ReservationNotFoundError) return { error: 'notFound' }
+    throw e
+  }
 
   revalidatePath('/qr')
   return {}

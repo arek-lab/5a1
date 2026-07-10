@@ -8,7 +8,7 @@ export class DpaNotSignedError extends Error {
   }
 }
 
-async function checkDpa(propertyId: string): Promise<void> {
+export async function checkDpa(propertyId: string): Promise<void> {
   const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('properties')
