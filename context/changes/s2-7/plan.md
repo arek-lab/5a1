@@ -387,22 +387,22 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 5.1 Test: po transferze dokładnie jeden owner
-- [x] 5.2 Test: transfer do nie-active usera odrzucony
-- [x] 5.3 Test: transfer wołany przez admin → 403
+- [x] 5.1 Test: po transferze dokładnie jeden owner — 0f63e51
+- [x] 5.2 Test: transfer do nie-active usera odrzucony — 0f63e51
+- [x] 5.3 Test: transfer wołany przez admin → 403 — 0f63e51
 
 #### Manual
 
-- [ ] 5.4 Stary Owner po transferze ma dostęp jako Admin, traci billing/transfer_ownership
+- [x] 5.4 Stary Owner po transferze ma dostęp jako Admin, traci billing/transfer_ownership — 0f63e51
 
 ### Phase 6: Testy — IT-5 + RLS mutation test
 
 #### Automated
 
-- [ ] 6.1 IT-5 przechodzi w całości
-- [ ] 6.2 Test RLS: viewer odrzucony, admin przechodzi
-- [ ] 6.3 npm run lint przechodzi
-- [ ] 6.4 npm run typecheck przechodzi
+- [x] 6.1 IT-5 przechodzi w całości
+- [x] 6.2 Test RLS: viewer odrzucony, admin przechodzi
+- [x] 6.3 npm run lint przechodzi
+- [x] 6.4 npm run typecheck przechodzi
 
 #### Manual
 
