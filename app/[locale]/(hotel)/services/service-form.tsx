@@ -22,6 +22,7 @@ export default function ServiceForm({ service, onSaved }: Props) {
     service?.price_cents != null ? String(service.price_cents) : ''
   )
   const [imageUrl, setImageUrl] = useState(service?.image_url ?? '')
+  const [isTimeSensitive, setIsTimeSensitive] = useState(service?.is_time_sensitive ?? false)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -36,6 +37,7 @@ export default function ServiceForm({ service, onSaved }: Props) {
     formData.set('category', category)
     formData.set('price_cents', included ? '' : priceCents)
     formData.set('image_url', imageUrl)
+    formData.set('is_time_sensitive', isTimeSensitive ? 'on' : 'off')
 
     startTransition(async () => {
       const action = service ? updateService : createCustomService
@@ -98,6 +100,14 @@ export default function ServiceForm({ service, onSaved }: Props) {
       <label className={labelClass}>
         {t('fields.imageUrl')}
         <input className={inputClass} value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
+      </label>
+      <label className="flex items-center gap-2 text-sm font-medium">
+        <input
+          type="checkbox"
+          checked={isTimeSensitive}
+          onChange={e => setIsTimeSensitive(e.target.checked)}
+        />
+        {t('fields.timeSensitive')}
       </label>
       <button
         type="submit"

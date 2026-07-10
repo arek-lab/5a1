@@ -17,6 +17,7 @@ export type ServiceRecord = {
   image_url: string | null
   is_active: boolean
   is_pinned: boolean
+  is_time_sensitive: boolean
 }
 
 interface Props {
@@ -24,7 +25,7 @@ interface Props {
   canEdit: boolean
 }
 
-function statusBadgeClass(variant: 'active' | 'inactive' | 'pinned') {
+function statusBadgeClass(variant: 'active' | 'inactive' | 'pinned' | 'timeSensitive') {
   switch (variant) {
     case 'active':
       return 'rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800'
@@ -32,6 +33,8 @@ function statusBadgeClass(variant: 'active' | 'inactive' | 'pinned') {
       return 'rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600'
     case 'pinned':
       return 'rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800'
+    case 'timeSensitive':
+      return 'rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800'
   }
 }
 
@@ -129,6 +132,11 @@ export default function ServiceList({ services, canEdit }: Props) {
                         </span>
                         {service.is_pinned && (
                           <span className={statusBadgeClass('pinned')}>{t('list.pinnedLabel')}</span>
+                        )}
+                        {service.is_time_sensitive && (
+                          <span className={statusBadgeClass('timeSensitive')}>
+                            {t('list.timeSensitiveLabel')}
+                          </span>
                         )}
                       </div>
                       <div className="flex items-center gap-3">

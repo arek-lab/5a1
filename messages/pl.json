@@ -80,7 +80,8 @@
       "pinnedLabel": "Polecane",
       "includedLabel": "W cenie",
       "addFromTemplate": "Dodaj z szablonu",
-      "addCustom": "Dodaj własną"
+      "addCustom": "Dodaj własną",
+      "timeSensitiveLabel": "Wymaga godziny"
     },
     "form": {
       "fields": {
@@ -89,7 +90,8 @@
         "category": "Kategoria",
         "priceCents": "Cena",
         "included": "W cenie (bez dopłaty)",
-        "imageUrl": "URL zdjęcia"
+        "imageUrl": "URL zdjęcia",
+        "timeSensitive": "Wymaga wyboru godziny"
       },
       "actions": {
         "save": "Zapisz",

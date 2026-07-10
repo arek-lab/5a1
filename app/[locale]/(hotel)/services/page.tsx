@@ -13,7 +13,9 @@ export default async function ServicesPage() {
   const supabase = await createServerClient()
   const { data: services } = await supabase
     .from('services')
-    .select('id, template_key, name, description, category, price_cents, image_url, is_active, is_pinned')
+    .select(
+      'id, template_key, name, description, category, price_cents, image_url, is_active, is_pinned, is_time_sensitive'
+    )
     .eq('property_id', hotelUser.propertyId)
     .order('category')
     .order('name')

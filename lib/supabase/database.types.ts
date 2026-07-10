@@ -526,6 +526,7 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           is_pinned: boolean
+          is_time_sensitive: boolean
           name: string
           price_cents: number | null
           property_id: string
@@ -542,6 +543,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           is_pinned?: boolean
+          is_time_sensitive?: boolean
           name: string
           price_cents?: number | null
           property_id: string
@@ -558,6 +560,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           is_pinned?: boolean
+          is_time_sensitive?: boolean
           name?: string
           price_cents?: number | null
           property_id?: string

@@ -5,6 +5,7 @@ export type ServiceInput = {
   category: string
   priceCentsRaw: string
   imageUrl: string
+  isTimeSensitive: boolean
 }
 
 export type ServiceInputValue = {
@@ -12,6 +13,7 @@ export type ServiceInputValue = {
   category: ServiceCategory
   priceCents: number | null
   imageUrl: string | null
+  isTimeSensitive: boolean
 }
 
 export type ServiceValidationResult =
@@ -52,7 +54,10 @@ export function validateServiceInput(input: ServiceInput): ServiceValidationResu
     }
   }
 
-  return { ok: true, value: { name, category, priceCents, imageUrl: imageUrl || null } }
+  return {
+    ok: true,
+    value: { name, category, priceCents, imageUrl: imageUrl || null, isTimeSensitive: input.isTimeSensitive },
+  }
 }
 
 export function wouldExceedPinLimit(otherPinnedCount: number): boolean {

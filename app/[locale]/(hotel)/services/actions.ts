@@ -38,6 +38,7 @@ export async function createServiceFromTemplate(formData: FormData): Promise<Act
     category: template.category,
     priceCentsRaw: String(formData.get('price_cents') ?? template.suggestedPriceCents ?? ''),
     imageUrl: String(formData.get('image_url') ?? ''),
+    isTimeSensitive: formData.get('is_time_sensitive') === 'on',
   })
   if (!validated.ok) return { error: validated.error }
 
@@ -50,6 +51,7 @@ export async function createServiceFromTemplate(formData: FormData): Promise<Act
     category: validated.value.category,
     price_cents: validated.value.priceCents,
     image_url: validated.value.imageUrl,
+    is_time_sensitive: validated.value.isTimeSensitive,
   })
 
   if (error) {
@@ -74,6 +76,7 @@ export async function createCustomService(formData: FormData): Promise<ActionRes
     category: String(formData.get('category') ?? ''),
     priceCentsRaw: String(formData.get('price_cents') ?? ''),
     imageUrl: String(formData.get('image_url') ?? ''),
+    isTimeSensitive: formData.get('is_time_sensitive') === 'on',
   })
   if (!validated.ok) return { error: validated.error }
 
@@ -85,6 +88,7 @@ export async function createCustomService(formData: FormData): Promise<ActionRes
     category: validated.value.category,
     price_cents: validated.value.priceCents,
     image_url: validated.value.imageUrl,
+    is_time_sensitive: validated.value.isTimeSensitive,
   })
 
   if (error) {
@@ -112,6 +116,7 @@ export async function updateService(formData: FormData): Promise<ActionResult> {
     category: String(formData.get('category') ?? ''),
     priceCentsRaw: String(formData.get('price_cents') ?? ''),
     imageUrl: String(formData.get('image_url') ?? ''),
+    isTimeSensitive: formData.get('is_time_sensitive') === 'on',
   })
   if (!validated.ok) return { error: validated.error }
 
@@ -124,6 +129,7 @@ export async function updateService(formData: FormData): Promise<ActionResult> {
       category: validated.value.category,
       price_cents: validated.value.priceCents,
       image_url: validated.value.imageUrl,
+      is_time_sensitive: validated.value.isTimeSensitive,
     })
     .eq('id', id)
     .eq('property_id', hotelUser.propertyId)

@@ -80,7 +80,8 @@
       "pinnedLabel": "Featured",
       "includedLabel": "Included",
       "addFromTemplate": "Add from template",
-      "addCustom": "Add custom"
+      "addCustom": "Add custom",
+      "timeSensitiveLabel": "Time slot required"
     },
     "form": {
       "fields": {
@@ -89,7 +90,8 @@
         "category": "Category",
         "priceCents": "Price",
         "included": "Included (no extra charge)",
-        "imageUrl": "Image URL"
+        "imageUrl": "Image URL",
+        "timeSensitive": "Requires a time slot"
       },
       "actions": {
         "save": "Save",

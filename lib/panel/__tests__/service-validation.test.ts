@@ -6,6 +6,7 @@ const validInput = {
   category: 'spa',
   priceCentsRaw: '15000',
   imageUrl: '',
+  isTimeSensitive: false,
 }
 
 describe('validateServiceInput', () => {
@@ -18,7 +19,16 @@ describe('validateServiceInput', () => {
         category: 'spa',
         priceCents: 15000,
         imageUrl: null,
+        isTimeSensitive: false,
       })
+    }
+  })
+
+  it('passes isTimeSensitive through unchanged regardless of value', () => {
+    const result = validateServiceInput({ ...validInput, isTimeSensitive: true })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.value.isTimeSensitive).toBe(true)
     }
   })
 
