@@ -30,8 +30,8 @@ async function requireTransferAccess(): Promise<HotelUser | null> {
   return hotelUser
 }
 
-function inviteRedirectUrl(): string {
-  return `${process.env.NEXT_PUBLIC_APP_URL}/invite/accept`
+function inviteRedirectUrl(propertyId: string): string {
+  return `${process.env.NEXT_PUBLIC_APP_URL}/invite/accept?property_id=${propertyId}`
 }
 
 export async function inviteUser(formData: FormData): Promise<ActionResult> {
@@ -56,7 +56,7 @@ export async function inviteUser(formData: FormData): Promise<ActionResult> {
     throw new Error(insertError.message)
   }
 
-  const { error: sendError } = await sendInviteEmail(email, inviteRedirectUrl())
+  const { error: sendError } = await sendInviteEmail(email, inviteRedirectUrl(hotelUser.propertyId))
   if (sendError) return { error: sendError }
 
   revalidatePath('/users')
@@ -82,7 +82,10 @@ export async function resendInvite(userId: string): Promise<ActionResult> {
     .eq('id', userId)
   if (updateError) throw new Error(updateError.message)
 
-  const { error: sendError } = await sendInviteEmail(target.email, inviteRedirectUrl())
+  const { error: sendError } = await sendInviteEmail(
+    target.email,
+    inviteRedirectUrl(hotelUser.propertyId)
+  )
   if (sendError) return { error: sendError }
 
   return {}

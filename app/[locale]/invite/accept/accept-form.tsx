@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 
 export default function AcceptForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -15,6 +16,13 @@ export default function AcceptForm() {
     setLoading(true)
     setError(null)
 
+    const propertyId = searchParams.get('property_id')
+    if (!propertyId) {
+      setError('missing_property')
+      setLoading(false)
+      return
+    }
+
     const supabase = createBrowserClient()
     const { error: updateError } = await supabase.auth.updateUser({ password })
     if (updateError) {
@@ -23,7 +31,11 @@ export default function AcceptForm() {
       return
     }
 
-    const response = await fetch('/api/invite/activate', { method: 'POST' })
+    const response = await fetch('/api/invite/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ propertyId }),
+    })
     if (!response.ok) {
       setError('activation_failed')
       setLoading(false)
