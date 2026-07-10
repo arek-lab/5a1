@@ -18,8 +18,10 @@ describe('WelcomeBanner', () => {
     expect(screen.getByText('Witamy w pokoju 204')).toBeTruthy()
   })
 
-  it('falls back to a generic greeting when neither name nor room number is present', () => {
+  it('shows a scan-room CTA when neither name nor room number is present', () => {
     render(<WelcomeBanner guestFirstName={null} roomNumber={null} />)
-    expect(screen.getByText('Witaj!')).toBeTruthy()
+    const link = screen.getByRole('link', { name: 'Skanuj kod pokoju' })
+    expect(link).toBeTruthy()
+    expect(link.getAttribute('href')).toBe('/scan')
   })
 })
