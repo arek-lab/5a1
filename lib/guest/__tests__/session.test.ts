@@ -25,9 +25,16 @@ function headersWith(values: Record<string, string>) {
 }
 
 function makeClient(responses: {
-  session?: { id: string; property_id: string; auth_level: number; reservation_id: string | null } | null
+  session?: {
+    id: string
+    property_id: string
+    auth_level: number
+    reservation_id: string | null
+    room_id: string | null
+  } | null
   property?: { name: string; logo_url: string | null } | null
   reservation?: { guest_first_name: string | null } | null
+  room?: { room_number: string } | null
 }) {
   return {
     from: vi.fn((table: string) => ({
@@ -37,6 +44,7 @@ function makeClient(responses: {
             if (table === 'sessions') return { data: responses.session ?? null }
             if (table === 'properties') return { data: responses.property ?? null }
             if (table === 'reservations') return { data: responses.reservation ?? null }
+            if (table === 'rooms') return { data: responses.room ?? null }
             return { data: null }
           }),
         })),
@@ -76,7 +84,7 @@ describe('getGuestSessionContext', () => {
     )
     mockWithTenantContext.mockResolvedValue(
       makeClient({
-        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 0, reservation_id: null },
+        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 0, reservation_id: null, room_id: null },
       }) as never
     )
 
@@ -85,15 +93,16 @@ describe('getGuestSessionContext', () => {
     expect(result).toBeNull()
   })
 
-  it('returns the guest context for a valid auth_level>=1 session with a reservation', async () => {
+  it('returns the guest context for a valid auth_level>=1 session with a reservation and room', async () => {
     mockHeaders.mockResolvedValue(
       headersWith({ 'x-property-id': 'prop-1', 'x-session-id': 'sess-1' })
     )
     mockWithTenantContext.mockResolvedValue(
       makeClient({
-        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 2, reservation_id: 'res-1' },
+        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 2, reservation_id: 'res-1', room_id: 'room-1' },
         property: { name: 'Hotel Test', logo_url: 'https://example.com/logo.png' },
         reservation: { guest_first_name: 'Jan' },
+        room: { room_number: '204' },
       }) as never
     )
 
@@ -104,18 +113,19 @@ describe('getGuestSessionContext', () => {
       sessionId: 'sess-1',
       authLevel: 2,
       guestFirstName: 'Jan',
+      roomNumber: '204',
       propertyName: 'Hotel Test',
       logoUrl: 'https://example.com/logo.png',
     })
   })
 
-  it('returns a null guestFirstName when the session has no reservation', async () => {
+  it('returns a null guestFirstName and roomNumber when the session has no reservation or room', async () => {
     mockHeaders.mockResolvedValue(
       headersWith({ 'x-property-id': 'prop-1', 'x-session-id': 'sess-1' })
     )
     mockWithTenantContext.mockResolvedValue(
       makeClient({
-        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 1, reservation_id: null },
+        session: { id: 'sess-1', property_id: 'prop-1', auth_level: 1, reservation_id: null, room_id: null },
         property: { name: 'Hotel Test', logo_url: null },
       }) as never
     )
@@ -123,5 +133,6 @@ describe('getGuestSessionContext', () => {
     const result = await getGuestSessionContext()
 
     expect(result?.guestFirstName).toBeNull()
+    expect(result?.roomNumber).toBeNull()
   })
 })

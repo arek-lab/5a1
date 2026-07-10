@@ -65,3 +65,13 @@ Fixed out-of-scope-but-blocking via `supabase/migrations/20260710080000_fix_auth
 `change.md` under "Hotfix — 2026-07-10", since the bug originates there, not in s3-1.
 
 Phase 2 manual verification (2.4–2.7) can now resume.
+
+## TODO — out of scope for S3.1, raised during Phase 4 manual verification (2026-07-10)
+
+User suggested adding an in-app "Scan room QR" button (camera access via `MediaDevices` + a
+QR-decoding library) on the pre-login/splash screen. Current flow assumes the guest scans both
+QR codes with the phone's native camera app, which opens `/api/scan/reception` /
+`/api/scan/room` directly in the browser — no in-app camera UI exists or is planned in the
+roadmap yet. Needs its own UX design + plan; not part of S3.1 (app shell/splash/welcome/home).
+Candidate target: a future session under Faza 3 (guest flow) once S3.2 (category/order flow) is
+stable, or a dedicated session if the roadmap is amended.

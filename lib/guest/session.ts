@@ -7,6 +7,7 @@ export type GuestSessionContext = {
   sessionId: string
   authLevel: number
   guestFirstName: string | null
+  roomNumber: string | null
   propertyName: string
   logoUrl: string | null
 }
@@ -27,7 +28,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
 
   const { data: session } = await client
     .from('sessions')
-    .select('id, property_id, auth_level, reservation_id')
+    .select('id, property_id, auth_level, reservation_id, room_id')
     .eq('id', sessionId)
     .single()
 
@@ -51,11 +52,22 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     guestFirstName = reservation?.guest_first_name ?? null
   }
 
+  let roomNumber: string | null = null
+  if (session.room_id) {
+    const { data: room } = await client
+      .from('rooms')
+      .select('room_number')
+      .eq('id', session.room_id)
+      .single()
+    roomNumber = room?.room_number ?? null
+  }
+
   return {
     propertyId: session.property_id,
     sessionId: session.id,
     authLevel: session.auth_level,
     guestFirstName,
+    roomNumber,
     propertyName: property.name,
     logoUrl: property.logo_url,
   }

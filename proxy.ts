@@ -48,7 +48,10 @@ export default async function proxy(request: NextRequest) {
         return new NextResponse(null, { status: 401 })
       }
       const response = NextResponse.redirect(new URL('/error?type=session_revoked', request.url))
-      response.cookies.delete('__Host-session')
+      // __Host- prefixed cookies require Secure (and Path=/) on every Set-Cookie, including
+      // clearing ones — omitting it makes the browser silently reject the header entirely,
+      // leaving the stale invalid cookie in place and causing a redirect loop back to this branch.
+      response.cookies.delete({ name: '__Host-session', path: '/', secure: true })
       return response
     }
 

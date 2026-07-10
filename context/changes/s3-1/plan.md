@@ -355,27 +355,27 @@ Not applicable — no existing data or guest UI to migrate from; this is new con
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `npm run test -- components/guest/splash-screen components/guest/welcome-banner`
-- [x] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.1 Unit tests pass: `npm run test -- components/guest/splash-screen components/guest/welcome-banner` — 5cca6ee
+- [x] 3.2 Type checking passes: `npm run typecheck` — 5cca6ee
 
 #### Manual
 
-- [ ] 3.3 Splash disappears at ~1.5s regardless of throttling
-- [ ] 3.4 Welcome shows name when present, generic greeting when absent
+- [x] 3.3 Splash disappears at ~1.5s regardless of throttling
+- [x] 3.4 Welcome shows name when present, generic greeting when absent
 
 ### Phase 4: Home Page — Category Grid + Polecamy
 
 #### Automated
 
-- [ ] 4.1 Unit tests pass: `npm run test -- lib/guest/services components/guest/polecamy-section`
-- [ ] 4.2 Type checking passes: `npm run typecheck`
-- [ ] 4.3 Linting passes: `npm run lint`
+- [x] 4.1 Unit tests pass: `npm run test -- lib/guest/services components/guest/polecamy-section`
+- [x] 4.2 Type checking passes: `npm run typecheck`
+- [x] 4.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.4 All 5 category tiles render regardless of service content
-- [ ] 4.5 Polecamy shows on first visit, hides on revisit within 24h
-- [ ] 4.6 Polecamy renders below the fold on mobile viewport
+- [x] 4.4 All 5 category tiles render regardless of service content
+- [x] 4.5 Polecamy shows on first visit, hides on revisit within 24h
+- [x] 4.6 Polecamy renders below the fold on mobile viewport
 
 ### Phase 5: Translations, Tests, Performance Verification
 
