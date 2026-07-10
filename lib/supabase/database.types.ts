@@ -652,6 +652,10 @@ export type Database = {
     }
     Functions: {
       auth_user_property_ids: { Args: never; Returns: string[] }
+      create_hotel_and_owner: {
+        Args: { p_auth_user_id: string; p_email: string; p_hotel_name: string }
+        Returns: string
+      }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
       process_early_checkout: {
         Args: { p_reservation_id: string }

@@ -2,6 +2,24 @@
   "common": {
     "loading": "Loading..."
   },
+  "signup": {
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "hotelName": "Hotel name"
+    },
+    "actions": {
+      "signUp": "Sign up",
+      "signingUp": "Signing up…"
+    },
+    "errors": {
+      "email_taken": "This email is already registered.",
+      "invalid_hotel_name": "Enter a valid hotel name.",
+      "rate_limited": "Too many attempts. Please try again later.",
+      "invalid_request": "Something went wrong. Please try again.",
+      "signup_failed": "Something went wrong. Please try again."
+    }
+  },
   "analytics": {
     "banner": {
       "message": "We measure usage without personal data.",

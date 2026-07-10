@@ -209,28 +209,28 @@ Nie dotyczy — nowa funkcjonalność, brak istniejących danych do migrowania. 
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się: `supabase db reset` (wklejona i zaaplikowana w Supabase SQL Editor)
-- [x] 1.2 Typecheck przechodzi: `npm run typecheck`
-- [x] 1.3 Lint przechodzi: `npm run lint` (pre-istniejący błąd w qr-panel.tsx poza zakresem, patrz decyzja HITL)
+- [x] 1.1 Migracja aplikuje się: `supabase db reset` (wklejona i zaaplikowana w Supabase SQL Editor) — 2fd0a70
+- [x] 1.2 Typecheck przechodzi: `npm run typecheck` — 2fd0a70
+- [x] 1.3 Lint przechodzi: `npm run lint` (pre-istniejący błąd w qr-panel.tsx poza zakresem, patrz decyzja HITL) — 2fd0a70
 
 #### Manual
 
-- [x] 1.4 Ręczne wywołanie RPC tworzy oba wiersze atomowo
-- [x] 1.5 Powtórzony email zwraca błąd `email_taken`
+- [x] 1.4 Ręczne wywołanie RPC tworzy oba wiersze atomowo — 2fd0a70
+- [x] 1.5 Powtórzony email zwraca błąd `email_taken` — 2fd0a70
 
 ### Phase 2: UI signup + server action
 
 #### Automated
 
-- [ ] 2.1 Typecheck przechodzi: `npm run typecheck`
-- [ ] 2.2 Lint przechodzi: `npm run lint`
-- [ ] 2.3 Unit test walidacji `hotelName` przechodzi: `npm run test`
+- [x] 2.1 Typecheck przechodzi: `npm run typecheck`
+- [x] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.3 Unit test walidacji `hotelName` przechodzi: `npm run test`
 
 #### Manual
 
-- [ ] 2.4 Formularz signup tworzy konto, po potwierdzeniu emaila logowanie przekierowuje do `/dashboard`
-- [ ] 2.5 Powtórna próba signupu z tym samym emailem pokazuje czytelny błąd
-- [ ] 2.6 Przekroczenie rate limitu pokazuje komunikat o zbyt wielu próbach
+- [x] 2.4 Formularz signup tworzy konto, po potwierdzeniu emaila logowanie przekierowuje do `/dashboard`
+- [x] 2.5 Powtórna próba signupu z tym samym emailem pokazuje czytelny błąd
+- [x] 2.6 Przekroczenie rate limitu pokazuje komunikat o zbyt wielu próbach
 
 ### Phase 3: Integracyjny test RLS
 

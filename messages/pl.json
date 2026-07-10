@@ -2,6 +2,24 @@
   "common": {
     "loading": "Ładowanie..."
   },
+  "signup": {
+    "fields": {
+      "email": "E-mail",
+      "password": "Hasło",
+      "hotelName": "Nazwa hotelu"
+    },
+    "actions": {
+      "signUp": "Zarejestruj się",
+      "signingUp": "Rejestrowanie…"
+    },
+    "errors": {
+      "email_taken": "Ten adres e-mail jest już zarejestrowany.",
+      "invalid_hotel_name": "Podaj prawidłową nazwę hotelu.",
+      "rate_limited": "Zbyt wiele prób. Spróbuj ponownie później.",
+      "invalid_request": "Coś poszło nie tak. Spróbuj ponownie.",
+      "signup_failed": "Coś poszło nie tak. Spróbuj ponownie."
+    }
+  },
   "analytics": {
     "banner": {
       "message": "Mierzymy użycie bez danych osobowych.",
