@@ -47,9 +47,7 @@ edytuje rezerwacji property B; test integracyjny z aktywnym RLS.
 
 ## Implementacja — notatki
 
-**Phase 1 (warstwa serwerowa) zakomitowana z niepotwierdzoną manualną weryfikacją.** Automated
-checks (typecheck/lint/test/SQL RLS) przeszły. Punkty manualne `plan.md` Progress 1.5–1.8
-(`checkInRoomAction`/`updateCheckOutAction` — forbidden/dpaNotSigned/roomOccupied/invalidCheckOut)
-zostają celowo `- [ ]` — server actions wymagają cookies sesji Next.js (`getHotelUser()`), więc
-nie da się ich manualnie zweryfikować bez UI z Phase 2. **TODO:** potwierdzić 1.5–1.8 w przeglądarce
-razem z manualną weryfikacją Phase 2 (2.4–2.8), zalogowana jako różne role.
+Phase 1 (warstwa serwerowa) zakomitowana najpierw z niepotwierdzoną manualną weryfikacją
+1.5–1.8 (server actions wymagają cookies sesji Next.js, więc nie dało się ich przetestować bez
+UI z Phase 2). Phase 2 dostarczyła UI; 1.5–1.8 oraz 2.4–2.8 potwierdzone manualnie po zbudowaniu
+UI. Wszystkie punkty Progress zamknięte.

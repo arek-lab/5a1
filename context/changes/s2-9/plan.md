@@ -219,30 +219,30 @@ Brak migracji schematu — wszystkie wymagane kolumny (`reservations.*`, `rooms.
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Unit/integration tests pass: `npm run test` (obejmuje nowy `checkout-recalc.test.ts`)
-- [x] 1.4 SQL izolacja RLS: `psql "$DATABASE_URL" -f supabase/tests/s2_9_reservations_staff_isolation.sql` kończy się `S2.9 PASSED`
+- [x] 1.1 Type checking passes: `npm run typecheck` — 508291d
+- [x] 1.2 Linting passes: `npm run lint` — 508291d
+- [x] 1.3 Unit/integration tests pass: `npm run test` (obejmuje nowy `checkout-recalc.test.ts`) — 508291d
+- [x] 1.4 SQL izolacja RLS: `psql "$DATABASE_URL" -f supabase/tests/s2_9_reservations_staff_isolation.sql` kończy się `S2.9 PASSED` — 508291d
 
 #### Manual
 
-- [ ] 1.5 `checkInRoomAction` jako viewer zwraca `{error: 'forbidden'}`
-- [ ] 1.6 `checkInRoomAction` na property bez DPA zwraca `{error: 'dpaNotSigned'}`
-- [ ] 1.7 `checkInRoomAction` na pokoju z aktywną rezerwacją zwraca `{error: 'roomOccupied'}`
-- [ ] 1.8 `updateCheckOutAction` z datą w przeszłości zwraca `{error: 'invalidCheckOut'}`
+- [x] 1.5 `checkInRoomAction` jako viewer zwraca `{error: 'forbidden'}`
+- [x] 1.6 `checkInRoomAction` na property bez DPA zwraca `{error: 'dpaNotSigned'}`
+- [x] 1.7 `checkInRoomAction` na pokoju z aktywną rezerwacją zwraca `{error: 'roomOccupied'}`
+- [x] 1.8 `updateCheckOutAction` z datą w przeszłości zwraca `{error: 'invalidCheckOut'}`
 
 ### Phase 2: UI panelu — check-in i edycja check-out
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 Kliknięcie "Zamelduj" na pokoju bez rezerwacji, wpisanie daty check-out i zatwierdzenie tworzy rezerwację i pokazuje ją w wierszu
-- [ ] 2.5 Kliknięcie "Edytuj check-out" na pokoju z aktywną rezerwacją, zmiana daty i zatwierdzenie aktualizuje wyświetlaną datę
-- [ ] 2.6 Próba check-in na już zajętym pokoju pokazuje komunikat błędu bez zmiany stanu
-- [ ] 2.7 Viewer widzi datę check-out, ale nie widzi przycisków "Zamelduj"/"Edytuj check-out"
-- [ ] 2.8 Brak jakiegokolwiek modala/popupu w całym flow
+- [x] 2.4 Kliknięcie "Zamelduj" na pokoju bez rezerwacji, wpisanie daty check-out i zatwierdzenie tworzy rezerwację i pokazuje ją w wierszu
+- [x] 2.5 Kliknięcie "Edytuj check-out" na pokoju z aktywną rezerwacją, zmiana daty i zatwierdzenie aktualizuje wyświetlaną datę
+- [x] 2.6 Próba check-in na już zajętym pokoju pokazuje komunikat błędu bez zmiany stanu
+- [x] 2.7 Viewer widzi datę check-out, ale nie widzi przycisków "Zamelduj"/"Edytuj check-out"
+- [x] 2.8 Brak jakiegokolwiek modala/popupu w całym flow

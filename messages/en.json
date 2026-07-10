@@ -248,14 +248,22 @@
       "activeLabel": "QR active",
       "inactiveLabel": "QR inactive",
       "activate": "Activate QR",
-      "deactivate": "Deactivate QR"
+      "deactivate": "Deactivate QR",
+      "checkIn": "Check in",
+      "checkOutLabel": "Check-out",
+      "editCheckOut": "Edit check-out",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     },
     "dpaBlocked": {
       "message": "The QR module is locked until the Data Processing Agreement (DPA) is signed."
     },
     "errors": {
       "forbidden": "You don't have permission to manage QR codes.",
-      "dpaNotSigned": "The Data Processing Agreement (DPA) has not been signed."
+      "dpaNotSigned": "The Data Processing Agreement (DPA) has not been signed.",
+      "roomOccupied": "This room already has an active reservation.",
+      "invalidCheckOut": "The check-out date must be in the future.",
+      "notFound": "Room or reservation not found."
     }
   },
   "orders": {

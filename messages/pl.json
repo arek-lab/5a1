@@ -248,14 +248,22 @@
       "activeLabel": "QR aktywny",
       "inactiveLabel": "QR nieaktywny",
       "activate": "Aktywuj QR",
-      "deactivate": "Dezaktywuj QR"
+      "deactivate": "Dezaktywuj QR",
+      "checkIn": "Zamelduj",
+      "checkOutLabel": "Check-out",
+      "editCheckOut": "Edytuj check-out",
+      "confirm": "Zatwierdź",
+      "cancel": "Anuluj"
     },
     "dpaBlocked": {
       "message": "Moduł QR jest zablokowany, dopóki umowa powierzenia danych (DPA) nie zostanie podpisana."
     },
     "errors": {
       "forbidden": "Nie masz uprawnień do zarządzania kodami QR.",
-      "dpaNotSigned": "Umowa powierzenia danych (DPA) nie została podpisana."
+      "dpaNotSigned": "Umowa powierzenia danych (DPA) nie została podpisana.",
+      "roomOccupied": "Ten pokój ma już aktywną rezerwację.",
+      "invalidCheckOut": "Data check-out musi być w przyszłości.",
+      "notFound": "Nie znaleziono pokoju lub rezerwacji."
     }
   },
   "orders": {

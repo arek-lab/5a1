@@ -44,7 +44,7 @@ export default async function QrPage() {
       .maybeSingle(),
     supabase
       .from('rooms')
-      .select('id, room_number, room_type')
+      .select('id, room_number, room_type, room_active_reservation_id')
       .eq('property_id', hotelUser.propertyId)
       .order('room_number'),
     supabase
@@ -56,13 +56,30 @@ export default async function QrPage() {
     getActiveReceptionSessionCount(hotelUser.propertyId),
   ])
 
+  const activeReservationIds = (rooms ?? [])
+    .map(room => room.room_active_reservation_id)
+    .filter((id): id is string => id !== null)
+
+  const { data: reservations } =
+    activeReservationIds.length > 0
+      ? await supabase
+          .from('reservations')
+          .select('id, room_id, check_out')
+          .in('id', activeReservationIds)
+      : { data: [] }
+
+  const reservationByRoomId = new Map((reservations ?? []).map(res => [res.room_id, res]))
   const roomQrByRoomId = new Map((roomQrs ?? []).map(qr => [qr.room_id, qr]))
-  const roomsWithQr: RoomWithQr[] = (rooms ?? []).map(room => ({
-    id: room.id,
-    roomNumber: room.room_number,
-    roomType: room.room_type,
-    activeQr: roomQrByRoomId.has(room.id) ? { id: roomQrByRoomId.get(room.id)!.id } : null,
-  }))
+  const roomsWithQr: RoomWithQr[] = (rooms ?? []).map(room => {
+    const reservation = reservationByRoomId.get(room.id)
+    return {
+      id: room.id,
+      roomNumber: room.room_number,
+      roomType: room.room_type,
+      activeQr: roomQrByRoomId.has(room.id) ? { id: roomQrByRoomId.get(room.id)!.id } : null,
+      activeReservation: reservation ? { id: reservation.id, checkOut: reservation.check_out } : null,
+    }
+  })
 
   const receptionQrImage = receptionQr
     ? await generateQRImage(
