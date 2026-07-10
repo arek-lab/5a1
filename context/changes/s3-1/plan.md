@@ -340,23 +340,23 @@ Not applicable — no existing data or guest UI to migrate from; this is new con
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `npm run test -- lib/guest components/guest`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- lib/guest components/guest` — e36cbfc
+- [x] 2.2 Type checking passes: `npm run typecheck` — e36cbfc
+- [x] 2.3 Linting passes: `npm run lint` — e36cbfc
 
 #### Manual
 
-- [x] 2.4 `auth_level=0`/no session redirects to `/error?type=insufficient_auth`
-- [x] 2.5 Valid session shows header, language switcher, floating Concierge button
-- [x] 2.6 Concierge button navigates to placeholder `/concierge`
-- [x] 2.7 Chrome DevTools shows valid manifest + installability checks passing
+- [x] 2.4 `auth_level=0`/no session redirects to `/error?type=insufficient_auth` — e36cbfc
+- [x] 2.5 Valid session shows header, language switcher, floating Concierge button — e36cbfc
+- [x] 2.6 Concierge button navigates to placeholder `/concierge` — e36cbfc
+- [x] 2.7 Chrome DevTools shows valid manifest + installability checks passing — e36cbfc
 
 ### Phase 3: Splash + Welcome
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `npm run test -- components/guest/splash-screen components/guest/welcome-banner`
-- [ ] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.1 Unit tests pass: `npm run test -- components/guest/splash-screen components/guest/welcome-banner`
+- [x] 3.2 Type checking passes: `npm run typecheck`
 
 #### Manual
 
