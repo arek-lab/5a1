@@ -25,6 +25,14 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // File-convention metadata routes (manifest.ts -> /manifest.webmanifest) live outside
+  // [locale] entirely. Left to the intl middleware below, they get rewritten to a
+  // locale-prefixed path (e.g. /pl/manifest.webmanifest) that doesn't exist, 404ing
+  // the manifest and breaking PWA installability.
+  if (pathname === '/manifest.webmanifest') {
+    return NextResponse.next()
+  }
+
   const sessionId = request.cookies.get('__Host-session')?.value
   if (sessionId) {
     const admin = createServiceRoleClient()
@@ -83,15 +91,18 @@ export default async function proxy(request: NextRequest) {
     }
   )
 
-  // getUser() refreshes the JWT and may invoke setAll to write updated cookies.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // getClaims() refreshes the JWT (like getUser()) and decodes the token itself,
+  // so it reflects claims injected by the Custom Access Token Hook. getUser() must
+  // NOT be used here: it returns auth.users.raw_app_meta_data from the Auth server,
+  // which the hook never modifies — only the issued JWT's claims are hook-derived.
+  const { data: claimsData } = await supabase.auth.getClaims()
 
   // Inject tenant claims from JWT app_metadata into request headers so that
   // route handlers can call withTenantContext(headers) without re-decoding the JWT.
   const requestHeaders = new Headers(request.headers)
-  const meta = user?.app_metadata as { property_id?: string; session_id?: string } | undefined
+  const meta = claimsData?.claims.app_metadata as
+    | { property_id?: string; session_id?: string }
+    | undefined
   if (typeof meta?.property_id === 'string') {
     requestHeaders.set('x-property-id', meta.property_id)
   }

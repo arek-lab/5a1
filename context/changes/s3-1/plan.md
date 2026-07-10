@@ -327,29 +327,29 @@ Not applicable — no existing data or guest UI to migrate from; this is new con
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm run test -- lib/guest`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Unit tests pass: `npm run test -- lib/guest` — 0fbe80c
+- [x] 1.2 Type checking passes: `npm run typecheck` — 0fbe80c
+- [x] 1.3 Linting passes: `npm run lint` — 0fbe80c
 
 #### Manual
 
 - [ ] 1.4 `getGuestSessionContext()` returns expected fields for a valid session (deferred to Phase 2 — no guest page calls it yet until the layout guard lands)
-- [x] 1.5 Locale changes via cookie edit reflect on next SSR load
+- [x] 1.5 Locale changes via cookie edit reflect on next SSR load — 0fbe80c
 
 ### Phase 2: App Shell Layout + PWA Manifest
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `npm run test -- lib/guest components/guest`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- lib/guest components/guest`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 `auth_level=0`/no session redirects to `/error?type=insufficient_auth`
-- [ ] 2.5 Valid session shows header, language switcher, floating Concierge button
-- [ ] 2.6 Concierge button navigates to placeholder `/concierge`
-- [ ] 2.7 Chrome DevTools shows valid manifest + installability checks passing
+- [x] 2.4 `auth_level=0`/no session redirects to `/error?type=insufficient_auth`
+- [x] 2.5 Valid session shows header, language switcher, floating Concierge button
+- [x] 2.6 Concierge button navigates to placeholder `/concierge`
+- [x] 2.7 Chrome DevTools shows valid manifest + installability checks passing
 
 ### Phase 3: Splash + Welcome
 
