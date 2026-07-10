@@ -1,7 +1,7 @@
 ---
 change_id: s2-9
 title: Zarządzanie rezerwacją pokoju — check-in + edycja check-out
-status: implementing
+status: implemented
 created: 2026-07-10
 updated: 2026-07-10
 archived_at: null

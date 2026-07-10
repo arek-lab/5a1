@@ -226,23 +226,23 @@ Brak migracji schematu — wszystkie wymagane kolumny (`reservations.*`, `rooms.
 
 #### Manual
 
-- [x] 1.5 `checkInRoomAction` jako viewer zwraca `{error: 'forbidden'}`
-- [x] 1.6 `checkInRoomAction` na property bez DPA zwraca `{error: 'dpaNotSigned'}`
-- [x] 1.7 `checkInRoomAction` na pokoju z aktywną rezerwacją zwraca `{error: 'roomOccupied'}`
-- [x] 1.8 `updateCheckOutAction` z datą w przeszłości zwraca `{error: 'invalidCheckOut'}`
+- [x] 1.5 `checkInRoomAction` jako viewer zwraca `{error: 'forbidden'}` — 072fccb
+- [x] 1.6 `checkInRoomAction` na property bez DPA zwraca `{error: 'dpaNotSigned'}` — 072fccb
+- [x] 1.7 `checkInRoomAction` na pokoju z aktywną rezerwacją zwraca `{error: 'roomOccupied'}` — 072fccb
+- [x] 1.8 `updateCheckOutAction` z datą w przeszłości zwraca `{error: 'invalidCheckOut'}` — 072fccb
 
 ### Phase 2: UI panelu — check-in i edycja check-out
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npm run typecheck` — 072fccb
+- [x] 2.2 Linting passes: `npm run lint` — 072fccb
+- [x] 2.3 Build passes: `npm run build` — 072fccb
 
 #### Manual
 
-- [x] 2.4 Kliknięcie "Zamelduj" na pokoju bez rezerwacji, wpisanie daty check-out i zatwierdzenie tworzy rezerwację i pokazuje ją w wierszu
-- [x] 2.5 Kliknięcie "Edytuj check-out" na pokoju z aktywną rezerwacją, zmiana daty i zatwierdzenie aktualizuje wyświetlaną datę
-- [x] 2.6 Próba check-in na już zajętym pokoju pokazuje komunikat błędu bez zmiany stanu
-- [x] 2.7 Viewer widzi datę check-out, ale nie widzi przycisków "Zamelduj"/"Edytuj check-out"
-- [x] 2.8 Brak jakiegokolwiek modala/popupu w całym flow
+- [x] 2.4 Kliknięcie "Zamelduj" na pokoju bez rezerwacji, wpisanie daty check-out i zatwierdzenie tworzy rezerwację i pokazuje ją w wierszu — 072fccb
+- [x] 2.5 Kliknięcie "Edytuj check-out" na pokoju z aktywną rezerwacją, zmiana daty i zatwierdzenie aktualizuje wyświetlaną datę — 072fccb
+- [x] 2.6 Próba check-in na już zajętym pokoju pokazuje komunikat błędu bez zmiany stanu — 072fccb
+- [x] 2.7 Viewer widzi datę check-out, ale nie widzi przycisków "Zamelduj"/"Edytuj check-out" — 072fccb
+- [x] 2.8 Brak jakiegokolwiek modala/popupu w całym flow — 072fccb
