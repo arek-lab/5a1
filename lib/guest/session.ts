@@ -8,6 +8,8 @@ export type GuestSessionContext = {
   authLevel: number
   guestFirstName: string | null
   roomNumber: string | null
+  roomId: string | null
+  reservationId: string | null
   propertyName: string
   logoUrl: string | null
 }
@@ -68,6 +70,8 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     authLevel: session.auth_level,
     guestFirstName,
     roomNumber,
+    roomId: session.room_id,
+    reservationId: session.reservation_id,
     propertyName: property.name,
     logoUrl: property.logo_url,
   }

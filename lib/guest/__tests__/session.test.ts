@@ -114,6 +114,8 @@ describe('getGuestSessionContext', () => {
       authLevel: 2,
       guestFirstName: 'Jan',
       roomNumber: '204',
+      roomId: 'room-1',
+      reservationId: 'res-1',
       propertyName: 'Hotel Test',
       logoUrl: 'https://example.com/logo.png',
     })
@@ -134,5 +136,7 @@ describe('getGuestSessionContext', () => {
 
     expect(result?.guestFirstName).toBeNull()
     expect(result?.roomNumber).toBeNull()
+    expect(result?.roomId).toBeNull()
+    expect(result?.reservationId).toBeNull()
   })
 })

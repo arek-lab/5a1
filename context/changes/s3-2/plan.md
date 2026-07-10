@@ -348,27 +348,27 @@ Jedna migracja addytywna (`is_time_sensitive` z `DEFAULT false`) — bez wpływu
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się: `npx supabase db reset`
-- [x] 1.2 Unit testy przechodzą
-- [x] 1.3 Type checking przechodzi
-- [x] 1.4 Linting przechodzi
+- [x] 1.1 Migracja aplikuje się: `npx supabase db reset` — b0a7fe1
+- [x] 1.2 Unit testy przechodzą — b0a7fe1
+- [x] 1.3 Type checking przechodzi — b0a7fe1
+- [x] 1.4 Linting przechodzi — b0a7fe1
 
 #### Manual
 
-- [x] 1.5 Zaznaczenie „Wymaga wyboru godziny" trwale ustawia flagę
-- [x] 1.6 Usługa bez zaznaczenia ma `is_time_sensitive=false`
+- [x] 1.5 Zaznaczenie „Wymaga wyboru godziny" trwale ustawia flagę — b0a7fe1
+- [x] 1.6 Usługa bez zaznaczenia ma `is_time_sensitive=false` — b0a7fe1
 
 ### Phase 2: Warstwa danych gościa
 
 #### Automated
 
-- [ ] 2.1 Unit testy przechodzą
-- [ ] 2.2 Type checking przechodzi
-- [ ] 2.3 Linting przechodzi
+- [x] 2.1 Unit testy przechodzą
+- [x] 2.2 Type checking przechodzi
+- [x] 2.3 Linting przechodzi
 
 #### Manual
 
-- [ ] 2.4 `getVisibleCategories` zwraca tylko kategorie z aktywnymi usługami
+- [x] 2.4 `getVisibleCategories` zwraca tylko kategorie z aktywnymi usługami
 
 ### Phase 3: Trasy przeglądania — lista + szczegóły + puste kategorie na home
 

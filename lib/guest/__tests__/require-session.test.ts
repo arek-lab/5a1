@@ -31,6 +31,8 @@ describe('requireGuestSession', () => {
       authLevel: 1,
       guestFirstName: null,
       roomNumber: null,
+      roomId: null,
+      reservationId: null,
       propertyName: 'Hotel Test',
       logoUrl: null,
     }
