@@ -19,11 +19,12 @@ S0.1 → S0.2 → S0.3
                 │     ├─► S2.2 ─► S2.3 ┐
                 │     │          S2.4 ├─ (równolegle)
                 │     │          S2.5 │
-                │     │          S2.7 ┘
+                │     │          S2.7 │
+                │     │          S2.9 ┘
                 │     └─► S2.6 (+ S1.2)
                 │              │
                 │              └──► S3.1 → S3.2 → S3.3 → S3.4 → S3.5
-                │                                   │
+                │                     └──► S3.6
                 │              S2.4 ──► S4.1 ──► S4.2 → S4.3
                 │
                 └──► S5.1 (od S0.3; eventy dołączane do S1.2, S2.6)
@@ -114,6 +115,12 @@ S0.1 → S0.2 → S0.3
 **Blokery:** S0.2, S0.3.
 **Uwaga:** ta sesja była nieudokumentowaną luką — `implementation_roadmap.md` nazywa "Signup + konto hotelu (Owner = ADM)" jako MUST (krok 1 onboardingu), ale plan sesji jej nie miał; S2.1/S2.2 zakładają istniejące `properties`/`hotel_users`. Zarejestrowana 2026-07-10 podczas audytu invite flow — patrz `context/changes/s2-8/change.md`.
 
+### S2.9 — Zarządzanie rezerwacją pokoju: check-in + edycja check-out [luka odkryta 2026-07-10]
+**Scope:** minimalny CRUD rezerwacji per pokój (Staff+, RBAC wg S2.1): przypisanie aktywnej rezerwacji do pokoju (guest_first_name, check_in, check_out) → ustawia `rooms.room_active_reservation_id`, `valid_from = check_in`, `valid_until = check_out`. Edycja `check_out` istniejącej rezerwacji (przedłużenie/skrócenie pobytu) → aktualizuje `valid_until`; jeśli sesja gościa już istnieje (auth_level 2), przelicza `sessions.expires_at = nowy check_out + 2h` (formuła HITL #2 nietknięta — zmienia się tylko input). UI w `/qr` obok istniejącej listy pokoi (rozszerzenie S2.5) lub nowa zakładka. Audit log wpis przy zmianie check_out.
+**DoD:** recepcja może utworzyć/edytować rezerwację pokoju; zmiana check_out widoczna w `rooms.valid_until` i w `sessions.expires_at` aktywnej sesji; RLS: property A nie widzi/nie edytuje rezerwacji property B.
+**Blokery:** S2.1 (RBAC), S1.1 (schema rooms/reservations już istnieje z S0.2).
+**Uwaga:** ta sesja była nieudokumentowaną luką — `validateRoomScan` (lib/scan/room.ts) zależy od `reservations` + `rooms.valid_from/until`, ale żadna sesja w planie nigdy tych pól nie zapisuje poza testami. Bez tej sesji żaden skan QR pokoju (auth_level 1→2) nie może się powieść w praktyce. Zarejestrowana 2026-07-10 na wniosek użytkownika o TTL pokoju — patrz `context/changes/s2-9/change.md`.
+
 ---
 
 ## FAZA 3 — Interfejs gościa (5 sesji)
@@ -142,6 +149,12 @@ S0.1 → S0.2 → S0.3
 **Scope:** Workbox: Cache First (App Shell, obrazy, i18n); SWR (menu, usługi); Network First (zamówienia read); Network Only (POST, auth — NIGDY cache). WebP/AVIF lazy. Code splitting: czat, /orders, błędy — lazy.
 **DoD:** offline browsing z cache; POST nigdy z cache; <150 KB initial JS.
 **Blokery:** S3.4.
+
+### S3.6 — In-app skaner QR pokoju [dodane 2026-07-10, wykonane]
+**Scope:** przycisk "Skanuj kod pokoju" (`components/guest/welcome-banner.tsx`) zastępujący fallback `'Witaj!'` dla `auth_level=1` bez pokoju. Nowa strona `/scan` (`app/[locale]/(guest)/scan/page.tsx`) z komponentem klienckim (`components/guest/room-qr-scanner.tsx`) — kamera + dekodowanie QR (`qr-scanner`), walidacja zdekodowanego URL (`lib/guest/room-scan-url.ts`, same-origin + `/api/scan/room` + `room_id`), pełna nawigacja przeglądarki reużywająca istniejący `app/api/scan/room/route.ts` bez zmian. Alternatywa dla natywnego skanu aparatem telefonu, nie zamiennik.
+**DoD:** zeskanowanie poprawnego QR pokoju podnosi sesję do `auth_level=2`; obcy QR → inline odrzucenie bez nawigacji; odmowa uprawnień kamery → inline fallback z prośbą o pomoc w recepcji. Zweryfikowane manualnie 2026-07-10.
+**Blokery:** S3.1, S1.2 (istniejący `/api/scan/room`).
+**Uwaga:** zarejestrowane jako TODO w `context/changes/s3-1/change.md` podczas manualnej weryfikacji Fazy 4 S3.1 (poza zakresem tamtej sesji), zrealizowane jako osobna sesja — patrz `context/changes/s3-6/change.md`.
 
 ---
 
