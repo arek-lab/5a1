@@ -222,23 +222,23 @@ Nie dotyczy — nowa funkcjonalność, brak istniejących danych do migrowania. 
 
 #### Automated
 
-- [x] 2.1 Typecheck przechodzi: `npm run typecheck`
-- [x] 2.2 Lint przechodzi: `npm run lint`
-- [x] 2.3 Unit test walidacji `hotelName` przechodzi: `npm run test`
+- [x] 2.1 Typecheck przechodzi: `npm run typecheck` — f145ffb
+- [x] 2.2 Lint przechodzi: `npm run lint` — f145ffb
+- [x] 2.3 Unit test walidacji `hotelName` przechodzi: `npm run test` — f145ffb
 
 #### Manual
 
-- [x] 2.4 Formularz signup tworzy konto, po potwierdzeniu emaila logowanie przekierowuje do `/dashboard`
-- [x] 2.5 Powtórna próba signupu z tym samym emailem pokazuje czytelny błąd
-- [x] 2.6 Przekroczenie rate limitu pokazuje komunikat o zbyt wielu próbach
+- [x] 2.4 Formularz signup tworzy konto, po potwierdzeniu emaila logowanie przekierowuje do `/dashboard` — f145ffb
+- [x] 2.5 Powtórna próba signupu z tym samym emailem pokazuje czytelny błąd — f145ffb
+- [x] 2.6 Przekroczenie rate limitu pokazuje komunikat o zbyt wielu próbach — f145ffb
 
 ### Phase 3: Integracyjny test RLS
 
 #### Automated
 
-- [ ] 3.1 Test przechodzi: `npm run test -- it-signup`
-- [ ] 3.2 Cały test suite przechodzi: `npm run test`
+- [x] 3.1 Test przechodzi: `npm run test -- it-signup`
+- [x] 3.2 Cały test suite przechodzi: `npm run test` (3 niepowiązane pre-istniejące błędy w `__tests__/proxy.test.ts` — `getClaims is not a function`, poza zakresem s2-8)
 
 #### Manual
 
-- [ ] 3.3 Brak osieroconych wierszy w `auth.users`/`properties`/`hotel_users` po teście
+- [x] 3.3 Brak osieroconych wierszy w `auth.users`/`properties`/`hotel_users` po teście
