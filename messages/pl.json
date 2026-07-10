@@ -2,6 +2,21 @@
   "common": {
     "loading": "Ładowanie..."
   },
+  "guest": {
+    "categories": {
+      "restaurant": "Restauracja i bar",
+      "room_service": "Usługi pokojowe",
+      "spa": "Spa i wellness",
+      "transport": "Transport",
+      "info": "Informacje"
+    },
+    "service": {
+      "included": "W cenie pobytu",
+      "unavailable": "Tymczasowo niedostępne",
+      "orderCta": "Zamów",
+      "timeLabel": "Godzina"
+    }
+  },
   "signup": {
     "fields": {
       "email": "E-mail",

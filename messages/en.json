@@ -2,6 +2,21 @@
   "common": {
     "loading": "Loading..."
   },
+  "guest": {
+    "categories": {
+      "restaurant": "Restaurant & Bar",
+      "room_service": "Room Service",
+      "spa": "Spa & Wellness",
+      "transport": "Transport",
+      "info": "Information"
+    },
+    "service": {
+      "included": "Included in your stay",
+      "unavailable": "Temporarily unavailable",
+      "orderCta": "Order",
+      "timeLabel": "Time"
+    }
+  },
   "signup": {
     "fields": {
       "email": "Email",

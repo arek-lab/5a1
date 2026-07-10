@@ -362,28 +362,28 @@ Jedna migracja addytywna (`is_time_sensitive` z `DEFAULT false`) — bez wpływu
 
 #### Automated
 
-- [x] 2.1 Unit testy przechodzą
-- [x] 2.2 Type checking przechodzi
-- [x] 2.3 Linting przechodzi
+- [x] 2.1 Unit testy przechodzą — 117869f
+- [x] 2.2 Type checking przechodzi — 117869f
+- [x] 2.3 Linting przechodzi — 117869f
 
 #### Manual
 
-- [x] 2.4 `getVisibleCategories` zwraca tylko kategorie z aktywnymi usługami
+- [x] 2.4 `getVisibleCategories` zwraca tylko kategorie z aktywnymi usługami — 117869f
 
 ### Phase 3: Trasy przeglądania — lista + szczegóły + puste kategorie na home
 
 #### Automated
 
-- [ ] 3.1 Unit testy przechodzą
-- [ ] 3.2 Type checking przechodzi
-- [ ] 3.3 Linting przechodzi
+- [x] 3.1 Unit testy przechodzą
+- [x] 3.2 Type checking przechodzi
+- [x] 3.3 Linting przechodzi
 
 #### Manual
 
-- [ ] 3.4 Home pokazuje tylko kategorie z aktywnymi usługami
-- [ ] 3.5 `/c/[category]` z nieznanym segmentem zwraca 404
-- [ ] 3.6 Nieaktywna usługa wyszarzona, nieklikalna, bezpośredni URL szczegółów → 404
-- [ ] 3.7 Picker slotów działa dla time-sensitive z wypełnionymi godzinami, CTA działa bez selecta gdy brak godzin
+- [x] 3.4 Home pokazuje tylko kategorie z aktywnymi usługami
+- [x] 3.5 `/c/[category]` z nieznanym segmentem zwraca 404
+- [x] 3.6 Nieaktywna usługa wyszarzona, nieklikalna, bezpośredni URL szczegółów → 404
+- [x] 3.7 Picker slotów działa dla time-sensitive z wypełnionymi godzinami, CTA działa bez selecta gdy brak godzin
 
 ### Phase 4: Flow zamówienia — modal, zapis, ekran sukcesu
 
