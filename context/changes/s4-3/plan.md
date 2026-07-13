@@ -256,9 +256,9 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `npm run test -- app/api/concierge/escalate`
-- [x] 3.2 Type checking passes: `npm run typecheck`
-- [x] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- app/api/concierge/escalate` — 28cb055
+- [x] 3.2 Type checking passes: `npm run typecheck` — 28cb055
+- [x] 3.3 Linting passes: `npm run lint` — 28cb055
 
 ### Phase 4: Guest Chat UI — Escalation Bubble & Quick Reply Chips
 
