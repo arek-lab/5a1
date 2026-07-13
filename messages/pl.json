@@ -47,6 +47,29 @@
       "toast": {
         "rejected": "Twoje zamówienie zostało odrzucone."
       }
+    },
+    "error": {
+      "expired": {
+        "heading": "Link wygasł",
+        "body": "Ten link stracił ważność. Zeskanuj kod QR ponownie, aby uzyskać dostęp."
+      },
+      "invalid": {
+        "heading": "Link nieprawidłowy",
+        "body": "Ten link jest nieprawidłowy lub został już użyty. Zeskanuj kod QR ponownie."
+      },
+      "insufficientAccess": {
+        "heading": "Brak dostępu",
+        "body": "Nie masz wystarczających uprawnień, aby zobaczyć tę stronę. Zeskanuj kod QR w pokoju lub na recepcji."
+      },
+      "generic": {
+        "heading": "Coś poszło nie tak",
+        "body": "Nie udało się przetworzyć tego żądania. Spróbuj ponownie lub skontaktuj się z recepcją."
+      },
+      "contactReception": "Skontaktuj się z recepcją:",
+      "backHome": "Wróć na stronę główną"
+    },
+    "offline": {
+      "toastMessage": "Brak połączenia z internetem. Niektóre funkcje mogą być niedostępne."
     }
   },
   "concierge": {

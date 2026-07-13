@@ -47,6 +47,29 @@
       "toast": {
         "rejected": "Your order was rejected."
       }
+    },
+    "error": {
+      "expired": {
+        "heading": "Link expired",
+        "body": "This link is no longer valid. Please scan the QR code again to get access."
+      },
+      "invalid": {
+        "heading": "Invalid link",
+        "body": "This link is invalid or has already been used. Please scan the QR code again."
+      },
+      "insufficientAccess": {
+        "heading": "Access denied",
+        "body": "You don't have sufficient access to view this page. Please scan the QR code in your room or at reception."
+      },
+      "generic": {
+        "heading": "Something went wrong",
+        "body": "We couldn't process this request. Please try again or contact reception."
+      },
+      "contactReception": "Contact reception:",
+      "backHome": "Back to home"
+    },
+    "offline": {
+      "toastMessage": "No internet connection. Some features may be unavailable."
     }
   },
   "concierge": {

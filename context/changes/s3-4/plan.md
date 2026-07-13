@@ -321,31 +321,31 @@ No schema changes. No data migration.
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm run test -- lib/guest/error-copy lib/scan/reception lib/scan/room`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Unit tests pass: `npm run test -- lib/guest/error-copy lib/scan/reception lib/scan/room` — bd023a8
+- [x] 1.2 Type checking passes: `npm run typecheck` — bd023a8
+- [x] 1.3 Linting passes: `npm run lint` — bd023a8
 
 #### Manual
 
-- [ ] 1.4 Expired reception QR scan redirects to `/error?type=token_expired&property_id=<uuid>`
-- [ ] 1.5 Naturally expired session redirects with `type=session_expired`, not `session_revoked`
-- [ ] 1.6 Room QR scan property_id resolves correctly
+- [x] 1.4 Expired reception QR scan redirects to `/error?type=token_expired&property_id=<uuid>` — bd023a8
+- [x] 1.5 Naturally expired session redirects with `type=session_expired`, not `session_revoked` — bd023a8
+- [x] 1.6 Room QR scan property_id resolves correctly — bd023a8
 
 ### Phase 2: `/error` page
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `npm run test -- lib/guest/error-copy`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- lib/guest/error-copy`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 `/pl/error?type=token_expired&property_id=<real-uuid>` shows branded expired copy
-- [ ] 2.5 `/pl/error?type=token_not_found` shows generic unbranded copy
-- [ ] 2.6 `/pl/error?type=outside_window&property_id=<real-uuid>` shows distinct generic-room-issue copy
-- [ ] 2.7 `/en/error?type=session_revoked` shows English copy
-- [ ] 2.8 No redirect loop reaching `/error`
+- [x] 2.4 `/pl/error?type=token_expired&property_id=<real-uuid>` shows branded expired copy
+- [x] 2.5 `/pl/error?type=token_not_found` shows generic unbranded copy
+- [x] 2.6 `/pl/error?type=outside_window&property_id=<real-uuid>` shows distinct generic-room-issue copy
+- [x] 2.7 `/en/error?type=session_revoked` shows English copy
+- [x] 2.8 No redirect loop reaching `/error`
 
 ### Phase 3: Offline detection
 
