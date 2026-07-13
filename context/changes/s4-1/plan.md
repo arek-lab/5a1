@@ -189,17 +189,17 @@ None — no schema changes in this session.
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm run test -- lib/kb/hash lib/kb/render`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Unit tests pass: `npm run test -- lib/kb/hash lib/kb/render` — 9096242
+- [x] 1.2 Type checking passes: `npm run typecheck` — 9096242
+- [x] 1.3 Linting passes: `npm run lint` — 9096242
 
 ### Phase 2: Redis Cache Layer + IT-9
 
 #### Automated
 
-- [ ] 2.1 Integration test passes: `npm run test -- lib/kb/__tests__/it-9.test.ts`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Integration test passes: `npm run test -- lib/kb/__tests__/it-9.test.ts`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 Linting passes: `npm run lint`
 
 #### Manual
 
