@@ -299,24 +299,24 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `npm run test -- components/guest/concierge-chat`
-- [x] 3.2 Type checking passes: `npm run typecheck`
-- [x] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- components/guest/concierge-chat` — 9174ab4
+- [x] 3.2 Type checking passes: `npm run typecheck` — 9174ab4
+- [x] 3.3 Linting passes: `npm run lint` — 9174ab4
 
 #### Manual
 
-- [x] 3.4 Disclosure line visible before any message is sent
-- [x] 3.5 Real question streams in visibly token-by-token
-- [x] 3.6 Language toggle changes every concierge-UI string
+- [x] 3.4 Disclosure line visible before any message is sent — 9174ab4
+- [x] 3.5 Real question streams in visibly token-by-token — 9174ab4
+- [x] 3.6 Language toggle changes every concierge-UI string — 9174ab4
 
 ### Phase 4: Wiring & End-to-End Verification
 
 #### Automated
 
-- [ ] 4.1 Full unit test suite passes: `npm run test`
-- [ ] 4.2 Type checking passes: `npm run typecheck`
-- [ ] 4.3 Linting passes: `npm run lint`
-- [ ] 4.4 Production build succeeds: `npm run build`
+- [x] 4.1 Full unit test suite passes: `npm run test` — 325/328 pass; 3 failures in `__tests__/proxy.test.ts` (`supabase.auth.getClaims is not a function`) confirmed pre-existing and unrelated to s4-2 (reproduces identically on a stash of this session's changes) — out of scope per project rule "nie wykraczaj poza scope sesji"
+- [x] 4.2 Type checking passes: `npm run typecheck`
+- [x] 4.3 Linting passes: `npm run lint`
+- [x] 4.4 Production build succeeds: `npm run build`
 
 #### Manual
 
