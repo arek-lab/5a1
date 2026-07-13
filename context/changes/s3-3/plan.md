@@ -252,30 +252,30 @@ Bez migracji SQL — schemat `orders` i trigger NOTIFY (S2.6) już wystarczając
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Unit/integration tests pass: `npm run test`
-- [x] 1.4 `psql "$DATABASE_URL" -f supabase/tests/s3_3_guest_orders_sse_isolation.sql` kończy się `S3.3 PASSED`
+- [x] 1.1 Type checking passes: `npm run typecheck` — 36631e1
+- [x] 1.2 Linting passes: `npm run lint` — 36631e1
+- [x] 1.3 Unit/integration tests pass: `npm run test` — 36631e1
+- [x] 1.4 `psql "$DATABASE_URL" -f supabase/tests/s3_3_guest_orders_sse_isolation.sql` kończy się `S3.3 PASSED` — 36631e1
 
 #### Manual
 
-- [x] 1.5 Otwarcie `/api/orders/stream/guest` z ważnymi nagłówkami sesji zwraca strumień SSE
-- [x] 1.6 Otwarcie `/api/orders/stream/guest` bez nagłówków sesji zwraca 401
-- [x] 1.7 Update zamówienia sesji A nie dociera do strumienia sesji B (ten sam property)
+- [x] 1.5 Otwarcie `/api/orders/stream/guest` z ważnymi nagłówkami sesji zwraca strumień SSE — 36631e1
+- [x] 1.6 Otwarcie `/api/orders/stream/guest` bez nagłówków sesji zwraca 401 — 36631e1
+- [x] 1.7 Update zamówienia sesji A nie dociera do strumienia sesji B (ten sam property) — 36631e1
 
 ### Phase 2: Strona `/orders` + kliencki panel z SSE
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Unit tests pass: `npm run test`
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Unit tests pass: `npm run test`
 
 #### Manual
 
-- [ ] 2.4 Lista chronologiczna z poprawnymi statusami PL
-- [ ] 2.5 Pusty stan z linkiem do strony głównej
-- [ ] 2.6 Zmiana statusu w panelu pojawia się bez odświeżania
+- [x] 2.4 Lista chronologiczna z poprawnymi statusami PL
+- [x] 2.5 Pusty stan z linkiem do strony głównej
+- [x] 2.6 Zmiana statusu w panelu pojawia się bez odświeżania
 
 ### Phase 3: Fallback polling + toast + i18n + testy końcowe
 
