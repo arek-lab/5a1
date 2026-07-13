@@ -281,14 +281,14 @@ Bez migracji SQL — schemat `orders` i trigger NOTIFY (S2.6) już wystarczając
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run typecheck`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Build passes: `npm run build`
-- [x] 3.4 Pełny zestaw testów przechodzi: `npm run test` (poza 3 pre-istniejącymi, niezwiązanymi awariami w `__tests__/proxy.test.ts` — `getClaims` brakuje w mocku Supabase, potwierdzone przez stash że występują też bez zmian tej fazy)
+- [x] 3.1 Type checking passes: `npm run typecheck` — 49c835e
+- [x] 3.2 Linting passes: `npm run lint` — 49c835e
+- [x] 3.3 Build passes: `npm run build` — 49c835e
+- [x] 3.4 Pełny zestaw testów przechodzi: `npm run test` (poza 3 pre-istniejącymi, niezwiązanymi awariami w `__tests__/proxy.test.ts` — `getClaims` brakuje w mocku Supabase, potwierdzone przez stash że występują też bez zmian tej fazy) — 49c835e
 
 #### Manual
 
-- [x] 3.5 Przełączenie na polling po `onerror`; przywrócenie sieci nie wraca do SSE w tej samej wizycie
-- [x] 3.6 Toast przy statusie `rejected`, znika automatycznie
-- [x] 3.7 Przełącznik PL|EN zmienia wszystkie nowe stringi
-- [x] 3.8 Pełny E2E: złożenie → `/orders` → zmiana statusu w panelu → live update
+- [x] 3.5 Przełączenie na polling po `onerror`; przywrócenie sieci nie wraca do SSE w tej samej wizycie — 49c835e
+- [x] 3.6 Toast przy statusie `rejected`, znika automatycznie — 49c835e
+- [x] 3.7 Przełącznik PL|EN zmienia wszystkie nowe stringi — 49c835e
+- [x] 3.8 Pełny E2E: złożenie → `/orders` → zmiana statusu w panelu → live update — 49c835e
