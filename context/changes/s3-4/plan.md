@@ -353,9 +353,9 @@ No schema changes. No data migration.
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `npm run test -- lib/guest/use-online-status components/guest/offline-toast components/guest/order-cta`
-- [x] 3.2 Type checking passes: `npm run typecheck`
-- [x] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- lib/guest/use-online-status components/guest/offline-toast components/guest/order-cta` — 3fd40b2
+- [x] 3.2 Type checking passes: `npm run typecheck` — 3fd40b2
+- [x] 3.3 Linting passes: `npm run lint` — 3fd40b2
 
 #### Manual
 
