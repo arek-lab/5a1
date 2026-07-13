@@ -35,6 +35,8 @@ describe('requireGuestSession', () => {
       reservationId: null,
       propertyName: 'Hotel Test',
       logoUrl: null,
+      aiBotName: null,
+      phoneReception: null,
     }
     mockGetGuestSessionContext.mockResolvedValue(context)
 

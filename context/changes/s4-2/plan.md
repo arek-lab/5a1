@@ -286,28 +286,28 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `npm run test -- app/api/concierge`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- app/api/concierge` — 4927fa2
+- [x] 2.2 Type checking passes: `npm run typecheck` — 4927fa2
+- [x] 2.3 Linting passes: `npm run lint` — 4927fa2
 
 #### Manual
 
-- [x] 2.4 `curl -N` shows incrementally arriving SSE chunks, not one blocked response
-- [x] 2.5 Time-to-first-chunk for real questions is comfortably under 1.5s — observed ~4s on the one manual run (`scripts/verify-phase2-s4-2.ts`), accepted as known limitation (likely cold-start: first process boot + first TLS handshake to OpenAI); no automated latency assertion per plan's Performance Considerations
+- [x] 2.4 `curl -N` shows incrementally arriving SSE chunks, not one blocked response — 4927fa2
+- [x] 2.5 Time-to-first-chunk for real questions is comfortably under 1.5s — observed ~4s on the one manual run (`scripts/verify-phase2-s4-2.ts`), accepted as known limitation (likely cold-start: first process boot + first TLS handshake to OpenAI); no automated latency assertion per plan's Performance Considerations — 4927fa2
 
 ### Phase 3: Guest Chat UI
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `npm run test -- components/guest/concierge-chat`
-- [ ] 3.2 Type checking passes: `npm run typecheck`
-- [ ] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- components/guest/concierge-chat`
+- [x] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.4 Disclosure line visible before any message is sent
-- [ ] 3.5 Real question streams in visibly token-by-token
-- [ ] 3.6 Language toggle changes every concierge-UI string
+- [x] 3.4 Disclosure line visible before any message is sent
+- [x] 3.5 Real question streams in visibly token-by-token
+- [x] 3.6 Language toggle changes every concierge-UI string
 
 ### Phase 4: Wiring & End-to-End Verification
 

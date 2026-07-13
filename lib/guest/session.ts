@@ -12,6 +12,8 @@ export type GuestSessionContext = {
   reservationId: string | null
   propertyName: string
   logoUrl: string | null
+  aiBotName: string | null
+  phoneReception: string | null
 }
 
 export const getGuestSessionContext = cache(async (): Promise<GuestSessionContext | null> => {
@@ -38,7 +40,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
 
   const { data: property } = await client
     .from('properties')
-    .select('name, logo_url')
+    .select('name, logo_url, ai_bot_name, phone_reception')
     .eq('id', session.property_id)
     .single()
 
@@ -74,5 +76,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     reservationId: session.reservation_id,
     propertyName: property.name,
     logoUrl: property.logo_url,
+    aiBotName: property.ai_bot_name,
+    phoneReception: property.phone_reception,
   }
 })

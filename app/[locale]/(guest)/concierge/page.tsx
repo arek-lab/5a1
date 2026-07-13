@@ -1,8 +1,12 @@
-export default function ConciergePage() {
+import { requireGuestSession } from '@/lib/guest/require-session';
+import { ConciergeChat } from '@/components/guest/concierge-chat';
+
+export default async function ConciergePage() {
+  const { aiBotName, phoneReception } = await requireGuestSession();
+
   return (
-    <div className="p-6 text-center">
-      <h1 className="text-lg font-semibold">Concierge</h1>
-      <p className="mt-2 text-gray-600">Available soon.</p>
-    </div>
+    <main className="flex h-[calc(100vh-4rem)] flex-col px-4 py-4">
+      <ConciergeChat aiBotName={aiBotName} phoneReception={phoneReception} />
+    </main>
   );
 }

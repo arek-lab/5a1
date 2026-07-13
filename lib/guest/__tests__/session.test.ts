@@ -32,7 +32,12 @@ function makeClient(responses: {
     reservation_id: string | null
     room_id: string | null
   } | null
-  property?: { name: string; logo_url: string | null } | null
+  property?: {
+    name: string
+    logo_url: string | null
+    ai_bot_name?: string | null
+    phone_reception?: string | null
+  } | null
   reservation?: { guest_first_name: string | null } | null
   room?: { room_number: string } | null
 }) {
@@ -100,7 +105,12 @@ describe('getGuestSessionContext', () => {
     mockWithTenantContext.mockResolvedValue(
       makeClient({
         session: { id: 'sess-1', property_id: 'prop-1', auth_level: 2, reservation_id: 'res-1', room_id: 'room-1' },
-        property: { name: 'Hotel Test', logo_url: 'https://example.com/logo.png' },
+        property: {
+          name: 'Hotel Test',
+          logo_url: 'https://example.com/logo.png',
+          ai_bot_name: 'Hela',
+          phone_reception: '+48123456789',
+        },
         reservation: { guest_first_name: 'Jan' },
         room: { room_number: '204' },
       }) as never
@@ -118,6 +128,8 @@ describe('getGuestSessionContext', () => {
       reservationId: 'res-1',
       propertyName: 'Hotel Test',
       logoUrl: 'https://example.com/logo.png',
+      aiBotName: 'Hela',
+      phoneReception: '+48123456789',
     })
   })
 
