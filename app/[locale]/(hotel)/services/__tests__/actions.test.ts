@@ -13,11 +13,16 @@ vi.mock('@/lib/supabase/server', () => ({
 vi.mock('@/lib/analytics/capture', () => ({
   captureEvent: vi.fn(),
 }))
+vi.mock('next-intl/server', () => ({
+  getTranslations: vi.fn(),
+}))
 
 import { getHotelUser } from '@/lib/panel/auth'
 import { createServerClient } from '@/lib/supabase/server'
 import { captureEvent } from '@/lib/analytics/capture'
+import { getTranslations } from 'next-intl/server'
 import {
+  createServiceFromTemplate,
   createCustomService,
   updateService,
   toggleServiceActive,
@@ -27,6 +32,7 @@ import {
 const mockGetHotelUser = vi.mocked(getHotelUser)
 const mockCreateServerClient = vi.mocked(createServerClient)
 const mockCaptureEvent = vi.mocked(captureEvent)
+const mockGetTranslations = vi.mocked(getTranslations)
 
 const PROP = 'prop-abc'
 
@@ -79,6 +85,54 @@ const expectedEvent = {
   properties: { area: 'services' as const },
 }
 const expectedCtx = { distinctId: 'user-1', propertyId: PROP }
+
+describe('createServiceFromTemplate — server-resolved bilingual fill', () => {
+  const PL_MESSAGES: Record<string, string> = {
+    'serviceTemplates.massage.name': 'Masaż',
+    'serviceTemplates.massage.description': 'Relaksujący masaż w spa',
+  }
+  const EN_MESSAGES: Record<string, string> = {
+    'serviceTemplates.massage.name': 'Massage',
+    'serviceTemplates.massage.description': 'Relaxing spa massage',
+  }
+
+  beforeEach(() => {
+    vi.resetAllMocks()
+    mockGetHotelUser.mockResolvedValue(makeUser())
+    mockGetTranslations.mockImplementation(async (opts) => {
+      const locale = typeof opts === 'object' && opts && 'locale' in opts ? opts.locale : undefined
+      const messages = locale === 'en' ? EN_MESSAGES : PL_MESSAGES
+      return ((key: string) => messages[key] ?? key) as never
+    })
+  })
+
+  it('fills name/name_en/description/description_en from the two resolved locales', async () => {
+    const insert = vi.fn().mockResolvedValue({ error: null })
+    mockCreateServerClient.mockResolvedValue({ from: vi.fn().mockReturnValue({ insert }) } as never)
+
+    const result = await createServiceFromTemplate(formData({ template_key: 'massage' }))
+
+    expect(result).toEqual({})
+    expect(insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Masaż',
+        name_en: 'Massage',
+        description: 'Relaksujący masaż w spa',
+        description_en: 'Relaxing spa massage',
+      })
+    )
+  })
+
+  it('produces the same insert payload regardless of which locale the panel is set to', async () => {
+    const insert = vi.fn().mockResolvedValue({ error: null })
+    mockCreateServerClient.mockResolvedValue({ from: vi.fn().mockReturnValue({ insert }) } as never)
+
+    await createServiceFromTemplate(formData({ template_key: 'massage' }))
+
+    expect(mockGetTranslations).toHaveBeenCalledWith({ locale: 'pl' })
+    expect(mockGetTranslations).toHaveBeenCalledWith({ locale: 'en' })
+  })
+})
 
 describe('services actions — hotel_settings_updated instrumentation', () => {
   beforeEach(() => {

@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser, type HotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
@@ -33,8 +34,17 @@ export async function createServiceFromTemplate(formData: FormData): Promise<Act
     throw new Error(`Unknown service template: ${templateKey}`)
   }
 
+  const [tPl, tEn] = await Promise.all([
+    getTranslations({ locale: 'pl' }),
+    getTranslations({ locale: 'en' }),
+  ])
+  const namePl = tPl(template.nameKey)
+  const nameEn = tEn(template.nameKey)
+  const descriptionPl = tPl(template.descriptionKey)
+  const descriptionEn = tEn(template.descriptionKey)
+
   const validated = validateServiceInput({
-    name: String(formData.get('name') ?? ''),
+    name: namePl,
     category: template.category,
     priceCentsRaw: String(formData.get('price_cents') ?? template.suggestedPriceCents ?? ''),
     imageUrl: String(formData.get('image_url') ?? ''),
@@ -47,7 +57,9 @@ export async function createServiceFromTemplate(formData: FormData): Promise<Act
     property_id: hotelUser.propertyId,
     template_key: template.key,
     name: validated.value.name,
-    description: String(formData.get('description') ?? '').trim() || null,
+    description: descriptionPl.trim() || null,
+    name_en: nameEn.trim() || null,
+    description_en: descriptionEn.trim() || null,
     category: validated.value.category,
     price_cents: validated.value.priceCents,
     image_url: validated.value.imageUrl,

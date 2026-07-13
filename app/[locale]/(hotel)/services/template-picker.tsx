@@ -18,8 +18,6 @@ export default function TemplatePicker() {
     setError(null)
     const formData = new FormData()
     formData.set('template_key', template.key)
-    formData.set('name', t(template.nameKey))
-    formData.set('description', t(template.descriptionKey))
 
     startTransition(async () => {
       const result = await createServiceFromTemplate(formData)

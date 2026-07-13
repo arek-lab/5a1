@@ -406,34 +406,34 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Manual
 
-- [ ] 2.4 Usługa z `name_en` pokazuje EN na guest UI `en`
-- [ ] 2.5 Usługa bez `name_en` pokazuje PL fallback na `en`
-- [ ] 2.6 Guest UI na `pl` zawsze pokazuje PL
+- [x] 2.4 Usługa z `name_en` pokazuje EN na guest UI `en`
+- [x] 2.5 Usługa bez `name_en` pokazuje PL fallback na `en`
+- [x] 2.6 Guest UI na `pl` zawsze pokazuje PL
 
 ### Phase 3: Panel — manualne pola EN w formularzu usługi
 
 #### Automated
 
-- [x] 3.1 Type checking passes
-- [x] 3.2 Linting passes
-- [x] 3.3 Existing action tests still pass
+- [x] 3.1 Type checking passes — 8d5c337
+- [x] 3.2 Linting passes — 8d5c337
+- [x] 3.3 Existing action tests still pass — 8d5c337
 
 #### Manual
 
-- [x] 3.4 Dodanie custom usługi z EN zapisuje kolumny poprawnie
-- [x] 3.5 Edycja usługi z EN prefilluje pola poprawnie
-- [x] 3.6 Puste pola EN zapisują `null`, nie pusty string
+- [x] 3.4 Dodanie custom usługi z EN zapisuje kolumny poprawnie — 8d5c337
+- [x] 3.5 Edycja usługi z EN prefilluje pola poprawnie — 8d5c337
+- [x] 3.6 Puste pola EN zapisują `null`, nie pusty string — 8d5c337
 
 ### Phase 4: Template fill — oba języki naraz, resolved server-side
 
 #### Automated
 
-- [ ] 4.1 Nowy test `createServiceFromTemplate` z mockowanym `getTranslations` przechodzi
-- [ ] 4.2 Type checking passes
-- [ ] 4.3 Linting passes
+- [x] 4.1 Nowy test `createServiceFromTemplate` z mockowanym `getTranslations` przechodzi
+- [x] 4.2 Type checking passes
+- [x] 4.3 Linting passes
 
 #### Manual
 
-- [ ] 4.4 Dodanie z szablonu w PL zapisuje poprawne PL i EN
-- [ ] 4.5 Guest UI pokazuje poprawny język dla usługi z szablonu
-- [ ] 4.6 Wynik idempotentny względem locale panelu (PL vs EN panel daje ten sam zapis)
+- [x] 4.4 Dodanie z szablonu w PL zapisuje poprawne PL i EN
+- [x] 4.5 Guest UI pokazuje poprawny język dla usługi z szablonu
+- [x] 4.6 Wynik idempotentny względem locale panelu (PL vs EN panel daje ten sam zapis)
