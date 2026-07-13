@@ -13,5 +13,4 @@ export type AnalyticsEvent =
   | { name: 'concierge_query_submitted'; properties: Record<string, never> }
   // Reserved — S4.2 AI Concierge, no host code yet.
   | { name: 'concierge_response_delivered'; properties: { confidence: number; latency_ms: number } }
-  // Reserved — S4.3 AI Concierge escalation, no host code yet.
-  | { name: 'concierge_response_escalated'; properties: Record<string, never> };
+  | { name: 'concierge_response_escalated'; properties: { reason: 'complaint' | 'streak' } };

@@ -6,6 +6,10 @@ describe('buildSystemPrompt', () => {
     expect(buildSystemPrompt()).toContain('[FALLBACK]')
   })
 
+  it('includes the [ESCALATE] instruction', () => {
+    expect(buildSystemPrompt()).toContain('[ESCALATE]')
+  })
+
   it('includes the mandatory virtual-assistant disclosure phrase', () => {
     expect(buildSystemPrompt()).toContain('wirtualnym asystentem')
   })
