@@ -248,17 +248,17 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `npm run test -- app/api/concierge/stream`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- app/api/concierge/stream` — e7f07b2
+- [x] 2.2 Type checking passes: `npm run typecheck` — e7f07b2
+- [x] 2.3 Linting passes: `npm run lint` — e7f07b2
 
 ### Phase 3: Escalation Logging Endpoint (Streak Path)
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `npm run test -- app/api/concierge/escalate`
-- [ ] 3.2 Type checking passes: `npm run typecheck`
-- [ ] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- app/api/concierge/escalate`
+- [x] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.3 Linting passes: `npm run lint`
 
 ### Phase 4: Guest Chat UI — Escalation Bubble & Quick Reply Chips
 
