@@ -361,17 +361,17 @@ przez istniejący constraint `UNIQUE (property_id, room_number)`.
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npm run typecheck` — c9e0510
+- [x] 2.2 Linting passes: `npm run lint` — c9e0510
+- [x] 2.3 Build passes: `npm run build` — c9e0510
 
 #### Manual
 
-- [x] 2.4 Owner dodaje pokój z formularza na `/qr` → pojawia się na liście
-- [x] 2.5 Staff/Viewer nie widzą formularza "Dodaj pokój"
-- [x] 2.6 Duplikat numeru pokoju → komunikat błędu, brak duplikatu w bazie
+- [x] 2.4 Owner dodaje pokój z formularza na `/qr` → pojawia się na liście — c9e0510
+- [x] 2.5 Staff/Viewer nie widzą formularza "Dodaj pokój" — c9e0510
+- [x] 2.6 Duplikat numeru pokoju → komunikat błędu, brak duplikatu w bazie — c9e0510
 - [x] 2.7 `/qr/print` pokazuje kartę QR tylko dla pokoi z aktywnym QR, komunikat liczby
-      pominiętych
+      pominiętych — c9e0510
 - [x] 2.8 "Drukuj" otwiera dialog druku, podgląd pokazuje jeden kod na stronę bez elementów
-      ekranowych
-- [x] 2.9 Zeskanowanie wydrukowanego kodu prowadzi do poprawnego `room_id`
+      ekranowych — c9e0510
+- [x] 2.9 Zeskanowanie wydrukowanego kodu prowadzi do poprawnego `room_id` — c9e0510
