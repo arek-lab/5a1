@@ -1,7 +1,7 @@
 ---
 change_id: s4-2
 title: Integracja GPT-4o-mini + SSE streaming + semantic cache
-status: implementing
+status: implemented
 created: 2026-07-13
 updated: 2026-07-13
 archived_at: null

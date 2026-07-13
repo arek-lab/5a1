@@ -313,14 +313,14 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 4.1 Full unit test suite passes: `npm run test` — 325/328 pass; 3 failures in `__tests__/proxy.test.ts` (`supabase.auth.getClaims is not a function`) confirmed pre-existing and unrelated to s4-2 (reproduces identically on a stash of this session's changes) — out of scope per project rule "nie wykraczaj poza scope sesji"
-- [x] 4.2 Type checking passes: `npm run typecheck`
-- [x] 4.3 Linting passes: `npm run lint`
-- [x] 4.4 Production build succeeds: `npm run build`
+- [x] 4.1 Full unit test suite passes: `npm run test` — 325/328 pass; 3 failures in `__tests__/proxy.test.ts` (`supabase.auth.getClaims is not a function`) confirmed pre-existing and unrelated to s4-2 (reproduces identically on a stash of this session's changes) — out of scope per project rule "nie wykraczaj poza scope sesji" — 72b010f
+- [x] 4.2 Type checking passes: `npm run typecheck` — 72b010f
+- [x] 4.3 Linting passes: `npm run lint` — 72b010f
+- [x] 4.4 Production build succeeds: `npm run build` — 72b010f
 
 #### Manual
 
-- [ ] 4.5 End-to-end chat streams for a real guest session
-- [ ] 4.6 PII check: OpenAI payload contains no guest name/email/room/reservation field
-- [ ] 4.7 Rate limit produces graceful in-chat message, not a raw 429
-- [ ] 4.8 Invalid API key produces the fallback bubble, not a hung/broken UI
+- [x] 4.5 End-to-end chat streams for a real guest session — 72b010f
+- [x] 4.6 PII check: OpenAI payload contains no guest name/email/room/reservation field — 72b010f
+- [x] 4.7 Rate limit produces graceful in-chat message, not a raw 429 — 72b010f
+- [x] 4.8 Invalid API key produces the fallback bubble, not a hung/broken UI — 72b010f
