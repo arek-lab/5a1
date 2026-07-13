@@ -522,12 +522,14 @@ export type Database = {
           created_at: string
           currency: string
           description: string | null
+          description_en: string | null
           id: string
           image_url: string | null
           is_active: boolean
           is_pinned: boolean
           is_time_sensitive: boolean
           name: string
+          name_en: string | null
           price_cents: number | null
           property_id: string
           template_key: string | null
@@ -539,12 +541,14 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean
           is_pinned?: boolean
           is_time_sensitive?: boolean
           name: string
+          name_en?: string | null
           price_cents?: number | null
           property_id: string
           template_key?: string | null
@@ -556,12 +560,14 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean
           is_pinned?: boolean
           is_time_sensitive?: boolean
           name?: string
+          name_en?: string | null
           price_cents?: number | null
           property_id?: string
           template_key?: string | null
