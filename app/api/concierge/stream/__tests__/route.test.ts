@@ -151,6 +151,55 @@ describe('POST /api/concierge/stream', () => {
     )
   })
 
+  it('fires concierge_response_escalated with reason complaint for an [ESCALATE]-prefixed answer', async () => {
+    mockWithTenantContext.mockResolvedValue(
+      makeClient({ id: 'session-1', auth_level: 1, property_id: 'prop-1' })
+    )
+    mockCreate.mockResolvedValue(makeOpenAIStream(['[ESCALATE]', ' Łączymy z recepcją.']))
+
+    const response = await POST(jsonRequest({ question: 'Mam reklamację' }) as never)
+    await readSseFrames(response)
+
+    expect(mockCaptureEvent).toHaveBeenCalledWith(
+      { name: 'concierge_response_delivered', properties: { confidence: 0, latency_ms: expect.any(Number) } },
+      { distinctId: 'session-1', propertyId: 'prop-1' }
+    )
+    expect(mockCaptureEvent).toHaveBeenCalledWith(
+      { name: 'concierge_response_escalated', properties: { reason: 'complaint' } },
+      { distinctId: 'session-1', propertyId: 'prop-1' }
+    )
+  })
+
+  it('does not fire concierge_response_escalated for a normal answer', async () => {
+    mockWithTenantContext.mockResolvedValue(
+      makeClient({ id: 'session-1', auth_level: 1, property_id: 'prop-1' })
+    )
+    mockCreate.mockResolvedValue(makeOpenAIStream(['Breakfast is at 8am.']))
+
+    const response = await POST(jsonRequest({ question: 'What time is breakfast?' }) as never)
+    await readSseFrames(response)
+
+    expect(mockCaptureEvent).not.toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'concierge_response_escalated' }),
+      expect.anything()
+    )
+  })
+
+  it('does not fire concierge_response_escalated for a [FALLBACK]-prefixed answer', async () => {
+    mockWithTenantContext.mockResolvedValue(
+      makeClient({ id: 'session-1', auth_level: 1, property_id: 'prop-1' })
+    )
+    mockCreate.mockResolvedValue(makeOpenAIStream(['[FALLBACK]', ' Nie mam tej informacji.']))
+
+    const response = await POST(jsonRequest({ question: 'Random question' }) as never)
+    await readSseFrames(response)
+
+    expect(mockCaptureEvent).not.toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'concierge_response_escalated' }),
+      expect.anything()
+    )
+  })
+
   it('emits a single error event and closes cleanly when the OpenAI call throws mid-stream', async () => {
     mockWithTenantContext.mockResolvedValue(
       makeClient({ id: 'session-1', auth_level: 1, property_id: 'prop-1' })

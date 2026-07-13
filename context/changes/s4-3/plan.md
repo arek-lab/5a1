@@ -240,17 +240,17 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `npm run test -- lib/concierge/system-prompt`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
+- [x] 1.1 Unit tests pass: `npm run test -- lib/concierge/system-prompt` — 75b37a9
+- [x] 1.2 Type checking passes: `npm run typecheck` — 75b37a9
+- [x] 1.3 Linting passes: `npm run lint` — 75b37a9
 
 ### Phase 2: Stream Route — Complaint Escalation Detection
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `npm run test -- app/api/concierge/stream`
-- [ ] 2.2 Type checking passes: `npm run typecheck`
-- [ ] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- app/api/concierge/stream`
+- [x] 2.2 Type checking passes: `npm run typecheck`
+- [x] 2.3 Linting passes: `npm run lint`
 
 ### Phase 3: Escalation Logging Endpoint (Streak Path)
 

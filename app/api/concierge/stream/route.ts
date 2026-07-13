@@ -101,11 +101,18 @@ export async function POST(request: NextRequest): Promise<NextResponse | Respons
           })
         }
 
-        const confidence = fullAnswer.startsWith('[FALLBACK]') ? 0 : 1
+        const confidence = fullAnswer.startsWith('[FALLBACK]') || fullAnswer.startsWith('[ESCALATE]') ? 0 : 1
         await captureEvent(
           { name: 'concierge_response_delivered', properties: { confidence, latency_ms: latencyMs } },
           { distinctId: sessionId, propertyId }
         )
+
+        if (fullAnswer.startsWith('[ESCALATE]')) {
+          await captureEvent(
+            { name: 'concierge_response_escalated', properties: { reason: 'complaint' } },
+            { distinctId: sessionId, propertyId }
+          )
+        }
       } catch (error) {
         Sentry.captureException(error)
         try {
