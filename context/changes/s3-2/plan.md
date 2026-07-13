@@ -404,12 +404,12 @@ Jedna migracja addytywna (`is_time_sensitive` z `DEFAULT false`) — bez wpływu
 
 #### Automated
 
-- [x] 5.1 Pełny zestaw testów przechodzi: `npm run test`
-- [x] 5.2 Type checking przechodzi
-- [x] 5.3 Linting przechodzi
-- [x] 5.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 5.1 Pełny zestaw testów przechodzi: `npm run test` — 425823b
+- [x] 5.2 Type checking przechodzi — 425823b
+- [x] 5.3 Linting przechodzi — 425823b
+- [x] 5.4 Build produkcyjny przechodzi: `npm run build` — 425823b
 
 #### Manual
 
-- [x] 5.5 E2E-01 pełny przebieg zweryfikowany ręcznie
-- [x] 5.6 Przełącznik PL|EN zmienia wszystkie nowe stringi
+- [x] 5.5 E2E-01 pełny przebieg zweryfikowany ręcznie — 425823b
+- [x] 5.6 Przełącznik PL|EN zmienia wszystkie nowe stringi — 425823b
