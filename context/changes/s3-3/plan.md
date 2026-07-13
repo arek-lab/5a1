@@ -267,28 +267,28 @@ Bez migracji SQL — schemat `orders` i trigger NOTIFY (S2.6) już wystarczając
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Unit tests pass: `npm run test`
+- [x] 2.1 Type checking passes: `npm run typecheck` — e4b18d5
+- [x] 2.2 Linting passes: `npm run lint` — e4b18d5
+- [x] 2.3 Unit tests pass: `npm run test` — e4b18d5
 
 #### Manual
 
-- [x] 2.4 Lista chronologiczna z poprawnymi statusami PL
-- [x] 2.5 Pusty stan z linkiem do strony głównej
-- [x] 2.6 Zmiana statusu w panelu pojawia się bez odświeżania
+- [x] 2.4 Lista chronologiczna z poprawnymi statusami PL — e4b18d5
+- [x] 2.5 Pusty stan z linkiem do strony głównej — e4b18d5
+- [x] 2.6 Zmiana statusu w panelu pojawia się bez odświeżania — e4b18d5
 
 ### Phase 3: Fallback polling + toast + i18n + testy końcowe
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run typecheck`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Build passes: `npm run build`
-- [ ] 3.4 Pełny zestaw testów przechodzi: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Build passes: `npm run build`
+- [x] 3.4 Pełny zestaw testów przechodzi: `npm run test` (poza 3 pre-istniejącymi, niezwiązanymi awariami w `__tests__/proxy.test.ts` — `getClaims` brakuje w mocku Supabase, potwierdzone przez stash że występują też bez zmian tej fazy)
 
 #### Manual
 
-- [ ] 3.5 Przełączenie na polling po `onerror`; przywrócenie sieci nie wraca do SSE w tej samej wizycie
-- [ ] 3.6 Toast przy statusie `rejected`, znika automatycznie
-- [ ] 3.7 Przełącznik PL|EN zmienia wszystkie nowe stringi
-- [ ] 3.8 Pełny E2E: złożenie → `/orders` → zmiana statusu w panelu → live update
+- [x] 3.5 Przełączenie na polling po `onerror`; przywrócenie sieci nie wraca do SSE w tej samej wizycie
+- [x] 3.6 Toast przy statusie `rejected`, znika automatycznie
+- [x] 3.7 Przełącznik PL|EN zmienia wszystkie nowe stringi
+- [x] 3.8 Pełny E2E: złożenie → `/orders` → zmiana statusu w panelu → live update

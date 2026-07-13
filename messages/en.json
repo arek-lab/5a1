@@ -43,6 +43,9 @@
         "confirmed": "Accepted",
         "fulfilled": "Fulfilled",
         "rejected": "Rejected"
+      },
+      "toast": {
+        "rejected": "Your order was rejected."
       }
     }
   },

@@ -43,6 +43,9 @@
         "confirmed": "Przyjęte",
         "fulfilled": "Zrealizowane",
         "rejected": "Odrzucone"
+      },
+      "toast": {
+        "rejected": "Twoje zamówienie zostało odrzucone."
       }
     }
   },

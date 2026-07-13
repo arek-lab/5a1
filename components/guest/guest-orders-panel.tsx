@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { GuestOrder } from '@/lib/guest/orders';
+import { OrderToast } from './order-toast';
+
+const POLL_INTERVAL_MS = 10_000;
 
 type SsePayload = {
   id: string;
@@ -17,43 +20,85 @@ function formatDateTime(value: string): string {
   return new Date(value).toLocaleString();
 }
 
+function mergeOrder(prev: GuestOrder[], payload: SsePayload): GuestOrder[] {
+  const index = prev.findIndex(order => order.id === payload.id);
+  if (index === -1) {
+    return [
+      {
+        id: payload.id,
+        status: payload.status,
+        createdAt: payload.created_at,
+        scheduledAt: payload.scheduled_at,
+        note: payload.note,
+        serviceName: '',
+      },
+      ...prev,
+    ];
+  }
+  const next = [...prev];
+  next[index] = {
+    ...next[index],
+    status: payload.status,
+    note: payload.note,
+    scheduledAt: payload.scheduled_at,
+  };
+  return next;
+}
+
 export function GuestOrdersPanel({ initialOrders }: { initialOrders: GuestOrder[] }) {
   const t = useTranslations('guest.orders');
   const [orders, setOrders] = useState<GuestOrder[]>(initialOrders);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const connectionModeRef = useRef<'sse' | 'polling'>('sse');
+  const ordersRef = useRef<GuestOrder[]>(initialOrders);
+
+  useEffect(() => {
+    ordersRef.current = orders;
+  }, [orders]);
 
   useEffect(() => {
     const source = new EventSource('/api/orders/stream/guest');
+    let pollInterval: ReturnType<typeof setInterval> | undefined;
+
+    // Checked against ordersRef (not the setOrders updater's own `prev`) so this stays
+    // a plain side effect fired before the state update, instead of nesting a second
+    // setState call inside setOrders' functional updater.
+    function checkRejected(id: string, nextStatus: GuestOrder['status']) {
+      const previous = ordersRef.current.find(order => order.id === id);
+      if (previous && previous.status !== 'rejected' && nextStatus === 'rejected') {
+        setToastMessage(t('toast.rejected'));
+      }
+    }
+
+    function applyUpdate(payload: SsePayload) {
+      checkRejected(payload.id, payload.status);
+      setOrders(prev => mergeOrder(prev, payload));
+    }
+
+    async function poll() {
+      const response = await fetch('/api/orders/guest');
+      if (!response.ok) return;
+      const { orders: fetched }: { orders: GuestOrder[] } = await response.json();
+      for (const order of fetched) checkRejected(order.id, order.status);
+      setOrders(fetched);
+    }
 
     source.onmessage = event => {
-      const payload: SsePayload = JSON.parse(event.data);
-      setOrders(prev => {
-        const index = prev.findIndex(order => order.id === payload.id);
-        if (index === -1) {
-          return [
-            {
-              id: payload.id,
-              status: payload.status,
-              createdAt: payload.created_at,
-              scheduledAt: payload.scheduled_at,
-              note: payload.note,
-              serviceName: '',
-            },
-            ...prev,
-          ];
-        }
-        const next = [...prev];
-        next[index] = {
-          ...next[index],
-          status: payload.status,
-          note: payload.note,
-          scheduledAt: payload.scheduled_at,
-        };
-        return next;
-      });
+      applyUpdate(JSON.parse(event.data));
     };
 
-    return () => source.close();
-  }, []);
+    source.onerror = () => {
+      if (connectionModeRef.current === 'polling') return;
+      connectionModeRef.current = 'polling';
+      source.close();
+      pollInterval = setInterval(poll, POLL_INTERVAL_MS);
+    };
+
+    return () => {
+      source.close();
+      if (pollInterval) clearInterval(pollInterval);
+    };
+  }, [t]);
 
   if (orders.length === 0) {
     return (
@@ -87,6 +132,7 @@ export function GuestOrdersPanel({ initialOrders }: { initialOrders: GuestOrder[
           </li>
         ))}
       </ul>
+      {toastMessage && <OrderToast message={toastMessage} onDismiss={() => setToastMessage(null)} />}
     </div>
   );
 }

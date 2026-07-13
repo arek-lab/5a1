@@ -19,6 +19,7 @@ class MockEventSource {
 
 afterEach(() => {
   cleanup()
+  vi.useRealTimers()
 })
 
 beforeEach(() => {
@@ -76,5 +77,58 @@ describe('GuestOrdersPanel', () => {
 
     expect(screen.getByText('Przyjęte')).toBeTruthy()
     expect(screen.queryByText('Złożone')).toBeNull()
+  })
+
+  it('shows a toast when an incoming SSE update transitions an order to rejected', () => {
+    renderPanel([order])
+
+    const source = MockEventSource.instances[0]
+    act(() => {
+      source.onmessage?.({
+        data: JSON.stringify({
+          id: 'order-1',
+          status: 'rejected',
+          note: null,
+          created_at: order.createdAt,
+          scheduled_at: null,
+        }),
+      } as MessageEvent)
+    })
+
+    expect(screen.getByText('Twoje zamówienie zostało odrzucone.')).toBeTruthy()
+  })
+
+  it('falls back to polling after the SSE connection errors, and keeps polling after recovery', async () => {
+    vi.useFakeTimers()
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        orders: [{ ...order, status: 'confirmed' }],
+      }),
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    renderPanel([order])
+
+    const source = MockEventSource.instances[0]
+    act(() => {
+      source.onerror?.()
+    })
+
+    expect(source.close).toHaveBeenCalled()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000)
+    })
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/orders/guest')
+    expect(screen.getByText('Przyjęte')).toBeTruthy()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000)
+    })
+
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    vi.stubGlobal('fetch', vi.fn())
   })
 })
