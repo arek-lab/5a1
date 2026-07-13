@@ -88,6 +88,7 @@ export default async function QrPage() {
     : null
 
   const canEdit = canPerform(hotelUser.role, 'qr_manage', 'write')
+  const canManageRooms = canPerform(hotelUser.role, 'rooms_manage', 'write')
 
   return (
     <RequirePermission role={hotelUser.role} resource="qr_sessions" level="read">
@@ -100,6 +101,7 @@ export default async function QrPage() {
           rooms={roomsWithQr}
           sessionCount={sessionCount}
           canEdit={canEdit}
+          canManageRooms={canManageRooms}
         />
       </main>
     </RequirePermission>

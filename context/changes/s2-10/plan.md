@@ -339,23 +339,23 @@ przez istniejący constraint `UNIQUE (property_id, room_number)`.
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
+- [x] 1.1 Type checking passes: `npm run typecheck` — cdbfa51
+- [x] 1.2 Linting passes: `npm run lint` — cdbfa51
 - [x] 1.3 Unit/integration tests pass: `npm run test` (nowy `lib/rooms/__tests__/create.test.ts`;
       pozostałe 3 niepowiązane failury w `__tests__/proxy.test.ts` to istniejący problem mocka
-      `supabase.auth.getClaims`, sprzed tej sesji)
+      `supabase.auth.getClaims`, sprzed tej sesji) — cdbfa51
 - [x] 1.4 SQL izolacja RLS: uruchomione przez użytkownika w Supabase SQL Editor (skrypt
       przepisany na kilka top-level bloków `DO $$` bez zagnieżdżonego `BEGIN/EXCEPTION/END`,
       bo edytor Supabase Studio błędnie tnie skrypt na takim zagnieżdżeniu) — zakończone sukcesem,
-      brak `FAILED`
+      brak `FAILED` — cdbfa51
 
 #### Manual
 
-- [x] 1.5 `createRoomAction` jako Staff/Viewer zwraca `{error: 'forbidden'}`
+- [x] 1.5 `createRoomAction` jako Staff/Viewer zwraca `{error: 'forbidden'}` — cdbfa51
 - [x] 1.6 `createRoomAction` z numerem pokoju już istniejącym w property zwraca
-      `{error: 'roomNumberTaken'}`
-- [x] 1.7 `createRoomAction` z pustym numerem pokoju zwraca `{error: 'invalidRoomNumber'}`
-- [x] 1.8 Nowy pokój pojawia się w `rooms` z poprawnym `property_id`
+      `{error: 'roomNumberTaken'}` — cdbfa51
+- [x] 1.7 `createRoomAction` z pustym numerem pokoju zwraca `{error: 'invalidRoomNumber'}` — cdbfa51
+- [x] 1.8 Nowy pokój pojawia się w `rooms` z poprawnym `property_id` — cdbfa51
 
 ### Phase 2: UI — formularz dodawania pokoju + strona druku
 

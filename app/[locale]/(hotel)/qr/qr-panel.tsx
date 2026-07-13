@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import {
   rotateReceptionQR,
@@ -8,6 +9,7 @@ import {
   deactivateRoomQR,
   checkInRoomAction,
   updateCheckOutAction,
+  createRoomAction,
 } from './actions'
 
 export type RoomWithQr = {
@@ -29,6 +31,7 @@ interface Props {
   rooms: RoomWithQr[]
   sessionCount: number
   canEdit: boolean
+  canManageRooms: boolean
 }
 
 const AUTO_ROTATE_INTERVAL_MS = 5 * 60 * 1000
@@ -64,13 +67,16 @@ function formatCountdown(expiresAt: string | null): string {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit }: Props) {
+export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, canManageRooms }: Props) {
   const t = useTranslations('qr')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [countdown, setCountdown] = useState(() => formatCountdown(receptionQr?.expiresAt ?? null))
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null)
   const [checkOutInput, setCheckOutInput] = useState('')
+  const [isAddingRoom, setIsAddingRoom] = useState(false)
+  const [newRoomNumber, setNewRoomNumber] = useState('')
+  const [newRoomType, setNewRoomType] = useState('')
 
   useEffect(() => {
     const tick = setInterval(() => setCountdown(formatCountdown(receptionQr?.expiresAt ?? null)), 1000)
@@ -131,6 +137,31 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit }: P
     })
   }
 
+  function openAddRoomForm() {
+    setError(null)
+    setIsAddingRoom(true)
+    setNewRoomNumber('')
+    setNewRoomType('')
+  }
+
+  function closeAddRoomForm() {
+    setIsAddingRoom(false)
+    setNewRoomNumber('')
+    setNewRoomType('')
+  }
+
+  function handleAddRoomSubmit() {
+    setError(null)
+    startTransition(async () => {
+      const result = await createRoomAction(newRoomNumber, newRoomType.trim() || null)
+      if (result.error) {
+        setError(result.error)
+        return
+      }
+      closeAddRoomForm()
+    })
+  }
+
   return (
     <div className="space-y-6">
       {error && (
@@ -184,7 +215,66 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit }: P
       </section>
 
       <section className="rounded border p-4">
-        <h2 className="mb-3 text-lg font-semibold">{t('rooms.title')}</h2>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold">{t('rooms.title')}</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/qr/print" className={toolbarButtonClass}>
+              {t('rooms.printLink')}
+            </Link>
+            {canManageRooms && !isAddingRoom && (
+              <button
+                type="button"
+                className={toolbarButtonClass}
+                disabled={isPending}
+                onClick={openAddRoomForm}
+              >
+                {t('rooms.addRoom')}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {canManageRooms && isAddingRoom && (
+          <form
+            className="mb-4 flex flex-wrap items-end gap-2 rounded border p-3"
+            onSubmit={e => {
+              e.preventDefault()
+              handleAddRoomSubmit()
+            }}
+          >
+            <label className="flex flex-col text-sm">
+              {t('rooms.roomNumberLabel')}
+              <input
+                type="text"
+                required
+                value={newRoomNumber}
+                onChange={e => setNewRoomNumber(e.target.value)}
+                className="rounded border px-2 py-1 text-sm"
+              />
+            </label>
+            <label className="flex flex-col text-sm">
+              {t('rooms.roomTypeLabel')}
+              <input
+                type="text"
+                value={newRoomType}
+                onChange={e => setNewRoomType(e.target.value)}
+                className="rounded border px-2 py-1 text-sm"
+              />
+            </label>
+            <button type="submit" className={rowButtonClass} disabled={isPending}>
+              {t('rooms.confirm')}
+            </button>
+            <button
+              type="button"
+              className={rowButtonClass}
+              disabled={isPending}
+              onClick={closeAddRoomForm}
+            >
+              {t('rooms.cancel')}
+            </button>
+          </form>
+        )}
+
         {rooms.length === 0 ? (
           <p className="italic text-gray-500">{t('rooms.empty')}</p>
         ) : (
