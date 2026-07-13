@@ -160,7 +160,7 @@ export default function OrdersPanel({ initialOrders, rooms, services, canEditSta
           {visibleOrders.map(order => (
             <li key={order.id} className="flex flex-wrap items-center justify-between gap-3 p-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{order.serviceName}</span>
+                <span className="font-medium text-gray-900">{order.serviceName}</span>
                 <span className="text-sm text-gray-500">
                   {order.roomNumber ? `${t('list.room')} ${order.roomNumber}` : t('list.noRoom')}
                 </span>

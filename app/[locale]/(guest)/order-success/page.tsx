@@ -39,7 +39,7 @@ export default async function OrderSuccessPage({
       <p className="text-sm font-medium text-gray-500">{t('status')}</p>
       <div className="mt-4 flex w-full max-w-sm flex-col gap-2">
         <Link
-          href="/orders"
+          href="/my-orders"
           className="rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700"
         >
           {t('ordersLink')}
