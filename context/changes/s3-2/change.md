@@ -1,9 +1,9 @@
 ---
 change_id: s3-2
 title: Browse + flow zamówienia (3–4 tapy)
-status: implementing
+status: implemented
 created: 2026-07-10
-updated: 2026-07-10
+updated: 2026-07-13
 archived_at: null
 ---
 

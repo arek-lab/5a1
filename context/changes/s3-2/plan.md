@@ -389,27 +389,27 @@ Jedna migracja addytywna (`is_time_sensitive` z `DEFAULT false`) — bez wpływu
 
 #### Automated
 
-- [x] 4.1 Unit testy przechodzą
-- [x] 4.2 Type checking przechodzi
-- [x] 4.3 Linting przechodzi
+- [x] 4.1 Unit testy przechodzą — 825598f
+- [x] 4.2 Type checking przechodzi — 825598f
+- [x] 4.3 Linting przechodzi — 825598f
 
 #### Manual
 
-- [x] 4.4 Pełny happy path E2E-01 tworzy poprawny wiersz w `orders`
-- [x] 4.5 Błąd sieci → inline retry bez utraty Uwag
-- [x] 4.6 `scheduled_at` poprawny dla usługi time-sensitive
+- [x] 4.4 Pełny happy path E2E-01 tworzy poprawny wiersz w `orders` — 825598f
+- [x] 4.5 Błąd sieci → inline retry bez utraty Uwag — 825598f
+- [x] 4.6 `scheduled_at` poprawny dla usługi time-sensitive — 825598f
 - [ ] 4.7 RLS: property A nie widzi zamówień property B — pominięte tej sesji (decyzja użytkownika); pokryte istniejącymi politykami RLS + testami jednostkowymi route handlera, brak manualnej weryfikacji cross-property
 
 ### Phase 5: Tłumaczenia, testy, weryfikacja manualna
 
 #### Automated
 
-- [ ] 5.1 Pełny zestaw testów przechodzi: `npm run test`
-- [ ] 5.2 Type checking przechodzi
-- [ ] 5.3 Linting przechodzi
-- [ ] 5.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 5.1 Pełny zestaw testów przechodzi: `npm run test`
+- [x] 5.2 Type checking przechodzi
+- [x] 5.3 Linting przechodzi
+- [x] 5.4 Build produkcyjny przechodzi: `npm run build`
 
 #### Manual
 
-- [ ] 5.5 E2E-01 pełny przebieg zweryfikowany ręcznie
-- [ ] 5.6 Przełącznik PL|EN zmienia wszystkie nowe stringi
+- [x] 5.5 E2E-01 pełny przebieg zweryfikowany ręcznie
+- [x] 5.6 Przełącznik PL|EN zmienia wszystkie nowe stringi
