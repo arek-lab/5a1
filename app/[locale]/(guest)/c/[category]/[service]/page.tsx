@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { requireGuestSession } from '@/lib/guest/require-session';
 import { withTenantContext } from '@/lib/supabase/tenant';
 import { getServiceById } from '@/lib/guest/services';
@@ -21,7 +21,8 @@ export default async function ServiceDetailPage({
 
   const { propertyId, sessionId, roomId, reservationId } = await requireGuestSession();
   const client = await withTenantContext(await headers());
-  const service = await getServiceById(client, propertyId, serviceId);
+  const locale = await getLocale();
+  const service = await getServiceById(client, propertyId, serviceId, locale);
 
   if (!service || !service.isActive || service.category !== category) notFound();
 

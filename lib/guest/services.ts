@@ -31,13 +31,26 @@ export type ServiceDetail = {
   availableTo: string | null
 }
 
+function pickTranslated(pl: string, en: string | null, locale: string): string {
+  return locale === 'en' && en ? en : pl
+}
+
+function pickTranslatedNullable(
+  pl: string | null,
+  en: string | null,
+  locale: string
+): string | null {
+  return locale === 'en' && en ? en : pl
+}
+
 export async function getPinnedServices(
   client: SupabaseClient<Database>,
-  propertyId: string
+  propertyId: string,
+  locale: string
 ): Promise<PinnedService[]> {
   const { data, error } = await client
     .from('services')
-    .select('id, name, category, price_cents, image_url')
+    .select('id, name, name_en, category, price_cents, image_url')
     .eq('property_id', propertyId)
     .eq('is_pinned', true)
     .eq('is_active', true)
@@ -51,7 +64,7 @@ export async function getPinnedServices(
 
   return (data ?? []).map(service => ({
     id: service.id,
-    name: service.name,
+    name: pickTranslated(service.name, service.name_en, locale),
     category: service.category as ServiceCategory,
     priceCents: service.price_cents,
     imageUrl: service.image_url,
@@ -79,11 +92,12 @@ export async function getVisibleCategories(
 export async function getServicesByCategory(
   client: SupabaseClient<Database>,
   propertyId: string,
-  category: ServiceCategory
+  category: ServiceCategory,
+  locale: string
 ): Promise<ServiceListItem[]> {
   const { data, error } = await client
     .from('services')
-    .select('id, name, price_cents, image_url, is_active')
+    .select('id, name, name_en, price_cents, image_url, is_active')
     .eq('property_id', propertyId)
     .eq('category', category)
     .order('is_active', { ascending: false })
@@ -95,7 +109,7 @@ export async function getServicesByCategory(
 
   return (data ?? []).map(service => ({
     id: service.id,
-    name: service.name,
+    name: pickTranslated(service.name, service.name_en, locale),
     priceCents: service.price_cents,
     imageUrl: service.image_url,
     isActive: service.is_active,
@@ -105,12 +119,13 @@ export async function getServicesByCategory(
 export async function getServiceById(
   client: SupabaseClient<Database>,
   propertyId: string,
-  serviceId: string
+  serviceId: string,
+  locale: string
 ): Promise<ServiceDetail | null> {
   const { data, error } = await client
     .from('services')
     .select(
-      'id, name, description, category, price_cents, image_url, is_active, is_time_sensitive, available_from, available_to'
+      'id, name, name_en, description, description_en, category, price_cents, image_url, is_active, is_time_sensitive, available_from, available_to'
     )
     .eq('property_id', propertyId)
     .eq('id', serviceId)
@@ -124,8 +139,8 @@ export async function getServiceById(
 
   return {
     id: data.id,
-    name: data.name,
-    description: data.description,
+    name: pickTranslated(data.name, data.name_en, locale),
+    description: pickTranslatedNullable(data.description, data.description_en, locale),
     category: data.category as ServiceCategory,
     priceCents: data.price_cents,
     imageUrl: data.image_url,

@@ -400,9 +400,9 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Automated
 
-- [ ] 2.1 Unit testy `lib/guest/__tests__/services.test.ts` przechodzą
-- [ ] 2.2 Type checking passes
-- [ ] 2.3 Linting passes
+- [x] 2.1 Unit testy `lib/guest/__tests__/services.test.ts` przechodzą
+- [x] 2.2 Type checking passes
+- [x] 2.3 Linting passes
 
 #### Manual
 

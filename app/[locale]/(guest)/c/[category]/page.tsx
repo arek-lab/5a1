@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { getLocale } from 'next-intl/server';
 import { requireGuestSession } from '@/lib/guest/require-session';
 import { withTenantContext } from '@/lib/supabase/tenant';
 import { getServicesByCategory } from '@/lib/guest/services';
@@ -20,7 +21,8 @@ export default async function CategoryPage({
 
   const { propertyId } = await requireGuestSession();
   const client = await withTenantContext(await headers());
-  const services = await getServicesByCategory(client, propertyId, category);
+  const locale = await getLocale();
+  const services = await getServicesByCategory(client, propertyId, category, locale);
 
   return (
     <main className="grid grid-cols-2 gap-3 px-4 py-6 sm:grid-cols-3">
