@@ -15,6 +15,22 @@
       "unavailable": "Tymczasowo niedostępne",
       "orderCta": "Zamów",
       "timeLabel": "Godzina"
+    },
+    "orderModal": {
+      "title": "Potwierdź zamówienie",
+      "noteLabel": "Uwagi (opcjonalnie)",
+      "notePlaceholder": "np. bez cukru",
+      "submit": "Dopisz do rachunku pokoju",
+      "submitting": "Wysyłanie...",
+      "retry": "Spróbuj ponownie",
+      "cancel": "Anuluj",
+      "errorMessage": "Nie udało się złożyć zamówienia. Spróbuj ponownie."
+    },
+    "orderSuccess": {
+      "title": "Zamówienie złożone",
+      "status": "Status: Złożone",
+      "ordersLink": "Zobacz moje zamówienia",
+      "backToServices": "Wróć do listy usług"
     }
   },
   "signup": {
@@ -270,7 +286,11 @@
       "checkOutLabel": "Check-out",
       "editCheckOut": "Edytuj check-out",
       "confirm": "Zatwierdź",
-      "cancel": "Anuluj"
+      "cancel": "Anuluj",
+      "addRoom": "Dodaj pokój",
+      "roomNumberLabel": "Numer pokoju",
+      "roomTypeLabel": "Typ pokoju",
+      "printLink": "Drukuj kody QR pokoi"
     },
     "dpaBlocked": {
       "message": "Moduł QR jest zablokowany, dopóki umowa powierzenia danych (DPA) nie zostanie podpisana."
@@ -280,7 +300,15 @@
       "dpaNotSigned": "Umowa powierzenia danych (DPA) nie została podpisana.",
       "roomOccupied": "Ten pokój ma już aktywną rezerwację.",
       "invalidCheckOut": "Data check-out musi być w przyszłości.",
-      "notFound": "Nie znaleziono pokoju lub rezerwacji."
+      "notFound": "Nie znaleziono pokoju lub rezerwacji.",
+      "roomNumberTaken": "Pokój o tym numerze już istnieje w tym hotelu.",
+      "invalidRoomNumber": "Numer pokoju nie może być pusty."
+    },
+    "print": {
+      "title": "Druk kodów QR pokoi",
+      "printButton": "Drukuj",
+      "skippedRooms": "Pominięto {count} pokoi bez aktywnego kodu QR — aktywuj go najpierw w module QR.",
+      "empty": "Brak pokoi z aktywnym kodem QR do wydruku."
     }
   },
   "orders": {

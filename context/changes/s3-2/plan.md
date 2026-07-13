@@ -374,31 +374,31 @@ Jedna migracja addytywna (`is_time_sensitive` z `DEFAULT false`) — bez wpływu
 
 #### Automated
 
-- [x] 3.1 Unit testy przechodzą
-- [x] 3.2 Type checking przechodzi
-- [x] 3.3 Linting przechodzi
+- [x] 3.1 Unit testy przechodzą — 71e0f0c
+- [x] 3.2 Type checking przechodzi — 71e0f0c
+- [x] 3.3 Linting przechodzi — 71e0f0c
 
 #### Manual
 
-- [x] 3.4 Home pokazuje tylko kategorie z aktywnymi usługami
-- [x] 3.5 `/c/[category]` z nieznanym segmentem zwraca 404
-- [x] 3.6 Nieaktywna usługa wyszarzona, nieklikalna, bezpośredni URL szczegółów → 404
-- [x] 3.7 Picker slotów działa dla time-sensitive z wypełnionymi godzinami, CTA działa bez selecta gdy brak godzin
+- [x] 3.4 Home pokazuje tylko kategorie z aktywnymi usługami — 71e0f0c
+- [x] 3.5 `/c/[category]` z nieznanym segmentem zwraca 404 — 71e0f0c
+- [x] 3.6 Nieaktywna usługa wyszarzona, nieklikalna, bezpośredni URL szczegółów → 404 — 71e0f0c
+- [x] 3.7 Picker slotów działa dla time-sensitive z wypełnionymi godzinami, CTA działa bez selecta gdy brak godzin — 71e0f0c
 
 ### Phase 4: Flow zamówienia — modal, zapis, ekran sukcesu
 
 #### Automated
 
-- [ ] 4.1 Unit testy przechodzą
-- [ ] 4.2 Type checking przechodzi
-- [ ] 4.3 Linting przechodzi
+- [x] 4.1 Unit testy przechodzą
+- [x] 4.2 Type checking przechodzi
+- [x] 4.3 Linting przechodzi
 
 #### Manual
 
-- [ ] 4.4 Pełny happy path E2E-01 tworzy poprawny wiersz w `orders`
-- [ ] 4.5 Błąd sieci → inline retry bez utraty Uwag
-- [ ] 4.6 `scheduled_at` poprawny dla usługi time-sensitive
-- [ ] 4.7 RLS: property A nie widzi zamówień property B
+- [x] 4.4 Pełny happy path E2E-01 tworzy poprawny wiersz w `orders`
+- [x] 4.5 Błąd sieci → inline retry bez utraty Uwag
+- [x] 4.6 `scheduled_at` poprawny dla usługi time-sensitive
+- [ ] 4.7 RLS: property A nie widzi zamówień property B — pominięte tej sesji (decyzja użytkownika); pokryte istniejącymi politykami RLS + testami jednostkowymi route handlera, brak manualnej weryfikacji cross-property
 
 ### Phase 5: Tłumaczenia, testy, weryfikacja manualna
 

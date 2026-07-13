@@ -15,6 +15,22 @@
       "unavailable": "Temporarily unavailable",
       "orderCta": "Order",
       "timeLabel": "Time"
+    },
+    "orderModal": {
+      "title": "Confirm order",
+      "noteLabel": "Notes (optional)",
+      "notePlaceholder": "e.g. no sugar",
+      "submit": "Charge to room bill",
+      "submitting": "Sending...",
+      "retry": "Try again",
+      "cancel": "Cancel",
+      "errorMessage": "Couldn't place the order. Please try again."
+    },
+    "orderSuccess": {
+      "title": "Order placed",
+      "status": "Status: Placed",
+      "ordersLink": "See my orders",
+      "backToServices": "Back to services"
     }
   },
   "signup": {
@@ -270,7 +286,11 @@
       "checkOutLabel": "Check-out",
       "editCheckOut": "Edit check-out",
       "confirm": "Confirm",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "addRoom": "Add room",
+      "roomNumberLabel": "Room number",
+      "roomTypeLabel": "Room type",
+      "printLink": "Print room QR codes"
     },
     "dpaBlocked": {
       "message": "The QR module is locked until the Data Processing Agreement (DPA) is signed."
@@ -280,7 +300,15 @@
       "dpaNotSigned": "The Data Processing Agreement (DPA) has not been signed.",
       "roomOccupied": "This room already has an active reservation.",
       "invalidCheckOut": "The check-out date must be in the future.",
-      "notFound": "Room or reservation not found."
+      "notFound": "Room or reservation not found.",
+      "roomNumberTaken": "A room with this number already exists in this hotel.",
+      "invalidRoomNumber": "Room number must not be empty."
+    },
+    "print": {
+      "title": "Print room QR codes",
+      "printButton": "Print",
+      "skippedRooms": "Skipped {count} room(s) without an active QR code — activate it first in the QR module.",
+      "empty": "No rooms with an active QR code to print."
     }
   },
   "orders": {
