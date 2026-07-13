@@ -33,7 +33,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const validation = await validateRoomScan({ sessionId, roomId })
   if (!validation.ok) {
-    return NextResponse.redirect(new URL(`/error?type=${validation.error}`, request.url))
+    const redirectUrl = new URL(`/error?type=${validation.error}`, request.url)
+    if (validation.session) redirectUrl.searchParams.set('property_id', validation.session.property_id)
+    return NextResponse.redirect(redirectUrl)
   }
 
   const { reservation } = validation
@@ -89,7 +91,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { error: refreshError } = await supabase.auth.refreshSession()
   if (refreshError) {
-    return NextResponse.redirect(new URL('/error?type=auth_failed', request.url))
+    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    redirectUrl.searchParams.set('property_id', validation.session.property_id)
+    return NextResponse.redirect(redirectUrl)
   }
 
   void captureEvent(

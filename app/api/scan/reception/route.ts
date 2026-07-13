@@ -28,7 +28,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const tokenResult = await findAndConsumeToken(initToken)
   if (!tokenResult.ok) {
-    return NextResponse.redirect(new URL(`/error?type=${tokenResult.error}`, request.url))
+    const redirectUrl = new URL(`/error?type=${tokenResult.error}`, request.url)
+    if (tokenResult.qr) redirectUrl.searchParams.set('property_id', tokenResult.qr.property_id)
+    return NextResponse.redirect(redirectUrl)
   }
 
   const qr = tokenResult.qr
@@ -62,7 +64,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   } = await supabase.auth.signInAnonymously()
 
   if (signInError || !user) {
-    return NextResponse.redirect(new URL('/error?type=auth_failed', request.url))
+    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    redirectUrl.searchParams.set('property_id', qr.property_id)
+    return NextResponse.redirect(redirectUrl)
   }
 
   // Sessions row must exist before refreshSession() so the Custom Access Token Hook
@@ -74,7 +78,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { error: refreshError } = await supabase.auth.refreshSession()
   if (refreshError) {
-    return NextResponse.redirect(new URL('/error?type=auth_failed', request.url))
+    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    redirectUrl.searchParams.set('property_id', qr.property_id)
+    return NextResponse.redirect(redirectUrl)
   }
 
   response.cookies.set('__Host-session', session.id, {

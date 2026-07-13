@@ -7,7 +7,7 @@ export async function validateRoomScan(params: {
   roomId: string
 }): Promise<
   | { ok: true; session: Tables<'sessions'>; room: Tables<'rooms'>; reservation: Tables<'reservations'> }
-  | { ok: false; error: RoomScanError }
+  | { ok: false; error: RoomScanError; session?: Tables<'sessions'> }
 > {
   const supabase = createServiceRoleClient()
 
@@ -18,9 +18,10 @@ export async function validateRoomScan(params: {
     .single()
 
   if (sessionError || !session) return { ok: false, error: 'session_not_found' }
-  if (session.revoked) return { ok: false, error: 'session_revoked' }
-  if (new Date(session.expires_at) <= new Date()) return { ok: false, error: 'session_expired' }
-  if (session.auth_level !== 1) return { ok: false, error: 'wrong_auth_level' }
+  if (session.revoked) return { ok: false, error: 'session_revoked', session }
+  if (new Date(session.expires_at) <= new Date())
+    return { ok: false, error: 'session_expired', session }
+  if (session.auth_level !== 1) return { ok: false, error: 'wrong_auth_level', session }
 
   const { data: qrCode, error: qrError } = await supabase
     .from('qr_codes')
@@ -31,7 +32,7 @@ export async function validateRoomScan(params: {
     .eq('property_id', session.property_id)
     .single()
 
-  if (qrError || !qrCode) return { ok: false, error: 'room_qr_not_found' }
+  if (qrError || !qrCode) return { ok: false, error: 'room_qr_not_found', session }
 
   const { data: room, error: roomError } = await supabase
     .from('rooms')
@@ -40,7 +41,7 @@ export async function validateRoomScan(params: {
     .eq('property_id', session.property_id)
     .single()
 
-  if (roomError || !room) return { ok: false, error: 'room_qr_not_found' }
+  if (roomError || !room) return { ok: false, error: 'room_qr_not_found', session }
 
   const now = new Date()
   if (
@@ -49,11 +50,11 @@ export async function validateRoomScan(params: {
     now < new Date(room.valid_from) ||
     now > new Date(room.valid_until)
   ) {
-    return { ok: false, error: 'outside_window' }
+    return { ok: false, error: 'outside_window', session }
   }
 
   if (room.room_active_reservation_id === null) {
-    return { ok: false, error: 'no_active_reservation' }
+    return { ok: false, error: 'no_active_reservation', session }
   }
 
   const { data: reservation, error: reservationError } = await supabase
@@ -62,7 +63,7 @@ export async function validateRoomScan(params: {
     .eq('id', room.room_active_reservation_id)
     .single()
 
-  if (reservationError || !reservation) return { ok: false, error: 'no_active_reservation' }
+  if (reservationError || !reservation) return { ok: false, error: 'no_active_reservation', session }
 
   return { ok: true, session, room, reservation }
 }

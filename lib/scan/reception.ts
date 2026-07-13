@@ -4,7 +4,10 @@ import type { ReceptionScanError } from './errors'
 
 export async function findAndConsumeToken(
   initToken: string
-): Promise<{ ok: true; qr: Tables<'qr_codes'> } | { ok: false; error: ReceptionScanError }> {
+): Promise<
+  | { ok: true; qr: Tables<'qr_codes'> }
+  | { ok: false; error: ReceptionScanError; qr?: Tables<'qr_codes'> }
+> {
   const supabase = createServiceRoleClient()
 
   const { data: row, error } = await supabase
@@ -17,10 +20,10 @@ export async function findAndConsumeToken(
   if (error || !row) return { ok: false, error: 'token_not_found' }
 
   if (row.expires_at !== null && new Date(row.expires_at) <= new Date()) {
-    return { ok: false, error: 'token_expired' }
+    return { ok: false, error: 'token_expired', qr: row }
   }
 
-  if (row.used_at !== null) return { ok: false, error: 'token_used' }
+  if (row.used_at !== null) return { ok: false, error: 'token_used', qr: row }
 
   const { data: updated, error: updateError } = await supabase
     .from('qr_codes')
@@ -31,7 +34,7 @@ export async function findAndConsumeToken(
 
   if (updateError) throw updateError
 
-  if (!updated || updated.length === 0) return { ok: false, error: 'token_used' }
+  if (!updated || updated.length === 0) return { ok: false, error: 'token_used', qr: row }
 
   return { ok: true, qr: updated[0] }
 }

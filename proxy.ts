@@ -42,12 +42,26 @@ export default async function proxy(request: NextRequest) {
       .eq('id', sessionId)
       .single()
 
-    const invalid = !session || session.revoked || new Date(session.expires_at) <= new Date()
-    if (invalid) {
+    const expired = session !== null && new Date(session.expires_at) <= new Date()
+    if (!session || session.revoked || expired) {
       if (request.nextUrl.pathname.startsWith('/api/')) {
         return new NextResponse(null, { status: 401 })
       }
-      const response = NextResponse.redirect(new URL('/error?type=session_revoked', request.url))
+
+      let redirectUrl: URL
+      // Session row exists even for the expired/revoked branches — only a missing row
+      // (!session) has no property to attach to the redirect.
+      if (!session) {
+        redirectUrl = new URL('/error?type=session_revoked', request.url)
+      } else if (session.revoked) {
+        redirectUrl = new URL('/error?type=session_revoked', request.url)
+        redirectUrl.searchParams.set('property_id', session.property_id)
+      } else {
+        redirectUrl = new URL('/error?type=session_expired', request.url)
+        redirectUrl.searchParams.set('property_id', session.property_id)
+      }
+
+      const response = NextResponse.redirect(redirectUrl)
       // __Host- prefixed cookies require Secure (and Path=/) on every Set-Cookie, including
       // clearing ones — omitting it makes the browser silently reject the header entirely,
       // leaving the stale invalid cookie in place and causing a redirect loop back to this branch.
