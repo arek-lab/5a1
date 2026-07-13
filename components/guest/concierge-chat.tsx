@@ -1,19 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ConciergeTurn } from '@/lib/concierge/payload';
 
 const MAX_HISTORY_TURNS = 10;
 const FALLBACK_PREFIX = '[FALLBACK]';
+const ESCALATE_PREFIX = '[ESCALATE]';
+const ESCALATION_STREAK_THRESHOLD = 3;
+const QUICK_REPLY_KEYS = ['breakfast', 'wifi', 'parking', 'checkout', 'pets', 'area'] as const;
 
 type ChatMessage = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   isFallback: boolean;
+  isEscalated: boolean;
   isStreaming: boolean;
 };
+
+function reportEscalation() {
+  void fetch('/api/concierge/escalate', { method: 'POST' }).catch(() => {});
+}
 
 function parseSseFrames(buffer: string): { events: string[]; rest: string } {
   const events: string[] = [];
@@ -40,15 +48,16 @@ export function ConciergeChat({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const consecutiveFallbackCount = useRef(0);
 
   const botName = aiBotName ?? t('defaultBotName');
 
-  async function sendMessage() {
-    const question = input.trim();
+  async function sendMessage(overrideQuestion?: string) {
+    const question = (overrideQuestion ?? input).trim();
     if (!question || isSending) return;
 
     const history: ConciergeTurn[] = messages
-      .filter(message => !message.isFallback)
+      .filter(message => !message.isFallback && !message.isEscalated)
       .slice(-MAX_HISTORY_TURNS)
       .map(message => ({ role: message.role, content: message.content }));
 
@@ -57,6 +66,7 @@ export function ConciergeChat({
       role: 'user',
       content: question,
       isFallback: false,
+      isEscalated: false,
       isStreaming: false,
     };
     const assistantId = crypto.randomUUID();
@@ -65,6 +75,7 @@ export function ConciergeChat({
       role: 'assistant',
       content: '',
       isFallback: false,
+      isEscalated: false,
       isStreaming: true,
     };
 
@@ -86,6 +97,7 @@ export function ConciergeChat({
       });
 
       if (!response.ok || !response.body) {
+        consecutiveFallbackCount.current += 1;
         updateAssistant({ isFallback: true, isStreaming: false });
         return;
       }
@@ -109,16 +121,31 @@ export function ConciergeChat({
             accumulated += payload.text;
             updateAssistant({ content: accumulated });
           } else if (payload.type === 'error') {
+            consecutiveFallbackCount.current += 1;
             updateAssistant({ isFallback: true, isStreaming: false });
           } else if (payload.type === 'done') {
-            updateAssistant({
-              isFallback: accumulated.startsWith(FALLBACK_PREFIX),
-              isStreaming: false,
-            });
+            if (accumulated.startsWith(ESCALATE_PREFIX)) {
+              consecutiveFallbackCount.current = 0;
+              reportEscalation();
+              updateAssistant({ isEscalated: true, isStreaming: false });
+            } else if (accumulated.startsWith(FALLBACK_PREFIX)) {
+              consecutiveFallbackCount.current += 1;
+              if (consecutiveFallbackCount.current >= ESCALATION_STREAK_THRESHOLD) {
+                consecutiveFallbackCount.current = 0;
+                reportEscalation();
+                updateAssistant({ isEscalated: true, isStreaming: false });
+              } else {
+                updateAssistant({ isFallback: true, isStreaming: false });
+              }
+            } else {
+              consecutiveFallbackCount.current = 0;
+              updateAssistant({ isStreaming: false });
+            }
           }
         }
       }
     } catch {
+      consecutiveFallbackCount.current += 1;
       updateAssistant({ isFallback: true, isStreaming: false });
     } finally {
       setIsSending(false);
@@ -136,6 +163,15 @@ export function ConciergeChat({
           message.role === 'user' ? (
             <div key={message.id} className="ml-auto max-w-[85%] rounded-2xl bg-gray-900 px-4 py-2 text-white">
               {message.content}
+            </div>
+          ) : message.isEscalated ? (
+            <div key={message.id} className="max-w-[85%] rounded-2xl bg-red-50 px-4 py-2 text-red-900">
+              <p>{t('escalationMessage', { phone: phoneReception ?? '' })}</p>
+              {phoneReception && (
+                <a href={`tel:${phoneReception}`} className="mt-1 inline-block font-semibold underline">
+                  {t('escalationCta')}
+                </a>
+              )}
             </div>
           ) : message.isFallback ? (
             <div key={message.id} className="max-w-[85%] rounded-2xl bg-amber-50 px-4 py-2 text-amber-900">
@@ -156,6 +192,21 @@ export function ConciergeChat({
           )
         )}
       </div>
+
+      {messages.length === 0 && (
+        <div className="flex flex-wrap gap-2">
+          {QUICK_REPLY_KEYS.map(key => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => void sendMessage(t(`chips.${key}`))}
+              className="rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              {t(`chips.${key}`)}
+            </button>
+          ))}
+        </div>
+      )}
 
       <form
         onSubmit={event => {

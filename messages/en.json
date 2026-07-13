@@ -56,7 +56,17 @@
     "send": "Send",
     "typing": "Typing...",
     "fallbackMessage": "I don't have an answer for that. Please contact reception: {phone}",
-    "fallbackCta": "Call reception"
+    "fallbackCta": "Call reception",
+    "escalationMessage": "This needs reception's attention. Connecting you directly: {phone}",
+    "escalationCta": "Call reception",
+    "chips": {
+      "breakfast": "Breakfast — what hours?",
+      "wifi": "Is there WiFi?",
+      "parking": "Is there parking?",
+      "checkout": "What time is checkout?",
+      "pets": "Can I bring a pet?",
+      "area": "What's worth seeing nearby?"
+    }
   },
   "signup": {
     "fields": {

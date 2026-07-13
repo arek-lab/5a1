@@ -56,7 +56,17 @@
     "send": "Wyślij",
     "typing": "Piszę...",
     "fallbackMessage": "Nie mam odpowiedzi na to pytanie. Skontaktuj się z recepcją: {phone}",
-    "fallbackCta": "Zadzwoń do recepcji"
+    "fallbackCta": "Zadzwoń do recepcji",
+    "escalationMessage": "Ta sprawa wymaga uwagi recepcji. Łączymy Cię bezpośrednio: {phone}",
+    "escalationCta": "Zadzwoń do recepcji",
+    "chips": {
+      "breakfast": "Śniadanie — godziny?",
+      "wifi": "Jest WiFi?",
+      "parking": "Czy jest parking?",
+      "checkout": "O której jest wymeldowanie?",
+      "pets": "Czy mogę przyjechać ze zwierzakiem?",
+      "area": "Co warto zobaczyć w okolicy?"
+    }
   },
   "signup": {
     "fields": {

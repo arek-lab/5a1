@@ -264,13 +264,13 @@ Not applicable — no schema changes in this session.
 
 #### Automated
 
-- [ ] 4.1 Unit tests pass: `npm run test -- components/guest/concierge-chat`
-- [ ] 4.2 Type checking passes: `npm run typecheck`
-- [ ] 4.3 Linting passes: `npm run lint`
+- [x] 4.1 Unit tests pass: `npm run test -- components/guest/concierge-chat`
+- [x] 4.2 Type checking passes: `npm run typecheck`
+- [x] 4.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.4 Complaint-style message escalates on the first reply, no plain-fallback bubble shown first
-- [ ] 4.5 3 consecutive fallbacks escalate exactly on the 3rd
-- [ ] 4.6 Disclosure line and Quick Reply chips render correctly; chips disappear after first message
-- [ ] 4.7 `concierge_response_escalated` observed firing for the streak-triggered case
+- [x] 4.4 Complaint-style message escalates on the first reply, no plain-fallback bubble shown first
+- [x] 4.5 3 consecutive fallbacks escalate exactly on the 3rd
+- [x] 4.6 Disclosure line and Quick Reply chips render correctly; chips disappear after first message
+- [x] 4.7 `concierge_response_escalated` observed firing for the streak-triggered case
