@@ -33,6 +33,12 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Reachability ping (lib/guest/use-online-status.ts) must succeed regardless of
+  // session state, or a lapsed session gets misreported as "offline" to the guest.
+  if (pathname === '/api/health') {
+    return NextResponse.next()
+  }
+
   const sessionId = request.cookies.get('__Host-session')?.value
   if (sessionId) {
     const admin = createServiceRoleClient()

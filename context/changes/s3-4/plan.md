@@ -148,15 +148,17 @@ Replace the stub with the real branded/generic informational page.
 
 Non-blocking global toast on connectivity loss; "Zamów" disabled while offline.
 
+**HITL decision (post-Phase-3-implementation)**: `navigator.onLine` alone only reflects OS-level network-interface state — it can read `true` behind a captive portal or when the backend itself is unreachable, and can occasionally flicker on mobile network handoff. Considered three options: (a) accept the limitation with a documented caveat, (b) debounce the offline signal to filter flicker, (c) confirm with a lightweight same-origin reachability ping. Chose **(c)** — the existing `app/api/health/route.ts` (unauthenticated `GET` → `200 "ok"`) is reused as the ping target, so no new endpoint was needed. `offline` events still flip the toast on immediately (fast path, no false negatives from delaying a real disconnect); `online` events and a 5s poll while offline confirm reachability before flipping back to online, closing the false-positive gap that a plain event-listener approach would miss.
+
 ### Changes Required:
 
 #### 1. Online-status hook
 
 **File**: `lib/guest/use-online-status.ts`
 
-**Intent**: Client hook exposing current connectivity, backed by `navigator.onLine` plus `online`/`offline` window event listeners.
+**Intent**: Client hook exposing current connectivity, backed by `navigator.onLine`/`online`/`offline` events plus a same-origin reachability ping — a bare `navigator.onLine` read cannot distinguish "network interface up" from "backend actually reachable."
 
-**Contract**: `'use client'` directive; `export function useOnlineStatus(): boolean` — initializes from `navigator.onLine` (guarded for SSR: default `true` when `navigator` is undefined), subscribes/unsubscribes `online`/`offline` listeners in a `useEffect`.
+**Contract**: `'use client'` directive; `export function useOnlineStatus(): boolean` — initializes from `navigator.onLine` (guarded for SSR: default `true` when `navigator` is undefined). `offline` event → `isOnline` flips to `false` immediately and a 5s poll against `GET /api/health` (`cache: 'no-store'`) starts. `online` event → fires one `/api/health` check immediately; flips to `true` only if it succeeds, otherwise stays `false` and the poll starts. Poll clears itself on the first successful ping. Reuses `app/api/health/route.ts` — no new endpoint.
 
 #### 2. Offline toast
 
@@ -283,7 +285,7 @@ Confirm all new copy exists in both locales under the agreed namespaces; run the
 
 - `resolveErrorGroup`: all 13 known type values map to the expected group; unrecognized value falls back to `generic`
 - `getErrorPageBranding`: returns `null` for undefined `property_id`, returns the expected shape for a known property, returns `null` for an unknown `property_id`
-- `useOnlineStatus`: reflects `navigator.onLine` initial value; updates on simulated `online`/`offline` events
+- `useOnlineStatus`: reflects `navigator.onLine` initial value; flips to offline immediately on an `offline` event; on `online`, flips to online only when the `/api/health` ping resolves `ok`, otherwise stays offline
 - `findAndConsumeToken` / `validateRoomScan`: widened failure return shapes still satisfy existing call sites and tests (extend, don't break, current test coverage in `lib/scan/__tests__/`)
 - `order-confirm-modal`: renders phone link when `phoneReception` present, omits it when null
 
@@ -335,25 +337,25 @@ No schema changes. No data migration.
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `npm run test -- lib/guest/error-copy`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Unit tests pass: `npm run test -- lib/guest/error-copy` — 86a0304
+- [x] 2.2 Type checking passes: `npm run typecheck` — 86a0304
+- [x] 2.3 Linting passes: `npm run lint` — 86a0304
 
 #### Manual
 
-- [x] 2.4 `/pl/error?type=token_expired&property_id=<real-uuid>` shows branded expired copy
-- [x] 2.5 `/pl/error?type=token_not_found` shows generic unbranded copy
-- [x] 2.6 `/pl/error?type=outside_window&property_id=<real-uuid>` shows distinct generic-room-issue copy
-- [x] 2.7 `/en/error?type=session_revoked` shows English copy
-- [x] 2.8 No redirect loop reaching `/error`
+- [x] 2.4 `/pl/error?type=token_expired&property_id=<real-uuid>` shows branded expired copy — 86a0304
+- [x] 2.5 `/pl/error?type=token_not_found` shows generic unbranded copy — 86a0304
+- [x] 2.6 `/pl/error?type=outside_window&property_id=<real-uuid>` shows distinct generic-room-issue copy — 86a0304
+- [x] 2.7 `/en/error?type=session_revoked` shows English copy — 86a0304
+- [x] 2.8 No redirect loop reaching `/error` — 86a0304
 
 ### Phase 3: Offline detection
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `npm run test -- lib/guest/use-online-status components/guest/offline-toast components/guest/order-cta`
-- [ ] 3.2 Type checking passes: `npm run typecheck`
-- [ ] 3.3 Linting passes: `npm run lint`
+- [x] 3.1 Unit tests pass: `npm run test -- lib/guest/use-online-status components/guest/offline-toast components/guest/order-cta`
+- [x] 3.2 Type checking passes: `npm run typecheck`
+- [x] 3.3 Linting passes: `npm run lint`
 
 #### Manual
 

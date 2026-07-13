@@ -1,6 +1,7 @@
 import { requireGuestSession } from '@/lib/guest/require-session';
 import { LanguageSwitcher } from '@/components/guest/language-switcher';
 import { FloatingConciergeButton } from '@/components/guest/floating-concierge-button';
+import { OfflineToast } from '@/components/guest/offline-toast';
 
 export default async function GuestLayout({ children }: { children: React.ReactNode }) {
   const { propertyName, logoUrl } = await requireGuestSession();
@@ -20,6 +21,7 @@ export default async function GuestLayout({ children }: { children: React.ReactN
       </header>
       {children}
       <FloatingConciergeButton />
+      <OfflineToast />
     </>
   );
 }
