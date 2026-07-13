@@ -85,6 +85,8 @@ export async function createCustomService(formData: FormData): Promise<ActionRes
     property_id: hotelUser.propertyId,
     name: validated.value.name,
     description: String(formData.get('description') ?? '').trim() || null,
+    name_en: String(formData.get('name_en') ?? '').trim() || null,
+    description_en: String(formData.get('description_en') ?? '').trim() || null,
     category: validated.value.category,
     price_cents: validated.value.priceCents,
     image_url: validated.value.imageUrl,
@@ -126,6 +128,8 @@ export async function updateService(formData: FormData): Promise<ActionResult> {
     .update({
       name: validated.value.name,
       description: String(formData.get('description') ?? '').trim() || null,
+      name_en: String(formData.get('name_en') ?? '').trim() || null,
+      description_en: String(formData.get('description_en') ?? '').trim() || null,
       category: validated.value.category,
       price_cents: validated.value.priceCents,
       image_url: validated.value.imageUrl,

@@ -16,6 +16,8 @@ export default function ServiceForm({ service, onSaved }: Props) {
   const tCategories = useTranslations('services.categories')
   const [name, setName] = useState(service?.name ?? '')
   const [description, setDescription] = useState(service?.description ?? '')
+  const [nameEn, setNameEn] = useState(service?.name_en ?? '')
+  const [descriptionEn, setDescriptionEn] = useState(service?.description_en ?? '')
   const [category, setCategory] = useState<ServiceCategory>(service?.category ?? SERVICE_CATEGORIES[0])
   const [included, setIncluded] = useState(service ? service.price_cents === null : false)
   const [priceCents, setPriceCents] = useState(
@@ -34,6 +36,8 @@ export default function ServiceForm({ service, onSaved }: Props) {
     if (service) formData.set('id', service.id)
     formData.set('name', name)
     formData.set('description', description)
+    formData.set('name_en', nameEn)
+    formData.set('description_en', descriptionEn)
     formData.set('category', category)
     formData.set('price_cents', included ? '' : priceCents)
     formData.set('image_url', imageUrl)
@@ -67,6 +71,14 @@ export default function ServiceForm({ service, onSaved }: Props) {
       <label className={labelClass}>
         {t('fields.description')}
         <textarea className={inputClass} value={description} onChange={e => setDescription(e.target.value)} />
+      </label>
+      <label className={labelClass}>
+        {t('fields.nameEn')}
+        <input className={inputClass} value={nameEn} onChange={e => setNameEn(e.target.value)} />
+      </label>
+      <label className={labelClass}>
+        {t('fields.descriptionEn')}
+        <textarea className={inputClass} value={descriptionEn} onChange={e => setDescriptionEn(e.target.value)} />
       </label>
       <label className={labelClass}>
         {t('fields.category')}

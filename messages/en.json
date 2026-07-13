@@ -31,7 +31,29 @@
       "status": "Status: Placed",
       "ordersLink": "See my orders",
       "backToServices": "Back to services"
+    },
+    "orders": {
+      "title": "My orders",
+      "empty": {
+        "message": "You don't have any orders yet.",
+        "cta": "Browse services"
+      },
+      "status": {
+        "new": "Placed",
+        "confirmed": "Accepted",
+        "fulfilled": "Fulfilled",
+        "rejected": "Rejected"
+      }
     }
+  },
+  "concierge": {
+    "defaultBotName": "Assistant",
+    "disclosure": "You're chatting with the virtual assistant {botName}.",
+    "inputPlaceholder": "Ask a question...",
+    "send": "Send",
+    "typing": "Typing...",
+    "fallbackMessage": "I don't have an answer for that. Please contact reception: {phone}",
+    "fallbackCta": "Call reception"
   },
   "signup": {
     "fields": {
@@ -118,6 +140,8 @@
       "fields": {
         "name": "Name",
         "description": "Description",
+        "nameEn": "Name (EN)",
+        "descriptionEn": "Description (EN)",
         "category": "Category",
         "priceCents": "Price",
         "included": "Included (no extra charge)",

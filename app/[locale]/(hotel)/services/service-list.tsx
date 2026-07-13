@@ -12,6 +12,8 @@ export type ServiceRecord = {
   template_key: string | null
   name: string
   description: string | null
+  name_en: string | null
+  description_en: string | null
   category: ServiceCategory
   price_cents: number | null
   image_url: string | null

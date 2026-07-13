@@ -400,9 +400,9 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Automated
 
-- [x] 2.1 Unit testy `lib/guest/__tests__/services.test.ts` przechodzą
-- [x] 2.2 Type checking passes
-- [x] 2.3 Linting passes
+- [x] 2.1 Unit testy `lib/guest/__tests__/services.test.ts` przechodzą — fed3ba8
+- [x] 2.2 Type checking passes — fed3ba8
+- [x] 2.3 Linting passes — fed3ba8
 
 #### Manual
 
@@ -414,15 +414,15 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Automated
 
-- [ ] 3.1 Type checking passes
-- [ ] 3.2 Linting passes
-- [ ] 3.3 Existing action tests still pass
+- [x] 3.1 Type checking passes
+- [x] 3.2 Linting passes
+- [x] 3.3 Existing action tests still pass
 
 #### Manual
 
-- [ ] 3.4 Dodanie custom usługi z EN zapisuje kolumny poprawnie
-- [ ] 3.5 Edycja usługi z EN prefilluje pola poprawnie
-- [ ] 3.6 Puste pola EN zapisują `null`, nie pusty string
+- [x] 3.4 Dodanie custom usługi z EN zapisuje kolumny poprawnie
+- [x] 3.5 Edycja usługi z EN prefilluje pola poprawnie
+- [x] 3.6 Puste pola EN zapisują `null`, nie pusty string
 
 ### Phase 4: Template fill — oba języki naraz, resolved server-side
 

@@ -31,7 +31,29 @@
       "status": "Status: Złożone",
       "ordersLink": "Zobacz moje zamówienia",
       "backToServices": "Wróć do listy usług"
+    },
+    "orders": {
+      "title": "Moje zamówienia",
+      "empty": {
+        "message": "Nie masz jeszcze żadnych zamówień.",
+        "cta": "Przeglądaj usługi"
+      },
+      "status": {
+        "new": "Złożone",
+        "confirmed": "Przyjęte",
+        "fulfilled": "Zrealizowane",
+        "rejected": "Odrzucone"
+      }
     }
+  },
+  "concierge": {
+    "defaultBotName": "Asystent",
+    "disclosure": "Rozmawiasz z wirtualnym asystentem {botName}.",
+    "inputPlaceholder": "Zadaj pytanie...",
+    "send": "Wyślij",
+    "typing": "Piszę...",
+    "fallbackMessage": "Nie mam odpowiedzi na to pytanie. Skontaktuj się z recepcją: {phone}",
+    "fallbackCta": "Zadzwoń do recepcji"
   },
   "signup": {
     "fields": {
@@ -118,6 +140,8 @@
       "fields": {
         "name": "Nazwa",
         "description": "Opis",
+        "nameEn": "Nazwa (EN)",
+        "descriptionEn": "Opis (EN)",
         "category": "Kategoria",
         "priceCents": "Cena",
         "included": "W cenie (bez dopłaty)",
