@@ -19,12 +19,21 @@ import {
   updateReservationCheckOut,
   ReservationNotFoundError,
 } from '@/lib/reservations/update-checkout'
+import { createRoom, InvalidRoomNumberError, RoomNumberTakenError } from '@/lib/rooms/create'
 
 type ActionResult = { error?: string }
 
 async function requireQrWriteAccess(): Promise<HotelUser | null> {
   const hotelUser = await getHotelUser()
   if (!hotelUser || !canPerform(hotelUser.role, 'qr_manage', 'write')) {
+    return null
+  }
+  return hotelUser
+}
+
+async function requireRoomsWriteAccess(): Promise<HotelUser | null> {
+  const hotelUser = await getHotelUser()
+  if (!hotelUser || !canPerform(hotelUser.role, 'rooms_manage', 'write')) {
     return null
   }
   return hotelUser
@@ -101,6 +110,25 @@ export async function updateCheckOutAction(
     if (e instanceof DpaNotSignedError) return { error: 'dpaNotSigned' }
     if (e instanceof InvalidCheckOutError) return { error: 'invalidCheckOut' }
     if (e instanceof ReservationNotFoundError) return { error: 'notFound' }
+    throw e
+  }
+
+  revalidatePath('/qr')
+  return {}
+}
+
+export async function createRoomAction(
+  roomNumber: string,
+  roomType: string | null
+): Promise<ActionResult> {
+  const hotelUser = await requireRoomsWriteAccess()
+  if (!hotelUser) return { error: 'forbidden' }
+
+  try {
+    await createRoom(hotelUser.propertyId, roomNumber, roomType)
+  } catch (e) {
+    if (e instanceof RoomNumberTakenError) return { error: 'roomNumberTaken' }
+    if (e instanceof InvalidRoomNumberError) return { error: 'invalidRoomNumber' }
     throw e
   }
 

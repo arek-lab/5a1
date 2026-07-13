@@ -121,6 +121,12 @@ S0.1 → S0.2 → S0.3
 **Blokery:** S2.1 (RBAC), S1.1 (schema rooms/reservations już istnieje z S0.2).
 **Uwaga:** ta sesja była nieudokumentowaną luką — `validateRoomScan` (lib/scan/room.ts) zależy od `reservations` + `rooms.valid_from/until`, ale żadna sesja w planie nigdy tych pól nie zapisuje poza testami. Bez tej sesji żaden skan QR pokoju (auth_level 1→2) nie może się powieść w praktyce. Zarejestrowana 2026-07-10 na wniosek użytkownika o TTL pokoju — patrz `context/changes/s2-9/change.md`.
 
+### S2.10 — Dodawanie pokoi + druk QR (rozszerzenie Modułu 4) [luka odkryta 2026-07-13]
+**Scope:** formularz "Dodaj pokój" (numer + opcjonalny typ) w `/qr`, dostępny tylko dla Owner/Admin (nowy zasób RBAC `rooms_manage`; Staff/Viewer bez dostępu — reszta modułu QR nietknięta). Nowa podstrona `/qr/print`: karty QR (SVG) dla pokoi z aktywnym QR pokoju + przycisk druku przeglądarki (`window.print()`, CSS `@media print`, jeden kod na kartę/stronę) — dostępna dla Owner/Admin/Staff/Viewer (odczyt, brak mutacji). Bez edycji/usuwania pokoju (poza zakresem).
+**DoD:** Owner/Admin tworzy pokój przez UI (nie przez service-role seed); Staff/Viewer nie widzą formularza dodawania; `/qr/print` renderuje skanowalny QR tylko dla pokoi z aktywnym QR pokoju; RLS/app-level: property A nie widzi/nie tworzy pokoi property B; test izolacji z aktywnym RLS.
+**Blokery:** brak — S0.2 (schemat `rooms`), S2.1 (RBAC panelu), S2.5 (moduł `/qr`, wzorzec do rozszerzenia) już zaimplementowane.
+**Uwaga:** ta sesja była nieudokumentowaną luką — w całym kodzie nie istniała żadna funkcja tworzenia pokoju (tabela `rooms` zasilana wyłącznie ręcznie przez skrypty testowe/service-role) ani renderowanie/druk QR pokoju (tylko QR recepcji miał SVG w panelu). `implementation_roadmap.md:293` zakładał "Generowanie PDF z QR pokoi do druku" jako płatną usługę zespołu platformy (SHOULD) — ta sesja unowocześnia to do self-service ownera, bez naruszania żadnej z 15 zamkniętych decyzji HITL. Zarejestrowana 2026-07-13 na wniosek użytkownika o samodzielne dodawanie pokoi i druk ich QR — patrz `context/changes/s2-10/change.md`.
+
 ---
 
 ## FAZA 3 — Interfejs gościa (5 sesji)
