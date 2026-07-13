@@ -197,10 +197,10 @@ None — no schema changes in this session.
 
 #### Automated
 
-- [x] 2.1 Integration test passes: `npm run test -- lib/kb/__tests__/it-9.test.ts`
-- [x] 2.2 Type checking passes: `npm run typecheck`
-- [x] 2.3 Linting passes: `npm run lint`
+- [x] 2.1 Integration test passes: `npm run test -- lib/kb/__tests__/it-9.test.ts` — 2bb1fbc
+- [x] 2.2 Type checking passes: `npm run typecheck` — 2bb1fbc
+- [x] 2.3 Linting passes: `npm run lint` — 2bb1fbc
 
 #### Manual
 
-- [ ] 2.4 Run IT-9 locally against real Supabase + Upstash Redis and eyeball composed Markdown for section order and Q&A formatting
+- [x] 2.4 Run IT-9 locally against real Supabase + Upstash Redis and eyeball composed Markdown for section order and Q&A formatting — 2bb1fbc

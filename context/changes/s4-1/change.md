@@ -1,7 +1,7 @@
 ---
 change_id: s4-1
 title: KB composition pipeline + Redis cache
-status: implementing
+status: implemented
 created: 2026-07-08
 updated: 2026-07-13
 archived_at: null
