@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --guest-stone: #eeebe3;
+  --guest-paper: #faf8f3;
+  --guest-ink: #2a2b24;
+  --guest-ink-muted: #6b6a5e;
+  --guest-accent: #a9814a;
+  --guest-moss: #4b5d45;
+  --guest-clay: #c98868;
+  --guest-shadow-soft: 0 2px 12px rgba(42, 43, 36, 0.08);
+  --radius-pill: 999px;
+
+  --panel-bg: #f5f6f7;
+  --panel-surface: #ffffff;
+  --panel-ink: #1d2126;
+  --panel-ink-muted: #5b6470;
+  --panel-accent: #2f5c8a;
+  --panel-success: #2f7a52;
+  --panel-warning: #c97a2b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="guest"] {
+  --font-display: var(--font-frank-ruhl-libre), serif;
+  --font-ui: var(--font-public-sans), sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+  --radius-card: 16px;
+  --shadow-soft: var(--guest-shadow-soft);
+}
+
+:root[data-theme="panel"] {
+  --font-ui: var(--font-ibm-plex-sans), sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+  --radius-card: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --guest-stone: #1f1e19;
+    --guest-paper: #2a2822;
+    --guest-ink: #f0ede4;
+    --guest-ink-muted: #a8a692;
+    --guest-accent: #c9a468;
+    --guest-moss: #7c9473;
+    --guest-clay: #e0a98c;
+    --guest-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.35);
+
+    --panel-bg: #14171a;
+    --panel-surface: #1e2227;
+    --panel-ink: #e7eaed;
+    --panel-ink-muted: #9aa3ad;
+    --panel-accent: #5b8fc7;
+    --panel-success: #4fa576;
+    --panel-warning: #e0994a;
   }
 }
 
+@theme inline {
+  --color-guest-stone: var(--guest-stone);
+  --color-guest-paper: var(--guest-paper);
+  --color-guest-ink: var(--guest-ink);
+  --color-guest-ink-muted: var(--guest-ink-muted);
+  --color-guest-accent: var(--guest-accent);
+  --color-guest-moss: var(--guest-moss);
+  --color-guest-clay: var(--guest-clay);
+
+  --color-panel-bg: var(--panel-bg);
+  --color-panel-surface: var(--panel-surface);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-ink-muted: var(--panel-ink-muted);
+  --color-panel-accent: var(--panel-accent);
+  --color-panel-success: var(--panel-success);
+  --color-panel-warning: var(--panel-warning);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+  --shadow-soft: var(--shadow-soft);
+
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+  --font-mono: var(--font-mono);
+}
+
+:root {
+  /* Pages don't consume the guest/panel tokens yet (Phases 3-4) — pin the
+     browser to light so it can't auto-invert unstyled canvas into a mismatched
+     forced-dark rendering ahead of the real per-theme dark palettes. */
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-ui, ui-sans-serif, system-ui, sans-serif);
 }
