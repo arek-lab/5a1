@@ -51,3 +51,5 @@ next-env.d.ts
 # stray build artifacts
 /tsc
 /hotel-guest-app@*
+
+/context

@@ -406,9 +406,9 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Manual
 
-- [x] 2.4 Usługa z `name_en` pokazuje EN na guest UI `en`
-- [x] 2.5 Usługa bez `name_en` pokazuje PL fallback na `en`
-- [x] 2.6 Guest UI na `pl` zawsze pokazuje PL
+- [x] 2.4 Usługa z `name_en` pokazuje EN na guest UI `en` — 206a3bc
+- [x] 2.5 Usługa bez `name_en` pokazuje PL fallback na `en` — 206a3bc
+- [x] 2.6 Guest UI na `pl` zawsze pokazuje PL — 206a3bc
 
 ### Phase 3: Panel — manualne pola EN w formularzu usługi
 
@@ -428,12 +428,12 @@ wykonania w dowolnym momencie bez utraty innych danych).
 
 #### Automated
 
-- [x] 4.1 Nowy test `createServiceFromTemplate` z mockowanym `getTranslations` przechodzi
-- [x] 4.2 Type checking passes
-- [x] 4.3 Linting passes
+- [x] 4.1 Nowy test `createServiceFromTemplate` z mockowanym `getTranslations` przechodzi — 206a3bc
+- [x] 4.2 Type checking passes — 206a3bc
+- [x] 4.3 Linting passes — 206a3bc
 
 #### Manual
 
-- [x] 4.4 Dodanie z szablonu w PL zapisuje poprawne PL i EN
-- [x] 4.5 Guest UI pokazuje poprawny język dla usługi z szablonu
-- [x] 4.6 Wynik idempotentny względem locale panelu (PL vs EN panel daje ten sam zapis)
+- [x] 4.4 Dodanie z szablonu w PL zapisuje poprawne PL i EN — 206a3bc
+- [x] 4.5 Guest UI pokazuje poprawny język dla usługi z szablonu — 206a3bc
+- [x] 4.6 Wynik idempotentny względem locale panelu (PL vs EN panel daje ten sam zapis) — 206a3bc

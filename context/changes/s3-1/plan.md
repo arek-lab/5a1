@@ -360,22 +360,22 @@ Not applicable — no existing data or guest UI to migrate from; this is new con
 
 #### Manual
 
-- [x] 3.3 Splash disappears at ~1.5s regardless of throttling
-- [x] 3.4 Welcome shows name when present, generic greeting when absent
+- [x] 3.3 Splash disappears at ~1.5s regardless of throttling — c0677cb
+- [x] 3.4 Welcome shows name when present, generic greeting when absent — c0677cb
 
 ### Phase 4: Home Page — Category Grid + Polecamy
 
 #### Automated
 
-- [x] 4.1 Unit tests pass: `npm run test -- lib/guest/services components/guest/polecamy-section`
-- [x] 4.2 Type checking passes: `npm run typecheck`
-- [x] 4.3 Linting passes: `npm run lint`
+- [x] 4.1 Unit tests pass: `npm run test -- lib/guest/services components/guest/polecamy-section` — c0677cb
+- [x] 4.2 Type checking passes: `npm run typecheck` — c0677cb
+- [x] 4.3 Linting passes: `npm run lint` — c0677cb
 
 #### Manual
 
-- [x] 4.4 All 5 category tiles render regardless of service content
-- [x] 4.5 Polecamy shows on first visit, hides on revisit within 24h
-- [x] 4.6 Polecamy renders below the fold on mobile viewport
+- [x] 4.4 All 5 category tiles render regardless of service content — c0677cb
+- [x] 4.5 Polecamy shows on first visit, hides on revisit within 24h — c0677cb
+- [x] 4.6 Polecamy renders below the fold on mobile viewport — c0677cb
 
 ### Phase 5: Translations, Tests, Performance Verification
 

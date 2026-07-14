@@ -377,16 +377,16 @@ Brak migracji danych — czysto zmiana warstwy prezentacji na istniejących, dzi
 
 #### Automated
 
-- [x] 1.1 `npm run build` przechodzi bez błędów
-- [x] 1.2 `npm run typecheck` przechodzi
-- [x] 1.3 `npm run lint` przechodzi
-- [x] 1.4 Nowy `build` job w CI zielony, bundle-size guard pod 150KB
+- [x] 1.1 `npm run build` przechodzi bez błędów — 712b371
+- [x] 1.2 `npm run typecheck` przechodzi — 712b371
+- [x] 1.3 `npm run lint` przechodzi — 712b371
+- [x] 1.4 Nowy `build` job w CI zielony, bundle-size guard pod 150KB — 712b371
 
 #### Manual
 
-- [x] 1.5 `app/globals.css` bez literałów hex poza blokiem tokenów §4
-- [x] 1.6 Fonty self-hosted (brak requestów do fonts.googleapis.com)
-- [x] 1.7 Przełączenie systemowego dark mode zmienia wszystkie `--guest-*`/`--panel-*`
+- [x] 1.5 `app/globals.css` bez literałów hex poza blokiem tokenów §4 — 712b371
+- [x] 1.6 Fonty self-hosted (brak requestów do fonts.googleapis.com) — 712b371
+- [x] 1.7 Przełączenie systemowego dark mode zmienia wszystkie `--guest-*`/`--panel-*` — 712b371
 
 ### Phase 2: shadcn/ui — instalacja i konfiguracja dla panelu
 

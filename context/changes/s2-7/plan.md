@@ -399,10 +399,10 @@ Migracja RLS (Faza 1) jest addytywna (drop+recreate jednej polityki) — bezpiec
 
 #### Automated
 
-- [x] 6.1 IT-5 przechodzi w całości
-- [x] 6.2 Test RLS: viewer odrzucony, admin przechodzi
-- [x] 6.3 npm run lint przechodzi
-- [x] 6.4 npm run typecheck przechodzi
+- [x] 6.1 IT-5 przechodzi w całości — 780cf73
+- [x] 6.2 Test RLS: viewer odrzucony, admin przechodzi — 780cf73
+- [x] 6.3 npm run lint przechodzi — 780cf73
+- [x] 6.4 npm run typecheck przechodzi — 780cf73
 
 #### Manual
 

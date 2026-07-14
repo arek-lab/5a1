@@ -29,6 +29,8 @@ S0.1 → S0.2 → S0.3
                 │
                 └──► S5.1 (od S0.3; eventy dołączane do S1.2, S2.6)
                           └──► S5.2
+
+Faza 2 (S2.1–S2.11) + Faza 3 (S3.1–S3.6) + Faza 4 (S4.1–S4.2) ──► S6.0 ──► S6.1
 ```
 
 ---
@@ -127,6 +129,12 @@ S0.1 → S0.2 → S0.3
 **Blokery:** brak — S0.2 (schemat `rooms`), S2.1 (RBAC panelu), S2.5 (moduł `/qr`, wzorzec do rozszerzenia) już zaimplementowane.
 **Uwaga:** ta sesja była nieudokumentowaną luką — w całym kodzie nie istniała żadna funkcja tworzenia pokoju (tabela `rooms` zasilana wyłącznie ręcznie przez skrypty testowe/service-role) ani renderowanie/druk QR pokoju (tylko QR recepcji miał SVG w panelu). `implementation_roadmap.md:293` zakładał "Generowanie PDF z QR pokoi do druku" jako płatną usługę zespołu platformy (SHOULD) — ta sesja unowocześnia to do self-service ownera, bez naruszania żadnej z 15 zamkniętych decyzji HITL. Zarejestrowana 2026-07-13 na wniosek użytkownika o samodzielne dodawanie pokoi i druk ich QR — patrz `context/changes/s2-10/change.md`.
 
+### S2.11 — Tłumaczenie treści usług (EN) (rozszerzenie Modułu 2) [luka odkryta 2026-07-13]
+**Scope:** nullable kolumny `name_en`, `description_en` w `services` (migracja SQL). Formularz `service-form.tsx` — opcjonalne pola "Nazwa (EN)"/"Opis (EN)" obok istniejących PL. `template-picker.tsx`/`actions.ts` (`createServiceFromTemplate`) — wypełnienie obu kolumn z `getTranslations({locale: 'pl'|'en'})` dla `nameKey`/`descriptionKey` szablonu, zamiast tylko bieżącego locale panelu. Guest read (`lib/guest/services.ts`: `getPinnedServices`, `getServicesByCategory`, `getServiceById`) — nowy parametr `locale`, zwraca `name_en`/`description_en` gdy locale='en' i pole niepuste, inaczej fallback na `name`/`description`.
+**DoD:** usługa dodana z szablonu ma poprawną nazwę/opis w obu językach bez ręcznej pracy hotelu; usługa custom z wypełnionym EN pokazuje EN po przełączeniu guest UI na `en`; usługa custom bez EN pokazuje fallback PL (nie pusty string); RLS/izolacja tenantów nietknięta (brak zmiany polityk, tylko nowe kolumny).
+**Blokery:** brak — S2.3 (schemat i CRUD usług) już zaimplementowane.
+**Uwaga:** zarejestrowane jako luka wykryta podczas audytu zgłoszenia użytkownika o niekompletnym przełączaniu języka (2026-07-13). Odroczone świadomie w S2.3 (`context/changes/s2-3/plan.md:36`) jako R4 (§11.2 roadmapy); ten wpis realizuje wyłącznie manualną warstwę tłumaczenia treści (bez auto-translate DeepL/Claude, R4 pozostaje otwarte na przyszłość) — patrz `context/changes/s2-11/change.md`.
+
 ---
 
 ## FAZA 3 — Interfejs gościa (5 sesji)
@@ -194,3 +202,145 @@ S0.1 → S0.2 → S0.3
 **Scope:** cron (job_queue) MUST przed go-live: sesja → delete 48h po checkout+2h; logi → 30 dni; AI chat → checkout+7 dni; PostHog `guest_id` → purge 30 dni; zamówienia → 5 lat. Dashboard: Pulse + Growth (§7.4 roadmapy).
 **DoD:** cron uruchamia się; IT-8 przechodzi; Pulse wyświetla liczby.
 **Blokery:** S5.1.
+
+---
+
+## FAZA 6 — Design System (Gość + Panel) [luka odkryta 2026-07-13]
+
+### S6.0 — Nawigacja główna: dolna nawigacja gościa + szyna panelu [luka odkryta 2026-07-14]
+**Scope:**
+Buduje brakującą, trwałą strukturę nawigacyjną w obu aplikacjach — na dzisiejszym stylu (Tailwind
+gray/blue), bez tokenów/shadcn (to zadanie S6.1, który wykonuje się po tej sesji). Zero zmian w
+logice biznesowej/RBAC/RLS — wyłącznie routing i chrome nawigacyjny.
+- **Gość** (`style.md` §1.3, 5 zakładek dolnej nawigacji): nowy trwały komponent nawigacji dolnej
+  (`components/guest/bottom-nav.tsx` lub równoważny) osadzony w `app/[locale]/(guest)/layout.tsx`,
+  widoczny na wszystkich stronach grupy `(guest)` poza `/scan` (pełnoekranowy skaner) i `/error`
+  (ekran błędu bez fałszywych afordancji). Pięć zakładek:
+  - Dziś → `/` (bez zmian, istniejąca strona główna)
+  - Udogodnienia → nowa strona `/amenities` re-używająca istniejącego `CategoryGrid` (bezpośrednie
+    przeglądanie 5 kategorii bez przewijania przez powitanie/Polecamy)
+  - Concierge → `/concierge` (bez zmian)
+  - Mój pobyt → nowa strona `/my-stay`: dane rezerwacji (imię, numer pokoju w IBM Plex Mono,
+    check-in/check-out z S2.9) + link do `/my-orders`
+  - Odkrywaj → nowa strona `/discover`: renderuje treść "okolica" z bazy wiedzy (S2.4
+    `knowledge_chunks`) dla property, pusty stan gdy brak treści
+  Aktywna zakładka podświetlona wg bieżącej trasy. Nawigacja renderuje się identycznie niezależnie
+  od `auth_level` — każda strona docelowa zachowuje własny guard (`requireGuestSession()` z S3.1).
+- **Panel** (`style.md` §2.3, lewa szyna 240px, stała): nowy komponent
+  (`components/panel/sidebar-nav.tsx`) osadzony w `app/[locale]/(hotel)/layout.tsx`. Sześć pozycji
+  menu: Dashboard (`/dashboard`), Usługi (`/services`), Baza wiedzy (`/knowledge`), QR (`/qr`),
+  Zamówienia (`/orders`), Użytkownicy (`/users`) — dokładnie tyle, ile ma dziś stronę + RBAC
+  resource w `lib/panel/rbac.ts`. Każda pozycja filtrowana przez `canPerform(role, resource,
+  'read')` z istniejącego `lib/panel/rbac.ts` — ukryta całkowicie (nie wyszarzona) gdy rola nie ma
+  dostępu do odczytu, zgodnie z wzorcem "viewer nie widzi billingu" z DoD S2.1. Aktywna sekcja
+  podświetlona wg bieżącej trasy. Onboarding i `app/admin/**` **poza menu** (nadal dostępne przez
+  bezpośredni URL) — decyzja HITL tej sesji.
+- Tłumaczenia PL/EN dla wszystkich nowych etykiet nawigacji i dwóch nowych stron gościa.
+
+**DoD:**
+- Gość: dolna nawigacja widoczna i funkcjonalna na każdej stronie `(guest)` poza `/scan`/`/error`;
+  5 zakładek z poprawnym stanem aktywnym; `/my-stay` pokazuje dane rezerwacji (numer pokoju w
+  mono); `/discover` renderuje treść "okolica" lub pusty stan; touch targets ≥44px (budżet z
+  S3.1/S3.5 nienaruszony — brak nowych ciężkich zależności).
+- Panel: lewa szyna 240px widoczna na każdej stronie `(hotel)`; 6 pozycji menu filtrowanych przez
+  RBAC (viewer/staff nie widzą sekcji bez uprawnień odczytu); aktywna sekcja podświetlona;
+  onboarding/`/admin` nieobecne w menu, ale nadal osiągalne przez URL.
+- `npm run build`/`lint`/`typecheck`/`test` przechodzą bez regresji. Zero zmian w RBAC/RLS/routingu
+  istniejących stron — wyłącznie nowy chrome nawigacyjny i dwie nowe strony gościa.
+
+**Blokery:** S1.2 (sesja gościa/auth_level), S2.1 (RBAC panelu), S2.4 (baza wiedzy — treść
+"okolica" dla `/discover`), S2.9 (dane rezerwacji/pokoju dla `/my-stay`), S3.1 (app shell gościa,
+`CategoryGrid` do re-użycia w `/amenities`).
+
+**Uwaga:** ta sesja była nieudokumentowaną luką — `style.md` §1.3/§2.3 definiuje strukturę
+nawigacji dla obu aplikacji, ale żadna sesja w planie nigdy jej nie zbudowała: S3.1 dostarczył
+tylko statyczny grid kategorii na stronie głównej, a każda sesja Fazy 2 (S2.1–S2.11) dodawała
+kolejną stronę panelu bez wspólnego menu. `context/changes/s6-1/plan.md:178` błędnie założył, że
+nawigacja gościa "jest już zaimplementowana z Fazy 3 sesji S3.1" — zweryfikowane jako nieprawdziwe
+(przeszukanie repo pod kątem `nav`/`sidebar`/`tabbar`/`menu` nie znalazło żadnego komponentu
+nawigacyjnego w żadnej z aplikacji). Zarejestrowana 2026-07-14 na wniosek użytkownika o
+uzupełnienie navbarów przy planowaniu Fazy 6. Numer sesji **S6.0** (nie S6.2) celowo, żeby
+numeracja odzwierciedlała kolejność wykonania: ta sesja musi poprzedzać S6.1, który retrofituje
+zbudowaną tu strukturę na tokeny/shadcn — patrz zaktualizowany bloker S6.1 poniżej.
+
+### S6.1 — Design tokens, shadcn/ui, retrofit UI (gość + panel)
+**Scope:**
+To jest retrofit, nie nowa funkcjonalność: cała logika produktu (Fazy 0–5) już istnieje i działa
+na domyślnym stylu bez tokenów/biblioteki komponentów. S6.1 zmienia wyłącznie warstwę prezentacji
+(CSS, markup, biblioteka komponentów) na istniejących, działających ekranach — zero zmian logiki
+biznesowej, zachowania, endpointów czy schematu danych.
+- Dokument konwencji **już istnieje**: `context/foundation/style.md` — dwa systemy wizualne
+  ("Welcome Tray" dla gościa, "Operations Deck" dla panelu) + wspólna tkanka platformy (§3) i
+  gotowy blok tokenów CSS (§4). Sesja **wdraża** ten dokument, nie tworzy nowego od zera.
+- Fonty ze `style.md` §1.2/§2.2 (Frank Ruhl Libre, Public Sans, IBM Plex Sans, IBM Plex Mono) —
+  dodanie przez `next/font`, zgodnie z budżetem wydajności z S3.1.
+- Design tokens: CSS custom properties w `app/globals.css`, dokładnie wg bloku `style.md` §4
+  (`--guest-*`, `--panel-*`, `--radius-*`, `--shadow-soft`, `--font-*`), zastępujące dzisiejsze
+  domyślne zmienne Geist/`--background`/`--foreground`.
+- shadcn/ui: instalacja + konfiguracja wyłącznie dla panelu hotelowego
+  (`app/[locale]/(hotel)/**`, `(hotel-auth)/**`, `app/admin/**`), theme podłączony pod
+  `--panel-*` z `style.md` §4. Guest PWA (`app/[locale]/(guest)/**`) zostaje na czystym
+  Tailwind + tokenach `--guest-*` — brak nowej zależności po tej stronie (budżet <150 KB gzipped
+  z S3.1/S3.5 nienaruszony).
+- Retrofit gościa wg `style.md` §1 (komponenty sygnaturowe: ekran główny "taca powitalna",
+  dymki Concierge AI jak notatka na papierze, karty usług, statusy): `components/guest/*` (13
+  komponentów: splash-screen, welcome-banner, category-grid, service-card, polecamy-section,
+  order-confirm-modal, order-cta, concierge-chat, guest-orders-panel, order-toast,
+  language-switcher, floating-concierge-button, room-qr-scanner) + strony
+  `app/[locale]/(guest)/**`.
+- Retrofit panelu wg `style.md` §2 (insight ticker na dashboardzie, tabele z inline-edycją,
+  generator kodów dostępu w mono, formularze zasilania AI): `components/panel/*`
+  (onboarding-wizard-shell, require-permission) + strony `app/[locale]/(hotel)/**`,
+  `(hotel-auth)/**`, `app/admin/**` — migracja tabel, formularzy, dropdownów, modali na
+  komponenty shadcn/ui podłączone pod tokeny.
+- Dostępność: kontrast WCAG AA tekst/tło (w tym stany greyed/disabled z S3.2), widoczny focus
+  ring (`2px solid var(--*-accent)` z offsetem, wg `style.md` §3), touch targets ≥44px na guest
+  PWA, `prefers-reduced-motion` respektowany (wg `style.md` §3 "Ruch").
+- Dark mode: świadoma decyzja zamiast dzisiejszego przypadkowego `prefers-color-scheme` w
+  `globals.css` — ustalić przy planowaniu (`/10x-plan`), czy zostaje (tokeny z wariantami
+  light/dark) czy jest świadomie wyłączony na MVP. `style.md` dziś nie definiuje wariantów dark —
+  do doprecyzowania w planie implementacji.
+
+**DoD:** wszystkie istniejące ekrany gościa i panelu renderują się na tokenach ze `style.md` §4
+(zero literału hex/koloru poza tym blokiem); panel korzysta z shadcn/ui dla
+list/formularzy/modali, gość zostaje na czystym Tailwind; kontrast WCAG AA zweryfikowany na
+kluczowych ekranach (welcome, home, dashboard, inbox zamówień); `npm run build`/`lint`/`test`
+przechodzą bez regresji; guest bundle nie przekracza budżetu 150 KB z S3.1. Zero zmian w
+logice/zachowaniu aplikacji (routing, walidacja, RBAC, RLS, SSE, AI) — wyłącznie warstwa
+prezentacji.
+
+**Blokery:** S6.0 (nawigacja musi istnieć zanim zostanie zretrofitowana), oraz wszystkie sesje z UI
+zaimplementowane do tej pory — Faza 2 (S2.1–S2.11), Faza 3 (S3.1–S3.6), Faza 4 (S4.1–S4.2).
+Retrofit wymaga istniejących komponentów do zmiany.
+
+**Uwaga:** nieudokumentowana luka — `implementation_roadmap.md` i `session-plan.md` nigdy nie
+definiowały design systemu ani konwencji stylu; `product-philosophy-brief.md:103-109` explicite
+wyklucza "szczegółowy flow UX i projekt interfejsu" ze swojego zakresu, zapowiadając go jako
+przedmiot "kolejnych sesji roboczych" — nigdy niezrealizowany. W efekcie Fazy 0–4 zbudowano na
+domyślnym Tailwind v4 (Geist font, tylko `--background`/`--foreground` w `globals.css`), bez
+wspólnych tokenów i bez biblioteki komponentów. Zarejestrowana 2026-07-13 na wniosek użytkownika.
+Decyzje HITL podjęte przy planowaniu (do zalogowania w `decisions_log.md`, referencjonowanym w
+`CLAUDE.md`, ale dziś nieobecnym w repo — rozbieżność odnotowana, nie naprawiana w tej sesji):
+1. Zakres: nowa sesja z pełnym retrofitem istniejącego UI, nie tylko konwencje na przyszłość.
+2. Warstwa komponentów: hybryda — czysty Tailwind + tokeny po stronie gościa, shadcn/ui po
+   stronie panelu, obie podłączone pod te same CSS custom properties.
+3. Branding: jednolity brand platformy dla wszystkich hoteli, bez per-hotel koloru motywu.
+4. Dostępność (WCAG/kontrast) i świadoma decyzja o dark mode wchodzą do formalnego DoD.
+
+**Uwaga (`style.md`):** `context/foundation/style.md` powstał 2026-07-13 jako realizacja tego
+dokumentu konwencji (systemy "Welcome Tray"/"Operations Deck"). Tego samego dnia skorygowany:
+sekcja 1.5 pierwotnie definiowała `--guest-accent` jako nadpisywany per-hotel z panelu, co
+kolidowało z decyzją HITL #3 powyżej (jednolity brand platformy). Poprawiono na stały,
+platformowy `--guest-accent` — jedyną zmienną per property pozostaje `properties.logo_url`.
+Wątek zamknięty, nie wymaga dalszej decyzji.
+
+**Uwaga (kolejność wykonania):** mimo numeracji na końcu pliku, S6.1 powinien zostać
+zaplanowany/wykonany **przed** ukończeniem S4.3, S5.1, S5.2, żeby te sesje budowały UI od razu
+zgodnie z konwencją ze `style.md` i nie wymagały drugiego retrofitu. Po zamknięciu S6.1 warto
+ręcznie dopisać "+ S6.1 (konwencje)" do blokerów S4.3/S5.1/S5.2.
+
+**Uwaga (korekta założenia, 2026-07-14):** plan S6.1 (`context/changes/s6-1/plan.md`, Faza 3
+punkt 2 i Faza 4 punkt 1) zakładał gotową nawigację gościa/panelu do retrofitu. To założenie było
+błędne — nawigacja nie istniała. Nową sesję S6.0 zarejestrowano, żeby ją zbudować przed
+retrofitem; S6.1 przy faktycznym planowaniu/wykonaniu Fazy 3–4 musi objąć również nowe komponenty
+`bottom-nav.tsx`/`sidebar-nav.tsx` i strony `/amenities`, `/my-stay`, `/discover` z S6.0.
