@@ -23,6 +23,19 @@ function reportEscalation() {
   void fetch('/api/concierge/escalate', { method: 'POST' }).catch(() => {});
 }
 
+function ConciergeAvatar() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-8 w-8 shrink-0 rounded-full bg-guest-accent/15 p-1.5 text-guest-accent"
+    >
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+    </svg>
+  );
+}
+
 function parseSseFrames(buffer: string): { events: string[]; rest: string } {
   const events: string[] = [];
   let rest = buffer;
@@ -153,54 +166,63 @@ export function ConciergeChat({
   }
 
   return (
-    <div className="flex h-full flex-col gap-4">
-      <p className="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600">
+    <div className="flex h-full min-h-0 flex-col gap-4">
+      <p className="shrink-0 rounded-card bg-guest-stone px-3 py-2 text-sm text-guest-ink-muted">
         {t('disclosure', { botName })}
       </p>
 
-      <div className="flex-1 space-y-3 overflow-y-auto">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
         {messages.map(message =>
           message.role === 'user' ? (
-            <div key={message.id} className="ml-auto max-w-[85%] rounded-2xl bg-gray-900 px-4 py-2 text-white">
+            <div key={message.id} className="ml-auto max-w-[85%] rounded-card bg-guest-accent px-4 py-2 text-white">
               {message.content}
             </div>
           ) : message.isEscalated ? (
-            <div key={message.id} className="max-w-[85%] rounded-2xl bg-red-50 px-4 py-2 text-red-900">
-              <p>{t('escalationMessage', { phone: phoneReception ?? '' })}</p>
-              {phoneReception && (
-                <a href={`tel:${phoneReception}`} className="mt-1 inline-block font-semibold underline">
-                  {t('escalationCta')}
-                </a>
-              )}
+            <div key={message.id} className="flex max-w-[85%] gap-2">
+              <ConciergeAvatar />
+              <div className="rounded-card bg-red-50 px-4 py-2 text-red-900">
+                <p>{t('escalationMessage', { phone: phoneReception ?? '' })}</p>
+                {phoneReception && (
+                  <a href={`tel:${phoneReception}`} className="mt-1 inline-block font-semibold underline">
+                    {t('escalationCta')}
+                  </a>
+                )}
+              </div>
             </div>
           ) : message.isFallback ? (
-            <div key={message.id} className="max-w-[85%] rounded-2xl bg-amber-50 px-4 py-2 text-amber-900">
-              <p>{t('fallbackMessage', { phone: phoneReception ?? '' })}</p>
-              {phoneReception && (
-                <a href={`tel:${phoneReception}`} className="mt-1 inline-block font-semibold underline">
-                  {t('fallbackCta')}
-                </a>
-              )}
+            <div key={message.id} className="flex max-w-[85%] gap-2">
+              <ConciergeAvatar />
+              <div className="rounded-card bg-amber-50 px-4 py-2 text-amber-900">
+                <p>{t('fallbackMessage', { phone: phoneReception ?? '' })}</p>
+                {phoneReception && (
+                  <a href={`tel:${phoneReception}`} className="mt-1 inline-block font-semibold underline">
+                    {t('fallbackCta')}
+                  </a>
+                )}
+              </div>
             </div>
           ) : (
-            <div key={message.id} className="max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-gray-900">
-              {message.content}
-              {message.isStreaming && !message.content && (
-                <span className="text-gray-400">{t('typing')}</span>
-              )}
+            <div key={message.id} className="flex max-w-[85%] gap-2">
+              <ConciergeAvatar />
+              <div className="rounded-card border border-guest-ink-muted/15 bg-guest-paper px-4 py-2 text-guest-ink shadow-soft">
+                {message.content}
+                {message.isStreaming && !message.content && (
+                  <span className="text-guest-ink-muted">{t('typing')}</span>
+                )}
+              </div>
             </div>
           )
         )}
       </div>
 
       {messages.length === 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex shrink-0 flex-wrap gap-2">
           {QUICK_REPLY_KEYS.map(key => (
             <button
               key={key}
               type="button"
               onClick={() => void sendMessage(t(`chips.${key}`))}
-              className="rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+              className="rounded-pill border border-guest-ink-muted/30 px-3 py-1 text-sm text-guest-ink-muted hover:bg-guest-stone"
             >
               {t(`chips.${key}`)}
             </button>
@@ -213,19 +235,19 @@ export function ConciergeChat({
           event.preventDefault();
           void sendMessage();
         }}
-        className="flex gap-2"
+        className="flex shrink-0 gap-2"
       >
         <input
           value={input}
           onChange={event => setInput(event.target.value)}
           placeholder={t('inputPlaceholder')}
           disabled={isSending}
-          className="flex-1 rounded-full border px-4 py-2"
+          className="flex-1 rounded-pill border border-guest-ink-muted/30 bg-guest-paper px-4 py-2 text-guest-ink"
         />
         <button
           type="submit"
           disabled={isSending || !input.trim()}
-          className="rounded-full bg-gray-900 px-5 py-2 font-semibold text-white disabled:opacity-50"
+          className="rounded-pill bg-guest-accent px-5 py-2 font-semibold text-white disabled:opacity-50"
         >
           {t('send')}
         </button>

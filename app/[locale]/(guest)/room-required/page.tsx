@@ -8,11 +8,11 @@ export default async function RoomRequiredPage() {
 
   return (
     <main className="flex flex-col items-center gap-4 px-4 py-12 text-center">
-      <h1 className="text-xl font-semibold text-gray-900">{t('title')}</h1>
-      <p className="text-gray-600">{t('body')}</p>
+      <h1 className="font-display text-xl font-semibold text-guest-ink">{t('title')}</h1>
+      <p className="text-guest-ink-muted">{t('body')}</p>
       <Link
         href="/scan"
-        className="rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-700"
+        className="rounded-pill bg-guest-accent px-6 py-3 text-sm font-medium text-white hover:opacity-90"
       >
         {t('cta')}
       </Link>

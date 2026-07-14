@@ -34,19 +34,19 @@ export default async function OrderSuccessPage({
 
   return (
     <main className="flex min-h-[70vh] flex-col items-center justify-center gap-4 px-4 py-6 text-center">
-      <h1 className="text-2xl font-semibold text-gray-900">{t('title')}</h1>
-      <p className="text-gray-700">{service?.name}</p>
-      <p className="text-sm font-medium text-gray-500">{t('status')}</p>
+      <h1 className="font-display text-2xl font-semibold text-guest-ink">{t('title')}</h1>
+      <p className="text-guest-ink">{service?.name}</p>
+      <p className="text-sm font-medium text-guest-ink-muted">{t('status')}</p>
       <div className="mt-4 flex w-full max-w-sm flex-col gap-2">
         <Link
           href="/my-orders"
-          className="rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700"
+          className="rounded-pill bg-guest-accent px-6 py-3 text-base font-semibold text-white hover:opacity-90"
         >
           {t('ordersLink')}
         </Link>
         <Link
           href="/"
-          className="rounded-full border px-6 py-3 text-base font-semibold text-gray-700 hover:bg-gray-50"
+          className="rounded-pill border border-guest-ink-muted/30 px-6 py-3 text-base font-semibold text-guest-ink-muted hover:bg-guest-stone"
         >
           {t('backToServices')}
         </Link>

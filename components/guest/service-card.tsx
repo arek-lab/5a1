@@ -18,16 +18,16 @@ export function ServiceCard({ service, category }: { service: ServiceListItem; c
             alt=""
             fill
             sizes="(max-width: 640px) 100vw, 320px"
-            className="rounded-t-lg object-cover"
+            className="rounded-t-card object-cover"
           />
         </div>
       )}
       <div className="flex items-center justify-between p-3">
-        <span className="font-medium">{service.name}</span>
-        <span className="text-sm text-gray-600">{price}</span>
+        <span className="font-display font-medium">{service.name}</span>
+        <span className="font-mono text-sm text-guest-ink-muted">{price}</span>
       </div>
       {!service.isActive && (
-        <span className="mx-3 mb-3 inline-block rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+        <span className="mx-3 mb-3 inline-block rounded-pill bg-guest-stone px-2 py-0.5 text-xs font-medium text-guest-ink-muted">
           {t('unavailable')}
         </span>
       )}
@@ -36,14 +36,16 @@ export function ServiceCard({ service, category }: { service: ServiceListItem; c
 
   if (!service.isActive) {
     return (
-      <div className="cursor-not-allowed rounded-lg border bg-gray-50 text-gray-400 opacity-60">{content}</div>
+      <div className="cursor-not-allowed rounded-card border border-guest-ink-muted/15 bg-guest-stone text-guest-ink-muted opacity-60">
+        {content}
+      </div>
     );
   }
 
   return (
     <Link
       href={`/c/${category}/${service.id}`}
-      className="block rounded-lg border bg-white text-gray-900 hover:bg-gray-50"
+      className="block rounded-card border border-guest-ink-muted/15 bg-guest-paper text-guest-ink shadow-soft hover:bg-guest-stone"
     >
       {content}
     </Link>

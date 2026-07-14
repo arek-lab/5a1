@@ -14,7 +14,7 @@ export default async function AmenitiesPage() {
 
   return (
     <main>
-      <h1 className="px-4 py-4 text-xl font-semibold text-gray-900">{t('title')}</h1>
+      <h1 className="px-4 py-4 font-display text-xl font-semibold text-guest-ink">{t('title')}</h1>
       <CategoryGrid visibleCategories={visibleCategories} />
     </main>
   );

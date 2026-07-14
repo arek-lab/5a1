@@ -57,31 +57,37 @@
   --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --guest-stone: #1f1e19;
-    --guest-paper: #2a2822;
-    --guest-ink: #f0ede4;
-    --guest-ink-muted: #a8a692;
-    --guest-accent: #c9a468;
-    --guest-moss: #7c9473;
-    --guest-clay: #e0a98c;
-    --guest-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.35);
+/* Explicit dark palette, applied by data-color-scheme (set by the inline
+   FOUC-prevention script in app/layout.tsx from localStorage, falling back to
+   prefers-color-scheme at first paint). Attribute selector specificity beats
+   the plain `:root` light defaults above regardless of source order, and no
+   @media query is needed here — "system" preference is resolved to a
+   concrete light/dark value by the script before this stylesheet is read. */
+:root[data-color-scheme="dark"] {
+  --guest-stone: #1f1e19;
+  --guest-paper: #2a2822;
+  --guest-ink: #f0ede4;
+  --guest-ink-muted: #a8a692;
+  --guest-accent: #c9a468;
+  --guest-moss: #7c9473;
+  --guest-clay: #e0a98c;
+  --guest-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.35);
 
-    --panel-bg: #14171a;
-    --panel-surface: #1e2227;
-    --panel-ink: #e7eaed;
-    --panel-ink-muted: #9aa3ad;
-    --panel-accent: #5b8fc7;
-    --panel-success: #4fa576;
-    --panel-warning: #e0994a;
-  }
+  --panel-bg: #14171a;
+  --panel-surface: #1e2227;
+  --panel-ink: #e7eaed;
+  --panel-ink-muted: #9aa3ad;
+  --panel-accent: #5b8fc7;
+  --panel-success: #4fa576;
+  --panel-warning: #e0994a;
 
-  [data-theme="panel"] {
-    --destructive: #ef4444;
-    --border: #2c3138;
-    --input: #2c3138;
-  }
+  color-scheme: dark;
+}
+
+:root[data-color-scheme="dark"] [data-theme="panel"] {
+  --destructive: #ef4444;
+  --border: #2c3138;
+  --input: #2c3138;
 }
 
 @theme inline {
@@ -135,9 +141,9 @@
 }
 
 :root {
-  /* Pages don't consume the guest/panel tokens yet (Phases 3-4) — pin the
-     browser to light so it can't auto-invert unstyled canvas into a mismatched
-     forced-dark rendering ahead of the real per-theme dark palettes. */
+  /* Default/light baseline. Overridden by :root[data-color-scheme="dark"]
+     above when the user (or their system, resolved once at first paint by
+     the inline script in app/layout.tsx) prefers dark. */
   color-scheme: light;
 }
 

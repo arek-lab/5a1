@@ -20,6 +20,13 @@ function formatDateTime(value: string): string {
   return new Date(value).toLocaleString();
 }
 
+const STATUS_BADGE_CLASS: Record<GuestOrder['status'], string> = {
+  new: 'bg-guest-stone text-guest-ink-muted',
+  confirmed: 'bg-guest-moss/15 text-guest-moss',
+  fulfilled: 'bg-guest-moss/15 text-guest-moss',
+  rejected: 'bg-red-100 text-red-700',
+};
+
 function mergeOrder(prev: GuestOrder[], payload: SsePayload): GuestOrder[] {
   const index = prev.findIndex(order => order.id === payload.id);
   if (index === -1) {
@@ -103,10 +110,10 @@ export function GuestOrdersPanel({ initialOrders }: { initialOrders: GuestOrder[
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center gap-4 py-12 text-center">
-        <p className="text-gray-600">{t('empty.message')}</p>
+        <p className="text-guest-ink-muted">{t('empty.message')}</p>
         <Link
           href="/"
-          className="rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700"
+          className="rounded-pill bg-guest-accent px-6 py-3 text-base font-semibold text-white hover:opacity-90"
         >
           {t('empty.cta')}
         </Link>
@@ -116,17 +123,17 @@ export function GuestOrdersPanel({ initialOrders }: { initialOrders: GuestOrder[
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-gray-900">{t('title')}</h1>
-      <ul className="divide-y rounded border">
+      <h1 className="font-display text-xl font-semibold text-guest-ink">{t('title')}</h1>
+      <ul className="divide-y divide-guest-ink-muted/15 rounded-card border border-guest-ink-muted/15 bg-guest-paper">
         {orders.map(order => (
           <li key={order.id} className="flex flex-wrap items-center justify-between gap-2 p-3">
             <div className="flex flex-col">
-              <span className="font-medium text-gray-900 dark:text-gray-100">{order.serviceName}</span>
-              <span className="text-sm text-gray-500">
+              <span className="font-medium text-guest-ink">{order.serviceName}</span>
+              <span className="font-mono text-sm text-guest-ink-muted">
                 {order.scheduledAt ? formatDateTime(order.scheduledAt) : formatDateTime(order.createdAt)}
               </span>
             </div>
-            <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
+            <span className={`rounded-pill px-2 py-0.5 text-xs font-medium ${STATUS_BADGE_CLASS[order.status]}`}>
               {t(`status.${order.status}`)}
             </span>
           </li>

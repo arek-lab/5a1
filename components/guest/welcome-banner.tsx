@@ -15,7 +15,7 @@ export function WelcomeBanner({
       <div className="px-4 py-6">
         <Link
           href="/scan"
-          className="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700"
+          className="inline-flex items-center justify-center rounded-pill bg-guest-accent px-6 py-3 text-base font-semibold text-white hover:opacity-90"
         >
           {t('scanCta')}
         </Link>
@@ -29,7 +29,7 @@ export function WelcomeBanner({
 
   return (
     <div className="px-4 py-6">
-      <h1 className="text-xl font-semibold text-foreground">{greeting}</h1>
+      <h1 className="font-display text-xl font-semibold text-guest-ink">{greeting}</h1>
     </div>
   );
 }

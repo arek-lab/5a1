@@ -19,7 +19,7 @@ export function CategoryGrid({ visibleCategories }: { visibleCategories: Service
         <Link
           key={category}
           href={`/c/${category}`}
-          className="flex flex-col items-center gap-2 rounded-lg border bg-white px-3 py-6 text-center text-gray-900 hover:bg-gray-50"
+          className="flex flex-col items-center gap-2 rounded-card border border-guest-ink-muted/15 bg-guest-paper px-3 py-6 text-center text-guest-ink shadow-soft hover:bg-guest-stone"
         >
           <span aria-hidden="true" className="text-3xl">{CATEGORY_ICON[category]}</span>
           <span className="text-sm font-medium">{t(category)}</span>

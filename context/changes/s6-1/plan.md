@@ -17,7 +17,7 @@ Retrofit istniejącej, działającej aplikacji (Fazy 0–5) na warstwę prezenta
 
 ## Desired End State
 
-Wszystkie istniejące ekrany gościa i panelu renderują się na tokenach CSS ze `style.md` §4 (rozszerzonych o warianty dark — patrz Key Discoveries), zero literału hex/koloru poza blokiem tokenów. Panel korzysta z shadcn/ui dla list/formularzy/modali/dropdownów; gość zostaje na czystym Tailwind + tokenach, bez nowej zależności. Kontrast WCAG AA zweryfikowany automatycznie (axe-core) na kluczowych ekranach (welcome, home, dashboard, inbox zamówień) + manualnie na stanach greyed/disabled. `npm run build`/`lint`/`test`/`typecheck` przechodzą bez regresji. Guest bundle nie przekracza budżetu 150KB gzipped, weryfikowane automatycznie w CI. Dark mode działa pełnoprawnie (system preference, bez ręcznego togglera) dla obu systemów wizualnych.
+Wszystkie istniejące ekrany gościa i panelu renderują się na tokenach CSS ze `style.md` §4 (rozszerzonych o warianty dark — patrz Key Discoveries), zero literału hex/koloru poza blokiem tokenów. Panel korzysta z shadcn/ui dla list/formularzy/modali/dropdownów; gość zostaje na czystym Tailwind + tokenach, bez nowej zależności. Kontrast WCAG AA zweryfikowany automatycznie (axe-core) na kluczowych ekranach (welcome, home, dashboard, inbox zamówień) + manualnie na stanach greyed/disabled. `npm run build`/`lint`/`test`/`typecheck` przechodzą bez regresji. Guest bundle nie przekracza budżetu 150KB gzipped, weryfikowane automatycznie w CI. Dark mode działa pełnoprawnie dla obu systemów wizualnych, domyślnie wg system preference, z ręcznym przełącznikiem (system/jasny/ciemny) po stronie gościa — decyzja zmieniona w trakcie implementacji Fazy 3, patrz "What We're NOT Doing".
 
 Weryfikacja: `npm run build && npm run lint && npm run typecheck && npm test`, wizualny przegląd kluczowych ekranów w light i dark, `npx playwright test a11y` (nowy skrypt z Fazy 5).
 
@@ -32,7 +32,7 @@ Weryfikacja: `npm run build && npm run lint && npm run typecheck && npm test`, w
 
 - Zmiana logiki biznesowej, routingu, walidacji, RBAC, RLS, SSE, AI, endpointów, schematu danych.
 - Tworzenie platformowego logo/znaku (§3 `style.md`) — DoD sesji go nie wymaga; zostaje TODO do osobnej sesji.
-- Ręczny toggler dark/light dla użytkownika — tylko `prefers-color-scheme`, zgodnie z dzisiejszym mechanizmem (rozszerzonym o pełne tokeny zamiast 2 zmiennych).
+- ~~Ręczny toggler dark/light dla użytkownika — tylko `prefers-color-scheme`~~ — **decyzja zmieniona w trakcie implementacji Fazy 3** (HITL, sesja implementacyjna): dodano ręczny przełącznik system/jasny/ciemny po stronie gościa (`components/guest/theme-toggle.tsx`, obok `LanguageSwitcher`), z zapisem preferencji w `localStorage` i blokującym inline-skryptem w `app/layout.tsx` zapobiegającym FOUC. Mechanizm CSS przeszedł z `@media (prefers-color-scheme: dark)` na atrybut `data-color-scheme` na `<html>` (patrz `app/globals.css`), rozwiązywany z system preference tylko gdy user nie ma zapisanej jawnej preferencji. Panel (Faza 4) nie dostaje własnego przełącznika w tym planie — TODO poza zakresem S6.1, jeśli będzie potrzebny.
 - Per-hotel branding poza `properties.logo_url` (HITL #3 z session-plan.md) — paleta/typografia/spacing identyczne dla wszystkich hoteli.
 - Instalacja shadcn/ui / lucide-react po stronie gościa — guest zostaje na czystym Tailwind (decyzja z session-plan.md, potwierdzona w tym planowaniu).
 - Trwały, rozbudowany system bundle-budgetów (np. per-route budgets, historical tracking) — dodajemy jeden prosty CI-gate na całkowity rozmiar guest bundle, nie infrastrukturę do jego wizualizacji.
@@ -61,7 +61,7 @@ Dodajemy `build` job do `.github/workflows/ci.yml` (dziś ma tylko `lint`+`type-
 
 ### Dark mode — zakres tokenów
 
-`style.md` §4 nie definiuje wartości dark — trzeba je wyprowadzić przy implementacji zachowując te same role (accent/moss/clay dla gościa, success/warning dla panelu) i kontrast WCAG AA, nie kopiować 1:1 wartości light z odwróconą jasnością. Mechanizm: rozszerzenie istniejącego `@media (prefers-color-scheme: dark)` bloku w `globals.css` o wszystkie nowe `--guest-*`/`--panel-*` zmienne (nie tylko dzisiejsze `--background`/`--foreground`) — bez ręcznego togglera, zgodnie z dzisiejszym mechanizmem OS-driven.
+`style.md` §4 nie definiuje wartości dark — trzeba je wyprowadzić przy implementacji zachowując te same role (accent/moss/clay dla gościa, success/warning dla panelu) i kontrast WCAG AA, nie kopiować 1:1 wartości light z odwróconą jasnością. Mechanizm (zaktualizowany w trakcie Fazy 3 — patrz "What We're NOT Doing"): `:root[data-color-scheme="dark"]` w `globals.css` niesie pełny zestaw `--guest-*`/`--panel-*` override'ów, aktywowany przez atrybut na `<html>` zamiast bezpośrednio przez `@media (prefers-color-scheme: dark)`. Atrybut jest ustawiany raz, przed pierwszym malowaniem, przez blokujący inline-skrypt w `app/layout.tsx` (`COLOR_SCHEME_INIT_SCRIPT` z `lib/theme/color-scheme.ts`): czyta zapisaną w `localStorage` preferencję (`light`/`dark`), a przy jej braku rozwiązuje z `prefers-color-scheme` — więc domyślne, nietknięte przez usera zachowanie nadal jest w pełni OS-driven, tylko z dodaną możliwością jawnego override'u przez `components/guest/theme-toggle.tsx`.
 
 ## Phase 1: Fundament — tokeny, fonty, bundle guard
 
@@ -216,6 +216,7 @@ Przepisuje wszystkie komponenty `components/guest/*` (13 wymienionych w session-
 - Ekran główny, karta usługi, Concierge chat wizualnie zgodne ze `style.md` §1.4 (taca powitalna, notatka na papierze, karty z ceną w mono)
 - Stany greyed/disabled z S3.2 nadal widoczne (nie ukryte) i czytelne kontrastowo
 - Dark mode: kluczowe ekrany gościa (welcome, home) czytelne po przełączeniu systemowego dark mode
+- Ręczny przełącznik motywu (obok `LanguageSwitcher`) cyklicznie zmienia system → jasny → ciemny → system, bez FOUC po odświeżeniu strony, i przetrwa nawigację między stronami gościa (localStorage)
 
 **Implementation Note**: Po ukończeniu tej fazy i przejściu automatycznej weryfikacji, zatrzymaj się do manualnego potwierdzenia przez człowieka przed przejściem do Fazy 4.
 
@@ -392,28 +393,29 @@ Brak migracji danych — czysto zmiana warstwy prezentacji na istniejących, dzi
 
 #### Automated
 
-- [x] 2.1 `npm run build`/`typecheck`/`lint` przechodzą
-- [x] 2.2 `components.json` obecny, wskazuje `components/ui`
-- [x] 2.3 Guest bundle-size guard nadal zielony, brak importów `components/ui` w `components/guest`
+- [x] 2.1 `npm run build`/`typecheck`/`lint` przechodzą — 419e172
+- [x] 2.2 `components.json` obecny, wskazuje `components/ui` — 419e172
+- [x] 2.3 Guest bundle-size guard nadal zielony, brak importów `components/ui` w `components/guest` — 419e172
 
 #### Manual
 
-- [x] 2.4 `onboarding-wizard-shell.tsx` renderuje się w `--panel-accent`
-- [x] 2.5 Trzy stany kroku nadal rozróżnialne wizualnie
+- [x] 2.4 `onboarding-wizard-shell.tsx` renderuje się w `--panel-accent` — 419e172
+- [x] 2.5 Trzy stany kroku nadal rozróżnialne wizualnie — 419e172
 
 ### Phase 3: Retrofit gościa — 14 komponentów + strony
 
 #### Automated
 
-- [ ] 3.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
-- [ ] 3.2 Bundle-size guard zielony
-- [ ] 3.3 Brak literałów hex w `components/guest/` i `app/[locale]/(guest)/`
+- [x] 3.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
+- [x] 3.2 Bundle-size guard zielony
+- [x] 3.3 Brak literałów hex w `components/guest/` i `app/[locale]/(guest)/`
 
 #### Manual
 
-- [ ] 3.4 Ekran główny/karta usługi/Concierge zgodne ze `style.md` §1.4
-- [ ] 3.5 Stany greyed/disabled nadal widoczne i czytelne
-- [ ] 3.6 Dark mode czytelny na welcome/home
+- [x] 3.4 Ekran główny/karta usługi/Concierge zgodne ze `style.md` §1.4
+- [x] 3.5 Stany greyed/disabled nadal widoczne i czytelne
+- [x] 3.6 Dark mode czytelny na welcome/home
+- [x] 3.7 Ręczny przełącznik motywu (system/jasny/ciemny) działa bez FOUC i przetrwa nawigację
 
 ### Phase 4: Retrofit panelu — shared + route-embedded na shadcn/ui
 

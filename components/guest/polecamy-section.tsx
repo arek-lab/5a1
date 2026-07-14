@@ -51,12 +51,15 @@ export function PolecamySection({
 
   return (
     <div className="px-4 py-6">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">Polecane przez {hotelName}</h2>
+      <h2 className="mb-3 font-display text-lg font-semibold text-guest-ink">Polecane przez {hotelName}</h2>
       <ul className="space-y-2">
         {services.map(service => (
-          <li key={service.id} className="flex items-center justify-between rounded-lg border bg-white px-4 py-3">
-            <span className="font-medium text-gray-900">{service.name}</span>
-            <span className="text-sm text-gray-600">
+          <li
+            key={service.id}
+            className="flex items-center justify-between rounded-card border border-guest-ink-muted/15 bg-guest-paper px-4 py-3 shadow-soft"
+          >
+            <span className="font-medium text-guest-ink">{service.name}</span>
+            <span className="font-mono text-sm text-guest-ink-muted">
               {service.priceCents === null ? 'W cenie' : `${(service.priceCents / 100).toFixed(2)}`}
             </span>
           </li>

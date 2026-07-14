@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Providers } from './providers';
 import { frankRuhlLibre, publicSans, ibmPlexSans, ibmPlexMono } from './fonts';
+import { COLOR_SCHEME_INIT_SCRIPT } from '@/lib/theme/color-scheme';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -22,6 +23,9 @@ const fontVariables = `${frankRuhlLibre.variable} ${publicSans.variable} ${ibmPl
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning className={fontVariables}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: COLOR_SCHEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>

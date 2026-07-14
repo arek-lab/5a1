@@ -13,18 +13,18 @@ export default async function DiscoverPage() {
 
   return (
     <main className="px-4 py-6">
-      <h1 className="text-xl font-semibold text-gray-900">{t('title')}</h1>
+      <h1 className="font-display text-xl font-semibold text-guest-ink">{t('title')}</h1>
 
       {items.length === 0 ? (
-        <p className="mt-4 text-sm text-gray-600">{t('empty')}</p>
+        <p className="mt-4 text-sm text-guest-ink-muted">{t('empty')}</p>
       ) : (
         <ul className="mt-4 space-y-6">
           {items.map((item, index) => (
             <li key={index}>
               {item.question && (
-                <h2 className="text-base font-semibold text-gray-900">{item.question}</h2>
+                <h2 className="font-display text-base font-semibold text-guest-ink">{item.question}</h2>
               )}
-              <p className="mt-1 whitespace-pre-line text-sm text-gray-600">{item.content}</p>
+              <p className="mt-1 whitespace-pre-line text-sm text-guest-ink-muted">{item.content}</p>
             </li>
           ))}
         </ul>

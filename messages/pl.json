@@ -113,6 +113,12 @@
       "greetingWithName": "Witaj, {name}!",
       "greetingWithRoom": "Witamy w pokoju {room}",
       "scanCta": "Skanuj kod pokoju"
+    },
+    "theme": {
+      "label": "Motyw: {mode}",
+      "system": "automatyczny",
+      "light": "jasny",
+      "dark": "ciemny"
     }
   },
   "concierge": {

@@ -34,13 +34,13 @@ export default async function ServiceDetailPage({
     <main className="space-y-4 px-4 py-6">
       {service.imageUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={service.imageUrl} alt="" className="h-48 w-full rounded-lg object-cover" />
+        <img src={service.imageUrl} alt="" className="h-48 w-full rounded-card object-cover" />
       )}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">{service.name}</h1>
-        <p className="mt-1 text-sm text-gray-600">{price}</p>
+        <h1 className="font-display text-xl font-semibold text-guest-ink">{service.name}</h1>
+        <p className="mt-1 font-mono text-sm text-guest-ink-muted">{price}</p>
       </div>
-      {service.description && <p className="text-gray-700">{service.description}</p>}
+      {service.description && <p className="text-guest-ink">{service.description}</p>}
       <OrderCta service={service} guestContext={guestContext} />
     </main>
   );

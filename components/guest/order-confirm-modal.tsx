@@ -53,21 +53,21 @@ export function OrderConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center">
-      <div className="w-full max-w-md rounded-t-2xl bg-white p-4 sm:rounded-2xl">
-        <h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
-        <p className="mt-1 text-sm text-gray-600">{service.name}</p>
+      <div className="w-full max-w-md rounded-t-card bg-guest-paper p-4 shadow-soft sm:rounded-card">
+        <h2 className="font-display text-lg font-semibold text-guest-ink">{t('title')}</h2>
+        <p className="mt-1 text-sm text-guest-ink-muted">{service.name}</p>
 
-        <label className="mt-4 flex flex-col gap-1 text-sm font-medium text-gray-900">
+        <label className="mt-4 flex flex-col gap-1 text-sm font-medium text-guest-ink">
           {t('noteLabel')}
           <textarea
             value={note}
             onChange={event => setNote(event.target.value.slice(0, NOTE_MAX_LENGTH))}
             maxLength={NOTE_MAX_LENGTH}
             placeholder={t('notePlaceholder')}
-            className="min-h-[80px] rounded border px-3 py-2"
+            className="min-h-[80px] rounded border border-guest-ink-muted/30 bg-guest-stone px-3 py-2 text-guest-ink"
           />
         </label>
-        <p className="mt-1 text-right text-xs text-gray-400">
+        <p className="mt-1 text-right text-xs font-mono text-guest-ink-muted">
           {note.length}/{NOTE_MAX_LENGTH}
         </p>
 
@@ -90,7 +90,7 @@ export function OrderConfirmModal({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="flex-1 rounded-full border px-4 py-3 text-sm font-semibold text-gray-700 disabled:opacity-50"
+            className="flex-1 rounded-pill border border-guest-ink-muted/30 px-4 py-3 text-sm font-semibold text-guest-ink-muted disabled:opacity-50"
           >
             {t('cancel')}
           </button>
@@ -98,7 +98,7 @@ export function OrderConfirmModal({
             type="button"
             onClick={submit}
             disabled={submitting}
-            className="flex-1 rounded-full bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
+            className="flex-1 rounded-pill bg-guest-accent px-4 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? t('submitting') : error ? t('retry') : t('submit')}
           </button>

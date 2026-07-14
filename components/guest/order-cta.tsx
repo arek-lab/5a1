@@ -31,12 +31,12 @@ export function OrderCta({
   return (
     <div className="space-y-3">
       {slots.length > 0 && (
-        <label className="flex flex-col gap-1 text-sm font-medium text-gray-900">
+        <label className="flex flex-col gap-1 text-sm font-medium text-guest-ink">
           {t('timeLabel')}
           <select
             value={scheduledTime}
             onChange={event => setScheduledTime(event.target.value)}
-            className="rounded border px-3 py-2"
+            className="rounded border border-guest-ink-muted/30 bg-guest-paper px-3 py-2 font-mono text-guest-ink"
           >
             {slots.map(slot => (
               <option key={slot} value={slot}>
@@ -50,7 +50,7 @@ export function OrderCta({
         type="button"
         onClick={() => setModalOpen(true)}
         disabled={!isOnline}
-        className="w-full rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
+        className="w-full rounded-pill bg-guest-accent px-6 py-3 text-base font-semibold text-white hover:opacity-90 disabled:opacity-50"
       >
         {t('orderCta')}
       </button>

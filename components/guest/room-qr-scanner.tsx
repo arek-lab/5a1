@@ -38,9 +38,9 @@ export function RoomQrScanner() {
 
   if (cameraError) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-2 px-4 text-center">
-        <p className="text-foreground">Nie można uzyskać dostępu do aparatu</p>
-        <p className="text-sm text-gray-500">Poproś o pomoc w recepcji</p>
+      <div className="flex min-h-screen flex-col items-center justify-center gap-2 bg-guest-stone px-4 text-center">
+        <p className="text-guest-ink">Nie można uzyskać dostępu do aparatu</p>
+        <p className="text-sm text-guest-ink-muted">Poproś o pomoc w recepcji</p>
       </div>
     )
   }
@@ -49,7 +49,7 @@ export function RoomQrScanner() {
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-black">
       <video ref={videoRef} className="h-full w-full object-cover" muted playsInline />
       {rejectionMessage && (
-        <p className="absolute bottom-8 left-4 right-4 rounded bg-white/90 px-4 py-2 text-center text-sm text-foreground">
+        <p className="absolute bottom-8 left-4 right-4 rounded-card bg-guest-paper/90 px-4 py-2 text-center text-sm text-guest-ink">
           {rejectionMessage}
         </p>
       )}
