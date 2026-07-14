@@ -579,12 +579,12 @@ sesjami gości.
 
 #### Automated
 
-- [x] 5.1 `npm run size` przechodzi poniżej 150KB gzip
+- [x] 5.1 `npm run size` przechodzi poniżej 150KB gzip — 80ef72c
 - [ ] 5.2 CI job `bundle-budget` zielony
-- [x] 5.3 `npm run build`/`lint`/`typecheck`/`test` bez regresji
+- [x] 5.3 `npm run build`/`lint`/`typecheck`/`test` bez regresji — 80ef72c
 
 #### Manual
 
-- [x] 5.4 Lighthouse PWA audit bez błędów krytycznych
-- [x] 5.5 Pełny manualny test airplane-mode (cache, offline fallback, błąd mutacji)
-- [x] 5.6 Panel hotelowy potwierdzony jako poza zasięgiem SW
+- [x] 5.4 Lighthouse PWA audit bez błędów krytycznych — 80ef72c
+- [x] 5.5 Pełny manualny test airplane-mode (cache, offline fallback, błąd mutacji) — 80ef72c
+- [x] 5.6 Panel hotelowy potwierdzony jako poza zasięgiem SW — 80ef72c
