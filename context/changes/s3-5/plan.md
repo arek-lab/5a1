@@ -567,24 +567,24 @@ sesjami gości.
 
 #### Automated
 
-- [x] 4.1 `npm run build` pokazuje osobne chunki dla `/concierge` i `/my-orders`
-- [x] 4.2 `npm run typecheck` i `npm run lint` przechodzą
-- [x] 4.3 Istniejące testy komponentów nadal przechodzą
+- [x] 4.1 `npm run build` pokazuje osobne chunki dla `/concierge` i `/my-orders` — 972413a
+- [x] 4.2 `npm run typecheck` i `npm run lint` przechodzą — 972413a
+- [x] 4.3 Istniejące testy komponentów nadal przechodzą — 972413a
 
 #### Manual
 
-- [x] 4.4 JS chunk czatu/zamówień ładuje się dopiero przy wejściu na trasę
+- [x] 4.4 JS chunk czatu/zamówień ładuje się dopiero przy wejściu na trasę — 972413a
 
 ### Phase 5: Budżet CI + weryfikacja końcowa
 
 #### Automated
 
-- [ ] 5.1 `npm run size` przechodzi poniżej 150KB gzip
+- [x] 5.1 `npm run size` przechodzi poniżej 150KB gzip
 - [ ] 5.2 CI job `bundle-budget` zielony
-- [ ] 5.3 `npm run build`/`lint`/`typecheck`/`test` bez regresji
+- [x] 5.3 `npm run build`/`lint`/`typecheck`/`test` bez regresji
 
 #### Manual
 
-- [ ] 5.4 Lighthouse PWA audit bez błędów krytycznych
-- [ ] 5.5 Pełny manualny test airplane-mode (cache, offline fallback, błąd mutacji)
-- [ ] 5.6 Panel hotelowy potwierdzony jako poza zasięgiem SW
+- [x] 5.4 Lighthouse PWA audit bez błędów krytycznych
+- [x] 5.5 Pełny manualny test airplane-mode (cache, offline fallback, błąd mutacji)
+- [x] 5.6 Panel hotelowy potwierdzony jako poza zasięgiem SW

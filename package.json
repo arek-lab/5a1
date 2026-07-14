@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "size": "size-limit"
   },
   "engines": {
     "node": ">=24.0.0"
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@serwist/next": "^9.2.1",
+    "@size-limit/preset-app": "^12.1.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
@@ -49,6 +51,7 @@
     "eslint-config-next": "16.2.6",
     "glob": "^13.0.6",
     "jsdom": "^29.1.1",
+    "size-limit": "^12.1.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.6"
