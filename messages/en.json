@@ -11,6 +11,21 @@
     "users": "Users"
   },
   "guest": {
+    "nav": {
+      "today": "Today",
+      "amenities": "Amenities",
+      "concierge": "Concierge",
+      "myStay": "My stay",
+      "discover": "Discover"
+    },
+    "amenities": {
+      "title": "Amenities"
+    },
+    "roomRequired": {
+      "title": "Scan your room code",
+      "body": "This feature unlocks once you scan the QR code in your room.",
+      "cta": "Scan room code"
+    },
     "categories": {
       "restaurant": "Restaurant & Bar",
       "room_service": "Room Service",
@@ -78,7 +93,10 @@
       "backHome": "Back to home"
     },
     "offline": {
-      "toastMessage": "No internet connection. Some features may be unavailable."
+      "toastMessage": "No internet connection. Some features may be unavailable.",
+      "heading": "No connection",
+      "body": "We couldn't connect to the internet. Check your connection and try again.",
+      "retry": "Back to home"
     },
     "welcome": {
       "greetingWithName": "Welcome, {name}!",

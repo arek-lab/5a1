@@ -5,7 +5,7 @@ export default async function ConciergePage() {
   const { aiBotName, phoneReception } = await requireGuestSession();
 
   return (
-    <main className="flex h-[calc(100vh-4rem)] flex-col px-4 py-4">
+    <main className="flex h-full flex-col px-4 py-4">
       <ConciergeChat aiBotName={aiBotName} phoneReception={phoneReception} />
     </main>
   );

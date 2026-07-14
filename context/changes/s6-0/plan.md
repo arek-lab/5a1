@@ -498,25 +498,25 @@ Brak migracji bazy danych — `check_in`/`check_out` już istnieją w schemacie 
 
 #### Automated
 
-- [x] 1.1 Unit testy filtrowania RBAC przechodzą: `npm run test`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Linting passes: `npm run lint`
-- [x] 1.4 Build passes: `npm run build`
+- [x] 1.1 Unit testy filtrowania RBAC przechodzą: `npm run test` — 2d552e6
+- [x] 1.2 Type checking passes: `npm run typecheck` — 2d552e6
+- [x] 1.3 Linting passes: `npm run lint` — 2d552e6
+- [x] 1.4 Build passes: `npm run build` — 2d552e6
 
 #### Manual
 
-- [ ] 1.5 Owner/admin widzą wszystkich 6 pozycji, aktywna sekcja podświetlona
-- [ ] 1.6 Viewer nie widzi "QR"
-- [ ] 1.7 Onboarding/`/admin` osiągalne przez URL, nieobecne w szynie
+- [x] 1.5 Owner/admin widzą wszystkich 6 pozycji, aktywna sekcja podświetlona — 2d552e6
+- [x] 1.6 Viewer nie widzi "QR" — 2d552e6
+- [x] 1.7 Onboarding/`/admin` osiągalne przez URL, nieobecne w szynie — 2d552e6
 
 ### Phase 2: Gość — dolna nawigacja + `/amenities`
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Build passes: `npm run build`
-- [ ] 2.4 `grep -r FloatingConciergeButton` zwraca 0 wyników
+- [x] 2.1 Type checking passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Build passes: `npm run build`
+- [x] 2.4 `grep -r FloatingConciergeButton` zwraca 0 wyników
 
 #### Manual
 

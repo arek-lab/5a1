@@ -1,14 +1,14 @@
 import { requireGuestSession } from '@/lib/guest/require-session';
 import { LanguageSwitcher } from '@/components/guest/language-switcher';
-import { FloatingConciergeButton } from '@/components/guest/floating-concierge-button';
+import { BottomNav } from '@/components/guest/bottom-nav';
 import { OfflineToast } from '@/components/guest/offline-toast';
 
 export default async function GuestLayout({ children }: { children: React.ReactNode }) {
-  const { propertyName, logoUrl } = await requireGuestSession();
+  const { propertyName, logoUrl, authLevel } = await requireGuestSession();
 
   return (
-    <>
-      <header className="flex h-16 items-center justify-between border-b bg-white px-4 text-gray-900">
+    <div className="flex min-h-screen flex-col">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b bg-white px-4 text-gray-900">
         <div className="flex h-10 items-center">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -19,9 +19,9 @@ export default async function GuestLayout({ children }: { children: React.ReactN
         </div>
         <LanguageSwitcher />
       </header>
-      {children}
-      <FloatingConciergeButton />
+      <div className="flex-1 overflow-y-auto pb-16">{children}</div>
+      <BottomNav authLevel={authLevel} />
       <OfflineToast />
-    </>
+    </div>
   );
 }

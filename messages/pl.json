@@ -11,6 +11,21 @@
     "users": "Użytkownicy"
   },
   "guest": {
+    "nav": {
+      "today": "Dziś",
+      "amenities": "Udogodnienia",
+      "concierge": "Concierge",
+      "myStay": "Mój pobyt",
+      "discover": "Odkrywaj"
+    },
+    "amenities": {
+      "title": "Udogodnienia"
+    },
+    "roomRequired": {
+      "title": "Zeskanuj kod pokoju",
+      "body": "Ta funkcja odblokuje się po zeskanowaniu kodu QR w Twoim pokoju.",
+      "cta": "Skanuj kod pokoju"
+    },
     "categories": {
       "restaurant": "Restauracja i bar",
       "room_service": "Usługi pokojowe",
@@ -78,7 +93,10 @@
       "backHome": "Wróć na stronę główną"
     },
     "offline": {
-      "toastMessage": "Brak połączenia z internetem. Niektóre funkcje mogą być niedostępne."
+      "toastMessage": "Brak połączenia z internetem. Niektóre funkcje mogą być niedostępne.",
+      "heading": "Brak połączenia",
+      "body": "Nie udało się połączyć z internetem. Sprawdź połączenie i spróbuj ponownie.",
+      "retry": "Wróć na stronę główną"
     },
     "welcome": {
       "greetingWithName": "Witaj, {name}!",
