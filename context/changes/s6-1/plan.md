@@ -392,14 +392,14 @@ Brak migracji danych — czysto zmiana warstwy prezentacji na istniejących, dzi
 
 #### Automated
 
-- [ ] 2.1 `npm run build`/`typecheck`/`lint` przechodzą
-- [ ] 2.2 `components.json` obecny, wskazuje `components/ui`
-- [ ] 2.3 Guest bundle-size guard nadal zielony, brak importów `components/ui` w `components/guest`
+- [x] 2.1 `npm run build`/`typecheck`/`lint` przechodzą
+- [x] 2.2 `components.json` obecny, wskazuje `components/ui`
+- [x] 2.3 Guest bundle-size guard nadal zielony, brak importów `components/ui` w `components/guest`
 
 #### Manual
 
-- [ ] 2.4 `onboarding-wizard-shell.tsx` renderuje się w `--panel-accent`
-- [ ] 2.5 Trzy stany kroku nadal rozróżnialne wizualnie
+- [x] 2.4 `onboarding-wizard-shell.tsx` renderuje się w `--panel-accent`
+- [x] 2.5 Trzy stany kroku nadal rozróżnialne wizualnie
 
 ### Phase 3: Retrofit gościa — 14 komponentów + strony
 

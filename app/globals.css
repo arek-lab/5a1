@@ -20,7 +20,7 @@
   --panel-warning: #c97a2b;
 }
 
-:root[data-theme="guest"] {
+[data-theme="guest"] {
   --font-display: var(--font-frank-ruhl-libre), serif;
   --font-ui: var(--font-public-sans), sans-serif;
   --font-mono: var(--font-ibm-plex-mono), monospace;
@@ -28,10 +28,33 @@
   --shadow-soft: var(--guest-shadow-soft);
 }
 
-:root[data-theme="panel"] {
+[data-theme="panel"] {
   --font-ui: var(--font-ibm-plex-sans), sans-serif;
   --font-mono: var(--font-ibm-plex-mono), monospace;
   --radius-card: 8px;
+
+  /* shadcn/ui slot variables — aliased to --panel-* tokens (single source of
+     truth), not a parallel palette. --accent here is shadcn's neutral hover
+     surface, distinct from the brand --panel-accent used for --primary. */
+  --background: var(--panel-bg);
+  --foreground: var(--panel-ink);
+  --card: var(--panel-surface);
+  --card-foreground: var(--panel-ink);
+  --popover: var(--panel-surface);
+  --popover-foreground: var(--panel-ink);
+  --primary: var(--panel-accent);
+  --primary-foreground: #ffffff;
+  --secondary: var(--panel-bg);
+  --secondary-foreground: var(--panel-ink);
+  --muted: var(--panel-bg);
+  --muted-foreground: var(--panel-ink-muted);
+  --accent: var(--panel-bg);
+  --accent-foreground: var(--panel-ink);
+  --destructive: #dc2626;
+  --border: #e2e4e7;
+  --input: #e2e4e7;
+  --ring: var(--panel-accent);
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +75,12 @@
     --panel-accent: #5b8fc7;
     --panel-success: #4fa576;
     --panel-warning: #e0994a;
+  }
+
+  [data-theme="panel"] {
+    --destructive: #ef4444;
+    --border: #2c3138;
+    --input: #2c3138;
   }
 }
 
@@ -79,6 +108,30 @@
   --font-display: var(--font-display);
   --font-ui: var(--font-ui);
   --font-mono: var(--font-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {

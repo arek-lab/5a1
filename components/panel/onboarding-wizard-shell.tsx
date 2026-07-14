@@ -3,6 +3,8 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import type { OnboardingStep, OnboardingStepKey } from '@/lib/panel/onboarding-steps'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
 
 interface Props {
   steps: OnboardingStep[]
@@ -27,37 +29,27 @@ export default function OnboardingWizardShell({
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-6">
+    <div data-theme="panel" className="mx-auto max-w-3xl space-y-6 p-6">
       <div>
-        <div className="h-2 w-full rounded bg-gray-200">
-          <div
-            className="h-2 rounded bg-blue-600"
-            style={{ width: `${readinessPercentage}%` }}
-          />
-        </div>
-        <p className="mt-1 text-sm text-gray-600">
+        <Progress value={readinessPercentage} />
+        <p className="mt-1 text-sm text-muted-foreground">
           {t('readiness.label', { percent: readinessPercentage })}
         </p>
       </div>
       <nav className="flex flex-wrap gap-2 border-b pb-4">
         {steps.map(step => (
-          <button
+          <Button
             key={step.key}
             type="button"
+            size="sm"
             disabled={!step.interactive}
             aria-current={step.key === activeStepKey ? 'step' : undefined}
             onClick={() => goToStep(step)}
-            className={
-              step.key === activeStepKey
-                ? 'rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white'
-                : step.interactive
-                  ? 'rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100'
-                  : 'rounded border px-3 py-1.5 text-sm font-medium text-gray-400 disabled:cursor-not-allowed'
-            }
+            variant={step.key === activeStepKey ? 'default' : 'outline'}
           >
             {t(step.labelKey)}
             {!step.interactive && ` (${t('wizard.comingSoon')})`}
-          </button>
+          </Button>
         ))}
       </nav>
       {children}
