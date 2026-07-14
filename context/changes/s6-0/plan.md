@@ -544,23 +544,23 @@ Brak migracji bazy danych — `check_in`/`check_out` już istnieją w schemacie 
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npm run typecheck`
-- [x] 4.2 Linting passes: `npm run lint`
-- [x] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npm run typecheck` — ffb3143
+- [x] 4.2 Linting passes: `npm run lint` — ffb3143
+- [x] 4.3 Build passes: `npm run build` — ffb3143
 
 #### Manual
 
-- [ ] 4.4 `/discover` renderuje treść kategorii `local` gdy istnieje
-- [ ] 4.5 `/discover` renderuje pusty stan gdy brak treści
+- [x] 4.4 `/discover` renderuje treść kategorii `local` gdy istnieje — ffb3143
+- [x] 4.5 `/discover` renderuje pusty stan gdy brak treści — ffb3143
 
 ### Phase 5: Testy + weryfikacja końcowa
 
 #### Automated
 
-- [ ] 5.1 `npm run test` — wszystkie testy przechodzą
-- [ ] 5.2 `npm run typecheck` przechodzi
-- [ ] 5.3 `npm run lint` przechodzi
-- [ ] 5.4 `npm run build` przechodzi
+- [x] 5.1 `npm run test` — wszystkie testy przechodzą
+- [x] 5.2 `npm run typecheck` przechodzi
+- [x] 5.3 `npm run lint` przechodzi
+- [x] 5.4 `npm run build` przechodzi
 
 #### Manual
 

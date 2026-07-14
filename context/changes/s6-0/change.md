@@ -22,3 +22,10 @@ sesji i przekierowuje zakładki wymagające pokoju (Udogodnienia, Mój pobyt, Od
 ekranu `/room-required` z instrukcją zeskanowania QR pokoju, gdy `authLevel < 2`. Dziś (`/`) i
 Concierge zostają dostępne już na `auth_level 1` (recepcja, oczekiwanie na pokój). Brak zmian w
 `requireGuestSession()`/RLS/guardach stron — gating jest wyłącznie na poziomie linków nav.
+
+**Znana, poza-scope'owa awaria testu (Faza 5, 2026-07-14):** `npm run test` zgłasza 3 niepowodzenia
+w `__tests__/proxy.test.ts` (`supabase.auth.getClaims is not a function`). Przyczyna: niezwiązana,
+już niezacommitowana zmiana w `proxy.ts` (obecna w working tree przed rozpoczęciem tej sesji, poza
+`context/changes/s6-0/`), której mock Supabase w teście nie pokrywa. Decyzja HITL: potraktować jako
+znaną, poza-scope'ową awarię i kontynuować — wszystkie testy nawigacyjne (nowe i istniejące)
+przechodzą (388/391).
