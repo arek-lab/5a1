@@ -38,7 +38,7 @@ function makeClient(responses: {
     ai_bot_name?: string | null
     phone_reception?: string | null
   } | null
-  reservation?: { guest_first_name: string | null } | null
+  reservation?: { guest_first_name: string | null; check_in?: string | null; check_out?: string | null } | null
   room?: { room_number: string } | null
 }) {
   return {
@@ -111,7 +111,7 @@ describe('getGuestSessionContext', () => {
           ai_bot_name: 'Hela',
           phone_reception: '+48123456789',
         },
-        reservation: { guest_first_name: 'Jan' },
+        reservation: { guest_first_name: 'Jan', check_in: '2026-07-14T14:00:00Z', check_out: '2026-07-18T11:00:00Z' },
         room: { room_number: '204' },
       }) as never
     )
@@ -123,6 +123,8 @@ describe('getGuestSessionContext', () => {
       sessionId: 'sess-1',
       authLevel: 2,
       guestFirstName: 'Jan',
+      checkIn: '2026-07-14T14:00:00Z',
+      checkOut: '2026-07-18T11:00:00Z',
       roomNumber: '204',
       roomId: 'room-1',
       reservationId: 'res-1',
@@ -147,6 +149,8 @@ describe('getGuestSessionContext', () => {
     const result = await getGuestSessionContext()
 
     expect(result?.guestFirstName).toBeNull()
+    expect(result?.checkIn).toBeNull()
+    expect(result?.checkOut).toBeNull()
     expect(result?.roomNumber).toBeNull()
     expect(result?.roomId).toBeNull()
     expect(result?.reservationId).toBeNull()

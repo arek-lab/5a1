@@ -30,6 +30,8 @@ describe('requireGuestSession', () => {
       sessionId: 'sess-1',
       authLevel: 1,
       guestFirstName: null,
+      checkIn: null,
+      checkOut: null,
       roomNumber: null,
       roomId: null,
       reservationId: null,

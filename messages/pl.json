@@ -21,6 +21,13 @@
     "amenities": {
       "title": "Udogodnienia"
     },
+    "myStay": {
+      "title": "Mój pobyt",
+      "roomLabel": "Numer pokoju",
+      "checkInLabel": "Zameldowanie",
+      "checkOutLabel": "Wymeldowanie",
+      "ordersLink": "Zobacz moje zamówienia"
+    },
     "roomRequired": {
       "title": "Zeskanuj kod pokoju",
       "body": "Ta funkcja odblokuje się po zeskanowaniu kodu QR w Twoim pokoju.",

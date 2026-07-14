@@ -513,26 +513,26 @@ Brak migracji bazy danych — `check_in`/`check_out` już istnieją w schemacie 
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npm run typecheck`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
-- [x] 2.4 `grep -r FloatingConciergeButton` zwraca 0 wyników
+- [x] 2.1 Type checking passes: `npm run typecheck` — c3a54b8
+- [x] 2.2 Linting passes: `npm run lint` — c3a54b8
+- [x] 2.3 Build passes: `npm run build` — c3a54b8
+- [x] 2.4 `grep -r FloatingConciergeButton` zwraca 0 wyników — c3a54b8
 
 #### Manual
 
-- [ ] 2.5 Dolna nawigacja widoczna i funkcjonalna na stronach `(guest)`
-- [ ] 2.6 Dolna nawigacja niewidoczna na `/scan`
-- [ ] 2.7 `/amenities` renderuje grid 5 kategorii bez powitania/Polecamy
-- [ ] 2.8 Touch targets ≥44px
+- [x] 2.5 Dolna nawigacja widoczna i funkcjonalna na stronach `(guest)` — c3a54b8
+- [x] 2.6 Dolna nawigacja niewidoczna na `/scan` — c3a54b8
+- [x] 2.7 `/amenities` renderuje grid 5 kategorii bez powitania/Polecamy — c3a54b8
+- [x] 2.8 Touch targets ≥44px — c3a54b8
 
 ### Phase 3: Gość — `/my-stay`
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npm run typecheck`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Build passes: `npm run build`
-- [ ] 3.4 Existing tests pass: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Build passes: `npm run build`
+- [x] 3.4 Existing tests pass: `npm run test`
 
 #### Manual
 

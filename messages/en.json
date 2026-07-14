@@ -21,6 +21,13 @@
     "amenities": {
       "title": "Amenities"
     },
+    "myStay": {
+      "title": "My stay",
+      "roomLabel": "Room number",
+      "checkInLabel": "Check-in",
+      "checkOutLabel": "Check-out",
+      "ordersLink": "View my orders"
+    },
     "roomRequired": {
       "title": "Scan your room code",
       "body": "This feature unlocks once you scan the QR code in your room.",
