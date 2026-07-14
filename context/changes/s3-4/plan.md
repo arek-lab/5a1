@@ -380,12 +380,12 @@ No schema changes. No data migration.
 
 #### Automated
 
-- [x] 5.1 Full test suite passes: `npm run test`
-- [x] 5.2 Type checking passes: `npm run typecheck`
-- [x] 5.3 Linting passes: `npm run lint`
-- [x] 5.4 Production build succeeds: `npm run build`
+- [x] 5.1 Full test suite passes: `npm run test` — 6c0eade
+- [x] 5.2 Type checking passes: `npm run typecheck` — 6c0eade
+- [x] 5.3 Linting passes: `npm run lint` — 6c0eade
+- [x] 5.4 Production build succeeds: `npm run build` — 6c0eade
 
 #### Manual
 
-- [ ] 5.5 Full manual pass through Phases 1-4 in both PL and EN
-- [x] 5.6 No leftover hard-coded strings in new/modified components
+- [x] 5.5 Full manual pass through Phases 1-4 in both PL and EN — 6c0eade
+- [x] 5.6 No leftover hard-coded strings in new/modified components — 6c0eade

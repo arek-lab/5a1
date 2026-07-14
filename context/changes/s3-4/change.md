@@ -1,7 +1,7 @@
 ---
 change_id: s3-4
 title: Guest edge cases P0/P1, error screens, and i18n
-status: implementing
+status: implemented
 created: 2026-07-13
 updated: 2026-07-14
 archived_at: null
