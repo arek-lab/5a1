@@ -2,6 +2,14 @@
   "common": {
     "loading": "Ładowanie..."
   },
+  "panelNav": {
+    "dashboard": "Panel główny",
+    "services": "Usługi",
+    "knowledge": "Baza wiedzy",
+    "qr": "QR",
+    "orders": "Zamówienia",
+    "users": "Użytkownicy"
+  },
   "guest": {
     "categories": {
       "restaurant": "Restauracja i bar",
