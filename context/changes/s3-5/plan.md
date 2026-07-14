@@ -539,29 +539,29 @@ sesjami gości.
 
 #### Automated
 
-- [x] 2.1 `npm run build` przechodzi
-- [x] 2.2 Nowy test `sw-routing.test.ts` zielony
-- [x] 2.3 `npm run test` zielony
+- [x] 2.1 `npm run build` przechodzi — c6900ed
+- [x] 2.2 Nowy test `sw-routing.test.ts` zielony — c6900ed
+- [x] 2.3 `npm run test` zielony — c6900ed
 
 #### Manual
 
-- [x] 2.4 Odwiedzona strona ładuje się offline z cache (SWR)
-- [x] 2.5 Nieodwiedzona trasa gościa pokazuje `/offline`
-- [x] 2.6 `POST /api/orders` offline kończy się błędem sieci, nie cache hitem
-- [x] 2.7 Panel hotelowy offline nie ładuje się z cache
+- [x] 2.4 Odwiedzona strona ładuje się offline z cache (SWR) — c6900ed
+- [x] 2.5 Nieodwiedzona trasa gościa pokazuje `/offline` — c6900ed
+- [x] 2.6 `POST /api/orders` offline kończy się błędem sieci, nie cache hitem — c6900ed
+- [x] 2.7 Panel hotelowy offline nie ładuje się z cache — c6900ed
 
 ### Phase 3: Pipeline obrazów
 
 #### Automated
 
-- [ ] 3.1 `npm run build` przechodzi
-- [ ] 3.2 `npm run typecheck` i `npm run lint` przechodzą
+- [x] 3.1 `npm run build` przechodzi
+- [x] 3.2 `npm run typecheck` i `npm run lint` przechodzą
 
 #### Manual
 
-- [ ] 3.3 Karta usługi renderuje obraz przez `/_next/image`
-- [ ] 3.4 Lighthouse "Installable" audit bez braków ikon
-- [ ] 3.5 iOS "Add to Home Screen" pokazuje właściwą ikonę
+- [x] 3.3 Karta usługi renderuje obraz przez `/_next/image`
+- [x] 3.4 Lighthouse "Installable" audit bez braków ikon
+- [x] 3.5 iOS "Add to Home Screen" pokazuje właściwą ikonę
 
 ### Phase 4: Code splitting (czat, zamówienia, błędy)
 

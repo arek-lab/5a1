@@ -38,7 +38,12 @@ const withSerwist = withSerwistInit({
   cacheOnNavigation: true,
 });
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    formats: ['image/avif', 'image/webp'],
+  },
+};
 
 export default withSerwist(
   withSentryConfig(withNextIntl(nextConfig), {

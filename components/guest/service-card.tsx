@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { ServiceListItem } from '@/lib/guest/services';
@@ -11,8 +12,15 @@ export function ServiceCard({ service, category }: { service: ServiceListItem; c
   const content = (
     <>
       {service.imageUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={service.imageUrl} alt="" className="h-32 w-full rounded-t-lg object-cover" />
+        <div className="relative h-32 w-full">
+          <Image
+            src={service.imageUrl}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 100vw, 320px"
+            className="rounded-t-lg object-cover"
+          />
+        </div>
       )}
       <div className="flex items-center justify-between p-3">
         <span className="font-medium">{service.name}</span>
