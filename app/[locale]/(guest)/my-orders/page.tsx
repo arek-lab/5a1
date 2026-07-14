@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 import { requireGuestSession } from '@/lib/guest/require-session';
 import { withTenantContext } from '@/lib/supabase/tenant';
 import { getGuestOrders } from '@/lib/guest/orders';
-import { GuestOrdersPanel } from '@/components/guest/guest-orders-panel';
+import { GuestOrdersPanelLoader } from '@/components/guest/guest-orders-panel-loader';
 
 export default async function GuestOrdersPage() {
   const { sessionId } = await requireGuestSession();
@@ -11,7 +11,7 @@ export default async function GuestOrdersPage() {
 
   return (
     <main className="px-4 py-6">
-      <GuestOrdersPanel initialOrders={initialOrders} />
+      <GuestOrdersPanelLoader initialOrders={initialOrders} />
     </main>
   );
 }

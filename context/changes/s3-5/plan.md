@@ -554,26 +554,26 @@ sesjami gości.
 
 #### Automated
 
-- [x] 3.1 `npm run build` przechodzi
-- [x] 3.2 `npm run typecheck` i `npm run lint` przechodzą
+- [x] 3.1 `npm run build` przechodzi — cc25426
+- [x] 3.2 `npm run typecheck` i `npm run lint` przechodzą — cc25426
 
 #### Manual
 
-- [x] 3.3 Karta usługi renderuje obraz przez `/_next/image`
-- [x] 3.4 Lighthouse "Installable" audit bez braków ikon
-- [x] 3.5 iOS "Add to Home Screen" pokazuje właściwą ikonę
+- [x] 3.3 Karta usługi renderuje obraz przez `/_next/image` — cc25426
+- [x] 3.4 Lighthouse "Installable" audit bez braków ikon — cc25426
+- [x] 3.5 iOS "Add to Home Screen" pokazuje właściwą ikonę — cc25426
 
 ### Phase 4: Code splitting (czat, zamówienia, błędy)
 
 #### Automated
 
-- [ ] 4.1 `npm run build` pokazuje osobne chunki dla `/concierge` i `/my-orders`
-- [ ] 4.2 `npm run typecheck` i `npm run lint` przechodzą
-- [ ] 4.3 Istniejące testy komponentów nadal przechodzą
+- [x] 4.1 `npm run build` pokazuje osobne chunki dla `/concierge` i `/my-orders`
+- [x] 4.2 `npm run typecheck` i `npm run lint` przechodzą
+- [x] 4.3 Istniejące testy komponentów nadal przechodzą
 
 #### Manual
 
-- [ ] 4.4 JS chunk czatu/zamówień ładuje się dopiero przy wejściu na trasę
+- [x] 4.4 JS chunk czatu/zamówień ładuje się dopiero przy wejściu na trasę
 
 ### Phase 5: Budżet CI + weryfikacja końcowa
 
