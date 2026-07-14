@@ -3,7 +3,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: vi.fn(() => ({
-    auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null } }) },
+    auth: {
+      getUser: vi.fn().mockResolvedValue({ data: { user: null } }),
+      getClaims: vi.fn().mockResolvedValue({ data: null }),
+    },
   })),
 }))
 
