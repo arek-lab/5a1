@@ -71,6 +71,11 @@
     },
     "offline": {
       "toastMessage": "No internet connection. Some features may be unavailable."
+    },
+    "welcome": {
+      "greetingWithName": "Welcome, {name}!",
+      "greetingWithRoom": "Welcome to room {room}",
+      "scanCta": "Scan room code"
     }
   },
   "concierge": {

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export function WelcomeBanner({
   guestFirstName,
@@ -7,6 +8,8 @@ export function WelcomeBanner({
   guestFirstName: string | null;
   roomNumber: string | null;
 }) {
+  const t = useTranslations('guest.welcome');
+
   if (!guestFirstName && !roomNumber) {
     return (
       <div className="px-4 py-6">
@@ -14,13 +17,15 @@ export function WelcomeBanner({
           href="/scan"
           className="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700"
         >
-          Skanuj kod pokoju
+          {t('scanCta')}
         </Link>
       </div>
     );
   }
 
-  const greeting = guestFirstName ? `Witaj, ${guestFirstName}!` : `Witamy w pokoju ${roomNumber}`;
+  const greeting = guestFirstName
+    ? t('greetingWithName', { name: guestFirstName })
+    : t('greetingWithRoom', { room: roomNumber! });
 
   return (
     <div className="px-4 py-6">

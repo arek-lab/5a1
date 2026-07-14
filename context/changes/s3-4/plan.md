@@ -367,25 +367,25 @@ No schema changes. No data migration.
 
 #### Automated
 
-- [x] 4.1 Unit tests pass: `npm run test -- components/guest/order-confirm-modal`
-- [x] 4.2 Type checking passes: `npm run typecheck`
-- [x] 4.3 Linting passes: `npm run lint`
+- [x] 4.1 Unit tests pass: `npm run test -- components/guest/order-confirm-modal` — 6c8ecd7
+- [x] 4.2 Type checking passes: `npm run typecheck` — 6c8ecd7
+- [x] 4.3 Linting passes: `npm run lint` — 6c8ecd7
 
 #### Manual
 
-- [x] 4.4 Forced POST failure shows retry button plus reception phone link
-- [x] 4.5 Successful retry after forced failure completes the order
+- [x] 4.4 Forced POST failure shows retry button plus reception phone link — 6c8ecd7
+- [x] 4.5 Successful retry after forced failure completes the order — 6c8ecd7
 
 ### Phase 5: i18n consistency pass + final verification
 
 #### Automated
 
-- [ ] 5.1 Full test suite passes: `npm run test`
-- [ ] 5.2 Type checking passes: `npm run typecheck`
-- [ ] 5.3 Linting passes: `npm run lint`
-- [ ] 5.4 Production build succeeds: `npm run build`
+- [x] 5.1 Full test suite passes: `npm run test`
+- [x] 5.2 Type checking passes: `npm run typecheck`
+- [x] 5.3 Linting passes: `npm run lint`
+- [x] 5.4 Production build succeeds: `npm run build`
 
 #### Manual
 
 - [ ] 5.5 Full manual pass through Phases 1-4 in both PL and EN
-- [ ] 5.6 No leftover hard-coded strings in new/modified components
+- [x] 5.6 No leftover hard-coded strings in new/modified components
