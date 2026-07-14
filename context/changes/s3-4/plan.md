@@ -359,9 +359,9 @@ No schema changes. No data migration.
 
 #### Manual
 
-- [ ] 3.4 Offline throttling shows toast and disables "Zamów"
-- [ ] 3.5 Restoring connectivity dismisses toast and re-enables "Zamów"
-- [ ] 3.6 Browsing remains usable while offline toast is shown
+- [x] 3.4 Offline throttling shows toast and disables "Zamów"
+- [x] 3.5 Restoring connectivity dismisses toast and re-enables "Zamów"
+- [x] 3.6 Browsing remains usable while offline toast is shown
 
 ### Phase 4: Order-retry phone number
 

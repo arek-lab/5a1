@@ -18,7 +18,12 @@ async function isReachable(): Promise<boolean> {
 // 'online' transition is confirmed with a same-origin ping before we trust it.
 // A poll keeps checking while offline in case the browser never fires 'online'.
 export function useOnlineStatus(): boolean {
-  const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
+  // `typeof navigator === 'undefined'` is not a reliable server check: Node 21+
+  // ships a global `navigator` polyfill (userAgent only, no `onLine`), so on the
+  // server `navigator` exists but `navigator.onLine` is `undefined` (falsy) —
+  // that previously rendered the offline state into the SSR HTML unconditionally.
+  // `window` is never polyfilled by Node, so it reliably distinguishes server from client.
+  const [isOnline, setIsOnline] = useState(() => (typeof window === 'undefined' ? true : navigator.onLine));
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
