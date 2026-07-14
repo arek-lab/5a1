@@ -19,14 +19,14 @@ export default async function ServiceDetailPage({
   const { category, service: serviceId } = await params;
   if (!isServiceCategory(category)) notFound();
 
-  const { propertyId, sessionId, roomId, reservationId } = await requireGuestSession();
+  const { propertyId, sessionId, roomId, reservationId, phoneReception } = await requireGuestSession();
   const client = await withTenantContext(await headers());
   const locale = await getLocale();
   const service = await getServiceById(client, propertyId, serviceId, locale);
 
   if (!service || !service.isActive || service.category !== category) notFound();
 
-  const guestContext: GuestOrderContext = { propertyId, sessionId, roomId, reservationId };
+  const guestContext: GuestOrderContext = { propertyId, sessionId, roomId, reservationId, phoneReception };
   const t = await getTranslations('guest.service');
   const price = service.priceCents === null ? t('included') : (service.priceCents / 100).toFixed(2);
 

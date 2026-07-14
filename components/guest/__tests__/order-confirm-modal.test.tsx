@@ -38,12 +38,13 @@ const guestContext: GuestOrderContext = {
   sessionId: 'session-1',
   roomId: 'room-1',
   reservationId: 'reservation-1',
+  phoneReception: '+48123456789',
 }
 
-function renderModal(onClose = vi.fn()) {
+function renderModal(onClose = vi.fn(), context: GuestOrderContext = guestContext) {
   return render(
     <NextIntlClientProvider locale="pl" messages={messages}>
-      <OrderConfirmModal service={service} guestContext={guestContext} onClose={onClose} />
+      <OrderConfirmModal service={service} guestContext={context} onClose={onClose} />
     </NextIntlClientProvider>
   )
 }
@@ -89,6 +90,30 @@ describe('OrderConfirmModal', () => {
 
     await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/order-success?orderId=order-2'))
     expect(global.fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('shows a reception phone link on failure when phoneReception is present', async () => {
+    global.fetch = vi.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch
+
+    renderModal()
+
+    fireEvent.click(screen.getByText('Dopisz do rachunku pokoju'))
+
+    await waitFor(() => expect(screen.getByText('Zadzwoń do recepcji')).toBeTruthy())
+    expect(screen.getByText('Zadzwoń do recepcji').closest('a')?.getAttribute('href')).toBe(
+      'tel:+48123456789'
+    )
+  })
+
+  it('omits the reception phone link when phoneReception is null', async () => {
+    global.fetch = vi.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch
+
+    renderModal(vi.fn(), { ...guestContext, phoneReception: null })
+
+    fireEvent.click(screen.getByText('Dopisz do rachunku pokoju'))
+
+    await waitFor(() => expect(screen.getByText('Nie udało się złożyć zamówienia. Spróbuj ponownie.')).toBeTruthy())
+    expect(screen.queryByText('Zadzwoń do recepcji')).toBeNull()
   })
 
   it('calls onClose without submitting', () => {

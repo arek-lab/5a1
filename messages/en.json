@@ -24,7 +24,8 @@
       "submitting": "Sending...",
       "retry": "Try again",
       "cancel": "Cancel",
-      "errorMessage": "Couldn't place the order. Please try again."
+      "errorMessage": "Couldn't place the order. Please try again.",
+      "callReception": "Call reception"
     },
     "orderSuccess": {
       "title": "Order placed",

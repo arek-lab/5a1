@@ -10,6 +10,7 @@ const NOTE_MAX_LENGTH = 500;
 
 export function OrderConfirmModal({
   service,
+  guestContext,
   scheduledTime,
   onClose,
 }: {
@@ -70,7 +71,19 @@ export function OrderConfirmModal({
           {note.length}/{NOTE_MAX_LENGTH}
         </p>
 
-        {error && <p className="mt-2 rounded bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {error && (
+          <div className="mt-2 rounded bg-red-50 p-3 text-sm text-red-700">
+            <p>{error}</p>
+            {guestContext.phoneReception && (
+              <a
+                href={`tel:${guestContext.phoneReception}`}
+                className="mt-1 inline-block font-semibold underline"
+              >
+                {t('callReception')}
+              </a>
+            )}
+          </div>
+        )}
 
         <div className="mt-4 flex gap-2">
           <button

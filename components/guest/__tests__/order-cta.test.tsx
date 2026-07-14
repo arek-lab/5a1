@@ -33,6 +33,7 @@ const guestContext: GuestOrderContext = {
   sessionId: 'session-1',
   roomId: 'room-1',
   reservationId: 'reservation-1',
+  phoneReception: '+48123456789',
 }
 
 function renderCta() {

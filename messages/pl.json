@@ -24,7 +24,8 @@
       "submitting": "Wysyłanie...",
       "retry": "Spróbuj ponownie",
       "cancel": "Anuluj",
-      "errorMessage": "Nie udało się złożyć zamówienia. Spróbuj ponownie."
+      "errorMessage": "Nie udało się złożyć zamówienia. Spróbuj ponownie.",
+      "callReception": "Zadzwoń do recepcji"
     },
     "orderSuccess": {
       "title": "Zamówienie złożone",

@@ -12,6 +12,7 @@ export type GuestOrderContext = {
   sessionId: string;
   roomId: string | null;
   reservationId: string | null;
+  phoneReception: string | null;
 };
 
 export function OrderCta({

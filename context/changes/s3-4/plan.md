@@ -359,22 +359,22 @@ No schema changes. No data migration.
 
 #### Manual
 
-- [x] 3.4 Offline throttling shows toast and disables "Zamów"
-- [x] 3.5 Restoring connectivity dismisses toast and re-enables "Zamów"
-- [x] 3.6 Browsing remains usable while offline toast is shown
+- [x] 3.4 Offline throttling shows toast and disables "Zamów" — e0bb5af
+- [x] 3.5 Restoring connectivity dismisses toast and re-enables "Zamów" — e0bb5af
+- [x] 3.6 Browsing remains usable while offline toast is shown — e0bb5af
 
 ### Phase 4: Order-retry phone number
 
 #### Automated
 
-- [ ] 4.1 Unit tests pass: `npm run test -- components/guest/order-confirm-modal`
-- [ ] 4.2 Type checking passes: `npm run typecheck`
-- [ ] 4.3 Linting passes: `npm run lint`
+- [x] 4.1 Unit tests pass: `npm run test -- components/guest/order-confirm-modal`
+- [x] 4.2 Type checking passes: `npm run typecheck`
+- [x] 4.3 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.4 Forced POST failure shows retry button plus reception phone link
-- [ ] 4.5 Successful retry after forced failure completes the order
+- [x] 4.4 Forced POST failure shows retry button plus reception phone link
+- [x] 4.5 Successful retry after forced failure completes the order
 
 ### Phase 5: i18n consistency pass + final verification
 
