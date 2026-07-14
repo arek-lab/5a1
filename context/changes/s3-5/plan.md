@@ -526,29 +526,29 @@ sesjami gości.
 
 #### Automated
 
-- [x] 1.1 `npm run build` generuje `public/sw.js`
-- [x] 1.2 `npm run typecheck` przechodzi
-- [x] 1.3 `npm run lint` przechodzi
+- [x] 1.1 `npm run build` generuje `public/sw.js` — 216a044
+- [x] 1.2 `npm run typecheck` przechodzi — 216a044
+- [x] 1.3 `npm run lint` przechodzi — 216a044
 
 #### Manual
 
-- [x] 1.4 SW widoczny jako "activated and is running" w DevTools
-- [x] 1.5 Aktualizacja SW po re-buildzie aktywuje się bez ręcznego zamykania kart
+- [x] 1.4 SW widoczny jako "activated and is running" w DevTools — 216a044
+- [x] 1.5 Aktualizacja SW po re-buildzie aktywuje się bez ręcznego zamykania kart — 216a044
 
 ### Phase 2: Strategie cache'owania + offline fallback
 
 #### Automated
 
-- [ ] 2.1 `npm run build` przechodzi
-- [ ] 2.2 Nowy test `sw-routing.test.ts` zielony
-- [ ] 2.3 `npm run test` zielony
+- [x] 2.1 `npm run build` przechodzi
+- [x] 2.2 Nowy test `sw-routing.test.ts` zielony
+- [x] 2.3 `npm run test` zielony
 
 #### Manual
 
-- [ ] 2.4 Odwiedzona strona ładuje się offline z cache (SWR)
-- [ ] 2.5 Nieodwiedzona trasa gościa pokazuje `/offline`
-- [ ] 2.6 `POST /api/orders` offline kończy się błędem sieci, nie cache hitem
-- [ ] 2.7 Panel hotelowy offline nie ładuje się z cache
+- [x] 2.4 Odwiedzona strona ładuje się offline z cache (SWR)
+- [x] 2.5 Nieodwiedzona trasa gościa pokazuje `/offline`
+- [x] 2.6 `POST /api/orders` offline kończy się błędem sieci, nie cache hitem
+- [x] 2.7 Panel hotelowy offline nie ładuje się z cache
 
 ### Phase 3: Pipeline obrazów
 
