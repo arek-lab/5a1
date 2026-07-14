@@ -557,12 +557,12 @@ Brak migracji bazy danych — `check_in`/`check_out` już istnieją w schemacie 
 
 #### Automated
 
-- [x] 5.1 `npm run test` — wszystkie testy przechodzą
-- [x] 5.2 `npm run typecheck` przechodzi
-- [x] 5.3 `npm run lint` przechodzi
-- [x] 5.4 `npm run build` przechodzi
+- [x] 5.1 `npm run test` — wszystkie testy przechodzą — 51c0fd3
+- [x] 5.2 `npm run typecheck` przechodzi — 51c0fd3
+- [x] 5.3 `npm run lint` przechodzi — 51c0fd3
+- [x] 5.4 `npm run build` przechodzi — 51c0fd3
 
 #### Manual
 
-- [ ] 5.5 Pełny przegląd DoD §S6.0 (gość + panel)
-- [ ] 5.6 Zero regresji w istniejących flow (guest smoke test, panel smoke test)
+- [x] 5.5 Pełny przegląd DoD §S6.0 (gość + panel) — 51c0fd3
+- [x] 5.6 Zero regresji w istniejących flow (guest smoke test, panel smoke test) — 51c0fd3
