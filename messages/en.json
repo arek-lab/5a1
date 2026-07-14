@@ -33,6 +33,10 @@
       "body": "This feature unlocks once you scan the QR code in your room.",
       "cta": "Scan room code"
     },
+    "discover": {
+      "title": "Discover the area",
+      "empty": "Local recommendations are coming soon. Ask the concierge for suggestions in the meantime."
+    },
     "categories": {
       "restaurant": "Restaurant & Bar",
       "room_service": "Room Service",

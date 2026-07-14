@@ -529,24 +529,24 @@ Brak migracji bazy danych — `check_in`/`check_out` już istnieją w schemacie 
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npm run typecheck`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Build passes: `npm run build`
-- [x] 3.4 Existing tests pass: `npm run test`
+- [x] 3.1 Type checking passes: `npm run typecheck` — 300c01e
+- [x] 3.2 Linting passes: `npm run lint` — 300c01e
+- [x] 3.3 Build passes: `npm run build` — 300c01e
+- [x] 3.4 Existing tests pass: `npm run test` — 300c01e
 
 #### Manual
 
-- [ ] 3.5 `/my-stay` pokazuje imię, numer pokoju (mono), daty (mono, DD.MM.YYYY)
-- [ ] 3.6 Sesja bez `reservationId` nie wywala błędu
-- [ ] 3.7 Link do `/my-orders` działa
+- [x] 3.5 `/my-stay` pokazuje imię, numer pokoju (mono), daty (mono, DD.MM.YYYY) — 300c01e
+- [x] 3.6 Sesja bez `reservationId` nie wywala błędu — 300c01e
+- [x] 3.7 Link do `/my-orders` działa — 300c01e
 
 ### Phase 4: Gość — `/discover`
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npm run typecheck`
-- [ ] 4.2 Linting passes: `npm run lint`
-- [ ] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npm run typecheck`
+- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.3 Build passes: `npm run build`
 
 #### Manual
 

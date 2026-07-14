@@ -33,6 +33,10 @@
       "body": "Ta funkcja odblokuje się po zeskanowaniu kodu QR w Twoim pokoju.",
       "cta": "Skanuj kod pokoju"
     },
+    "discover": {
+      "title": "Odkrywaj okolicę",
+      "empty": "Wkrótce dodamy informacje o okolicy. Zapytaj concierge o rekomendacje już teraz."
+    },
     "categories": {
       "restaurant": "Restauracja i bar",
       "room_service": "Usługi pokojowe",
