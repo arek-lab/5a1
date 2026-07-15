@@ -421,16 +421,16 @@ Brak migracji danych — czysto zmiana warstwy prezentacji na istniejących, dzi
 
 #### Automated
 
-- [x] 4.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
-- [x] 4.2 Brak literałów hex w plikach panelu/admin
-- [x] 4.3 Testy RBAC z S2.1 nadal zielone
+- [x] 4.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji — 0ae288a
+- [x] 4.2 Brak literałów hex w plikach panelu/admin — 0ae288a
+- [x] 4.3 Testy RBAC z S2.1 nadal zielone — 0ae288a
 
 #### Manual
 
-- [x] 4.4 Tabele/formularze/modale zgodne ze `style.md` §2
-- [x] 4.5 Transfer ownership modal nadal blokuje dezaktywację ostatniego Ownera
-- [x] 4.6 Insight ticker renderuje się na dashboardzie
-- [x] 4.7 Dark mode czytelny na dashboard/inbox zamówień
+- [x] 4.4 Tabele/formularze/modale zgodne ze `style.md` §2 — 0ae288a
+- [x] 4.5 Transfer ownership modal nadal blokuje dezaktywację ostatniego Ownera — 0ae288a
+- [x] 4.6 Insight ticker renderuje się na dashboardzie — 0ae288a
+- [x] 4.7 Dark mode czytelny na dashboard/inbox zamówień — 0ae288a
 
 ### Phase 5: Weryfikacja dostępności (WCAG AA)
 

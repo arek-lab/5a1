@@ -16,7 +16,7 @@ export function SidebarNav({ items, children }: Props) {
   const t = useTranslations('panelNav')
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r border-border bg-panel-surface">
+    <aside className="flex w-60 shrink-0 flex-col overflow-y-auto border-r border-border bg-panel-surface">
       <nav className="flex flex-col p-4">
         {items.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)

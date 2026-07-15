@@ -23,11 +23,11 @@ export default async function HotelLayout({ children }: { children: React.ReactN
   const navItems = getVisibleNavItems(hotelUser.role)
 
   return (
-    <div data-theme="panel" className="flex min-h-screen flex-col bg-panel-bg font-ui text-panel-ink">
+    <div data-theme="panel" className="flex h-screen flex-col bg-panel-bg font-ui text-panel-ink">
       <header className="flex h-14 shrink-0 items-center border-b border-border bg-panel-surface px-4">
         <span className="font-display text-sm font-semibold text-panel-ink">Hotel Guest App</span>
       </header>
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden">
         <SidebarNav items={navItems}>
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -38,7 +38,7 @@ export default async function HotelLayout({ children }: { children: React.ReactN
             </form>
           </div>
         </SidebarNav>
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>
   )
