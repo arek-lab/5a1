@@ -386,3 +386,19 @@ Poprawiono też dwa linki, które błędnie prowadziły na `/` zamiast `/ameniti
 `components/guest/guest-orders-panel.tsx` (pusty stan zamówień, "Przeglądaj usługi"). Czysto
 wizualna zmiana + korekta routingu — zero zmian schematu/RBAC. Poza formalnym DoD S6.1,
 udokumentowane tu z tego samego powodu co wpisy powyżej.
+
+### 2026-07-15 — Paleta ciemnego motywu gościa: "Ciepła Czerń" → "Żar"
+Na wniosek użytkownika, w trakcie trwania S6.1: obecna paleta `:root[data-color-scheme="dark"]`
+w `app/globals.css` (tokeny `--guest-stone`/`--guest-paper`, oliwkowo-szare, ~3% różnicy jasności
+tło↔karta) sprawiała wrażenie płaskiej i nieapetycznej — karty kategorii tonęły w tle, akcent
+`--guest-accent` był zbyt mało nasycony, cień liczony na czerni był niewidoczny. Porównano na
+żywo w przeglądarce (nie makieta) trzy warianty palety: "Ciepła Czerń" (neutralny prawie-czarny +
+złoto), "Nocna Rezydencja" (chłodny grafit + złoty kontrast), "Żar" (espresso + terakotowy akcent).
+"Ciepła Czerń" odrzucona przez użytkownika jako zbyt monochromatyczna ("kawa z błotem" — tło i
+karta zbyt blisko tego samego brązu). Wdrożono "Żar": `--guest-stone: #1b120e`,
+`--guest-paper: #2a1c15`, `--guest-ink: #f6ece2`, `--guest-ink-muted: #bba28f`,
+`--guest-accent: #e08a4f`, `--guest-moss: #8a9c6e`, `--guest-clay: #e79571`,
+`--guest-shadow-soft` z dodaną ciepłą poświatą (`0 0 26px rgba(224, 138, 79, 0.07)`) obok cienia.
+Zmiana wyłącznie w tokenach `--guest-*`; blok `--panel-*` (panel hotelu) nietknięty — zweryfikowano
+`git diff` bit w bit przed komitem. Czysto wizualna zmiana — zero zmian logiki/routingu/RBAC. Poza
+formalnym DoD S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.

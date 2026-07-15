@@ -64,14 +64,14 @@
    @media query is needed here — "system" preference is resolved to a
    concrete light/dark value by the script before this stylesheet is read. */
 :root[data-color-scheme="dark"] {
-  --guest-stone: #1f1e19;
-  --guest-paper: #2a2822;
-  --guest-ink: #f0ede4;
-  --guest-ink-muted: #a8a692;
-  --guest-accent: #c9a468;
-  --guest-moss: #7c9473;
-  --guest-clay: #e0a98c;
-  --guest-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --guest-stone: #1b120e;
+  --guest-paper: #2a1c15;
+  --guest-ink: #f6ece2;
+  --guest-ink-muted: #bba28f;
+  --guest-accent: #e08a4f;
+  --guest-moss: #8a9c6e;
+  --guest-clay: #e79571;
+  --guest-shadow-soft: 0 6px 22px rgba(0, 0, 0, 0.5), 0 0 26px rgba(224, 138, 79, 0.07);
 
   --panel-bg: #14171a;
   --panel-surface: #1e2227;
