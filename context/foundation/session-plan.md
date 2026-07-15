@@ -344,3 +344,15 @@ punkt 2 i Faza 4 punkt 1) zakładał gotową nawigację gościa/panelu do retrof
 błędne — nawigacja nie istniała. Nową sesję S6.0 zarejestrowano, żeby ją zbudować przed
 retrofitem; S6.1 przy faktycznym planowaniu/wykonaniu Fazy 3–4 musi objąć również nowe komponenty
 `bottom-nav.tsx`/`sidebar-nav.tsx` i strony `/amenities`, `/my-stay`, `/discover` z S6.0.
+
+---
+
+## Prace dodatkowe (poza formalnym zakresem sesji)
+
+### 2026-07-15 — Kafle kategorii gościa: tła zdjęciowe zamiast ikon
+Na wniosek użytkownika, w trakcie trwania S6.1: `components/guest/category-grid.tsx` — zamiana
+emoji-ikon (`CATEGORY_ICON`) na zdjęciowe tła kafli (`CATEGORY_IMAGE`, `next/image` hotlink do
+Unsplash) dla wszystkich 5 kategorii (`restaurant`, `room_service`, `spa`, `transport`, `info`).
+Czysto wizualna zmiana — zero zmian logiki/routingu/RBAC. Poza formalnym DoD S6.1 (który tego nie
+przewidywał), udokumentowane tu zamiast w `context/changes/s6-1/plan.md`, żeby nie zaburzać
+progresu formalnych faz tej sesji.
