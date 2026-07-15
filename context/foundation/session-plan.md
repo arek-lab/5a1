@@ -402,3 +402,46 @@ karta zbyt blisko tego samego brązu). Wdrożono "Żar": `--guest-stone: #1b120e
 Zmiana wyłącznie w tokenach `--guest-*`; blok `--panel-*` (panel hotelu) nietknięty — zweryfikowano
 `git diff` bit w bit przed komitem. Czysto wizualna zmiana — zero zmian logiki/routingu/RBAC. Poza
 formalnym DoD S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.
+
+### 2026-07-15 — Fix: `<script>` w `RootLayout` psuł render (guest + panel)
+W trakcie testowania powyższych zmian na żywo ujawnił się blokujący błąd deweloperski "Encountered
+a script tag while rendering React component" w `app/layout.tsx:27`, psujący render zarówno apki
+gościa, jak i panelu dla staffu (współdzielony `RootLayout`). Zweryfikowano `git diff` — plik nie
+był dotknięty żadną z powyższych zmian; przyczyna to znany konflikt Next.js 16.2 + React 19 z
+wzorcem `<script dangerouslySetInnerHTML>` w `<head>` Server Component (potwierdzone w publicznych
+issues Next.js/next-themes/shadcn-ui). Naprawiono przez zamianę na `next/script` ze strategią
+`beforeInteractive` (`import Script from 'next/script'`), co jest oficjalnie rekomendowanym wzorcem
+dla blokujących skryptów anty-FOUC w head. Bez zmian w `lib/theme/color-scheme.ts` — sam skrypt
+inicjalizujący `data-color-scheme` pozostał identyczny. Nie było to spowodowane pracami nad
+paletą/S6.1, ale naprawione w ramach tej samej sesji, bo blokowało dalszą weryfikację na żywo.
+
+### 2026-07-15 — Zielony odcień + gradient tła + zmiękczony akcent (dark mode gościa)
+Kontynuacja wpisu o palecie "Żar": na wniosek użytkownika dodano (1) delikatne przesunięcie
+`--guest-stone`/`--guest-paper` w stronę zieleni leśnej zamiast czystego espresso-brązu
+(`#1a1d13`/`#242a1b` w dark, `--guest-moss` podbity do `#7fa06e`), (2) gradient tła — nowy token
+`--guest-stone-deep` (głębszy stop) + klasa `.bg-guest-gradient` (liniowy gradient góra→dół),
+podpięta tylko do głównego wrappera `app/[locale]/(guest)/layout.tsx`; w light mode oba stopy są
+identyczne więc gradient tam jest niewidoczny, (3) zmiękczony akcent CTA — `--guest-accent` z
+ostrego pomarańczu `#e08a4f` na przygaszone złoto `#c99860` (użytkownik: "ten pomarańczowy jest za
+ostry"), (4) w jasnym motywie `--guest-ink` przesunięty lekko w zieleń (`#2a2b24` → `#232b1f`) z
+wyjątkiem górnej belki — nowy token `--guest-ink-header` (wartość identyczna jak stary `--guest-ink`
+w obu motywach) podpięty tylko do tytułu hotelu w `(guest)/layout.tsx`, żeby belka zostawała bez
+zmian. Czysto wizualne, zero zmian logiki/routingu/RBAC.
+
+### 2026-07-15 — Glassmorfizm na kaflach usług + redesign listy usług w kategorii
+Na wniosek użytkownika: (1) `components/guest/category-grid.tsx` (kafle "Udogodnienia") — usunięte
+płaskie `bg-guest-paper` z kontenera, panel z nazwą po prawej dostał `bg-guest-paper/65
+backdrop-blur-lg` (dostrojone iteracyjnie z /45 i /60 na żywo) + cienki separator; zdjęcie po lewej
+zostaje bez zmian (ostre, `object-cover`). (2) `components/guest/service-card.tsx` — przebudowany z
+pionowej karty (zdjęcie u góry + tekst pod spodem, siatka 2×3) na poziomy pasek pełnej szerokości
+bez zdjęcia (nazwa po lewej, cena/status po prawej, to samo szkło co w (1)); kontener listy w
+`app/[locale]/(guest)/c/[category]/page.tsx` zmieniony z `grid grid-cols-2 sm:grid-cols-3` na
+`flex flex-col gap-2.5`, spójnie z listą "Udogodnienia". `ServiceListItem.imageUrl` przestał być
+renderowany na tej liście (zostaje używany na stronie szczegółu usługi, nietkniętej). (3) Dodany
+link powrotu nad listą usług, wyrównany do prawej (`self-end`), stały cel `/amenities` (nie
+`router.back()` — ustalone z użytkownikiem jako bardziej przewidywalne dla wejść przez QR/deep-link);
+ikona SVG chevron (nie znak Unicode `‹` — renderował się krzywo, niespójny baseline między
+fontami), tekst skrócony do samego "Wróć"/"Back" (klucz `guest.categories.back` w
+`messages/pl.json`/`en.json`). Testy `service-card.test.tsx` (3/3) przechodzą bez zmian — nie
+sprawdzały renderowania zdjęcia. Czysto wizualne + jeden nowy link — zero zmian schematu/RBAC. Poza
+formalnym DoD S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.

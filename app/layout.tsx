@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Providers } from './providers';
 import { frankRuhlLibre, publicSans, ibmPlexSans, ibmPlexMono } from './fonts';
 import { COLOR_SCHEME_INIT_SCRIPT } from '@/lib/theme/color-scheme';
@@ -24,7 +25,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html suppressHydrationWarning className={fontVariables}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: COLOR_SCHEME_INIT_SCRIPT }} />
+        <Script
+          id="color-scheme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: COLOR_SCHEME_INIT_SCRIPT }}
+        />
       </head>
       <body>
         <Providers>{children}</Providers>

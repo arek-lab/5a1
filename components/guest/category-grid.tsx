@@ -23,12 +23,12 @@ export function CategoryGrid({ visibleCategories }: { visibleCategories: Service
         <Link
           key={category}
           href={`/c/${category}`}
-          className="flex h-[84px] items-stretch overflow-hidden rounded-card border border-guest-ink-muted/15 bg-guest-paper shadow-soft"
+          className="flex h-[84px] items-stretch overflow-hidden rounded-card border border-guest-ink-muted/15 shadow-soft"
         >
           <span className="relative w-[84px] shrink-0">
             <Image src={CATEGORY_IMAGE[category]} alt="" fill sizes="84px" className="object-cover" />
           </span>
-          <span className="flex flex-1 items-center justify-between gap-3 px-4">
+          <span className="flex flex-1 items-center justify-between gap-3 border-l border-guest-ink-muted/10 bg-guest-paper/65 px-4 backdrop-blur-lg">
             <span className="text-base font-medium text-guest-ink">{t(category)}</span>
             <span aria-hidden className="text-guest-ink-muted">
               ›

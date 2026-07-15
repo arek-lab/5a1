@@ -8,14 +8,14 @@ export default async function GuestLayout({ children }: { children: React.ReactN
   const { propertyName, logoUrl, authLevel } = await requireGuestSession();
 
   return (
-    <div data-theme="guest" className="flex h-dvh flex-col bg-guest-stone font-ui text-guest-ink">
+    <div data-theme="guest" className="flex h-dvh flex-col bg-guest-gradient font-ui text-guest-ink">
       <header className="flex h-16 shrink-0 items-center justify-between border-b border-guest-ink-muted/15 bg-guest-paper px-4">
         <div className="flex h-10 items-center">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={logoUrl} alt={propertyName} className="h-10 max-w-[160px] object-contain" />
           ) : (
-            <span className="font-display text-lg font-semibold text-guest-ink">{propertyName}</span>
+            <span className="font-display text-lg font-semibold text-guest-ink-header">{propertyName}</span>
           )}
         </div>
         <div className="flex items-center gap-1">

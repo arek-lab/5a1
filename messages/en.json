@@ -52,7 +52,8 @@
       "room_service": "Room Service",
       "spa": "Spa & Wellness",
       "transport": "Transport",
-      "info": "Information"
+      "info": "Information",
+      "back": "Back"
     },
     "service": {
       "included": "Included in your stay",

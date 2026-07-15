@@ -2,8 +2,10 @@
 
 :root {
   --guest-stone: #eeebe3;
+  --guest-stone-deep: #eeebe3;
   --guest-paper: #faf8f3;
-  --guest-ink: #2a2b24;
+  --guest-ink: #232b1f;
+  --guest-ink-header: #2a2b24;
   --guest-ink-muted: #6b6a5e;
   --guest-accent: #a9814a;
   --guest-moss: #4b5d45;
@@ -64,12 +66,14 @@
    @media query is needed here — "system" preference is resolved to a
    concrete light/dark value by the script before this stylesheet is read. */
 :root[data-color-scheme="dark"] {
-  --guest-stone: #1b120e;
-  --guest-paper: #2a1c15;
-  --guest-ink: #f6ece2;
-  --guest-ink-muted: #bba28f;
-  --guest-accent: #e08a4f;
-  --guest-moss: #8a9c6e;
+  --guest-stone: #1a1d13;
+  --guest-stone-deep: #10130d;
+  --guest-paper: #242a1b;
+  --guest-ink: #f3ede1;
+  --guest-ink-header: #f3ede1;
+  --guest-ink-muted: #aeae91;
+  --guest-accent: #c99860;
+  --guest-moss: #7fa06e;
   --guest-clay: #e79571;
   --guest-shadow-soft: 0 6px 22px rgba(0, 0, 0, 0.5), 0 0 26px rgba(224, 138, 79, 0.07);
 
@@ -92,8 +96,10 @@
 
 @theme inline {
   --color-guest-stone: var(--guest-stone);
+  --color-guest-stone-deep: var(--guest-stone-deep);
   --color-guest-paper: var(--guest-paper);
   --color-guest-ink: var(--guest-ink);
+  --color-guest-ink-header: var(--guest-ink-header);
   --color-guest-ink-muted: var(--guest-ink-muted);
   --color-guest-accent: var(--guest-accent);
   --color-guest-moss: var(--guest-moss);
@@ -149,4 +155,12 @@
 
 body {
   font-family: var(--font-ui, ui-sans-serif, system-ui, sans-serif);
+}
+
+/* Ambient depth for the guest app shell — flat in light mode (both stops
+   equal --guest-stone), a top-to-bottom falloff into --guest-stone-deep in
+   dark mode. Kept separate from --guest-stone itself so buttons/bubbles/etc.
+   that use bg-guest-stone stay flat. */
+.bg-guest-gradient {
+  background: linear-gradient(180deg, var(--guest-stone) 0%, var(--guest-stone-deep) 100%);
 }

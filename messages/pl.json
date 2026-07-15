@@ -52,7 +52,8 @@
       "room_service": "Usługi pokojowe",
       "spa": "Spa i wellness",
       "transport": "Transport",
-      "info": "Informacje"
+      "info": "Informacje",
+      "back": "Wróć"
     },
     "service": {
       "included": "W cenie pobytu",
