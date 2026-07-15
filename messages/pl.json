@@ -8,7 +8,17 @@
     "knowledge": "Baza wiedzy",
     "qr": "QR",
     "orders": "Zamówienia",
-    "users": "Użytkownicy"
+    "users": "Użytkownicy",
+    "insightTicker": {
+      "title": "Insighty concierge",
+      "empty": "Brak insightów. Pojawią się, gdy goście zaczną rozmawiać z AI concierge."
+    },
+    "theme": {
+      "label": "Motyw: {mode}",
+      "system": "automatyczny",
+      "light": "jasny",
+      "dark": "ciemny"
+    }
   },
   "guest": {
     "nav": {
@@ -112,7 +122,9 @@
     "welcome": {
       "greetingWithName": "Witaj, {name}!",
       "greetingWithRoom": "Witamy w pokoju {room}",
-      "scanCta": "Skanuj kod pokoju"
+      "scanCta": "Skanuj kod pokoju",
+      "amenitiesCta": "Zobacz co dla Ciebie przygotowaliśmy",
+      "description": "Kameralny hotel w sercu miasta — komfortowy pobyt i obsługa concierge 24/7."
     },
     "theme": {
       "label": "Motyw: {mode}",
@@ -219,7 +231,12 @@
       "includedLabel": "W cenie",
       "addFromTemplate": "Dodaj z szablonu",
       "addCustom": "Dodaj własną",
-      "timeSensitiveLabel": "Wymaga godziny"
+      "timeSensitiveLabel": "Wymaga godziny",
+      "columns": {
+        "name": "Nazwa",
+        "price": "Cena",
+        "actions": "Akcje"
+      }
     },
     "form": {
       "fields": {
@@ -269,6 +286,13 @@
       "resendInvite": "Wyślij ponownie",
       "deactivate": "Dezaktywuj",
       "reactivate": "Aktywuj ponownie",
+      "columns": {
+        "user": "Użytkownik",
+        "status": "Status",
+        "lastLogin": "Ostatnie logowanie",
+        "role": "Rola",
+        "actions": "Akcje"
+      },
       "status": {
         "active": "Aktywny",
         "invited": "Zaproszony",
@@ -334,7 +358,11 @@
       "title": "Baza wiedzy",
       "empty": "Nie dodano jeszcze żadnych wpisów FAQ.",
       "addFromTemplate": "Dodaj z szablonu",
-      "addCustom": "Dodaj własne"
+      "addCustom": "Dodaj własne",
+      "columns": {
+        "question": "Pytanie",
+        "actions": "Akcje"
+      }
     },
     "local": {
       "title": "Okolica",
@@ -447,7 +475,12 @@
     "list": {
       "empty": "Brak zamówień w tej zakładce.",
       "room": "Pokój",
-      "noRoom": "Bez pokoju"
+      "noRoom": "Bez pokoju",
+      "columns": {
+        "service": "Usługa",
+        "status": "Status",
+        "actions": "Akcje"
+      }
     },
     "errors": {
       "forbidden": "Nie masz uprawnień do zmiany statusu zamówienia.",

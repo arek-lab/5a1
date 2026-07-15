@@ -356,3 +356,33 @@ Unsplash) dla wszystkich 5 kategorii (`restaurant`, `room_service`, `spa`, `tran
 Czysto wizualna zmiana — zero zmian logiki/routingu/RBAC. Poza formalnym DoD S6.1 (który tego nie
 przewidywał), udokumentowane tu zamiast w `context/changes/s6-1/plan.md`, żeby nie zaburzać
 progresu formalnych faz tej sesji.
+
+### 2026-07-15 — Zakładka "Dziś": hero image + opis hotelu, usunięcie kafli kategorii
+Na wniosek użytkownika, w trakcie trwania S6.1: `app/[locale]/(guest)/page.tsx` — pod górną belką
+dodano zdjęcie na pełną szerokość (~30% wysokości ekranu, nowy `components/guest/hero-image.tsx`,
+`next/image` hotlink do Unsplash) i opis hotelu pod powitaniem (nowy
+`components/guest/hotel-description.tsx`), nowe klucze i18n `guest.welcome.description` w
+`messages/pl.json`/`en.json`. Dodatkowo usunięto z tej strony `CategoryGrid` (kafle kategorii
+usług) jako zbędne obok nowego hero+opisu — komponent i `getVisibleCategories` zostają, nadal
+używane na `/amenities`. Czysto wizualna zmiana — zero zmian logiki/routingu/RBAC/schematu. Poza
+formalnym DoD S6.1, udokumentowane tu z tego samego powodu co wpis powyżej.
+
+**TODO (poza zakresem tego wpisu):** opis hotelu jest dziś statycznym placeholderem — w tabeli
+`properties` nie ma pola na opis (HITL, 2026-07-15: zdecydowano nie rozszerzać schematu w tej
+sesji). Osobna sesja powinna dodać kolumnę `properties.description`/`description_en` + edycję w
+panelu (np. `app/[locale]/(hotel)/onboarding` lub sekcja profilu hotelu) i podmienić placeholder w
+`hotel-description.tsx` na dane z bazy.
+
+### 2026-07-15 — Kafle amenities poziome + CTA do udogodnień na "Dziś"
+Na wniosek użytkownika, w trakcie trwania S6.1: `components/guest/category-grid.tsx` —
+`/amenities` przebudowane z siatki 2×2 na pionową listę poziomych kafli pełnej szerokości
+(miniatura 84×84 po lewej na tle `guest-paper`, tytuł + strzałka po prawej), po porównaniu dwóch
+wariantów makiety z użytkownikiem. Dodano nowy komponent `components/guest/amenities-cta.tsx`
+(przycisk-pill, styl `scanCta`) wstawiony na stronie "Dziś" (`app/[locale]/(guest)/page.tsx`)
+między powitaniem a opisem hotelu; tekst z klucza `guest.welcome.amenitiesCta`
+(`messages/pl.json`/`en.json`) — finalna treść PL: "Zobacz co dla Ciebie przygotowaliśmy".
+Poprawiono też dwa linki, które błędnie prowadziły na `/` zamiast `/amenities`:
+`app/[locale]/(guest)/order-success/page.tsx` ("Wróć do listy usług") i
+`components/guest/guest-orders-panel.tsx` (pusty stan zamówień, "Przeglądaj usługi"). Czysto
+wizualna zmiana + korekta routingu — zero zmian schematu/RBAC. Poza formalnym DoD S6.1,
+udokumentowane tu z tego samego powodu co wpisy powyżej.

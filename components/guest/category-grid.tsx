@@ -18,22 +18,21 @@ export function CategoryGrid({ visibleCategories }: { visibleCategories: Service
   const t = useTranslations('guest.categories');
 
   return (
-    <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-3">
+    <div className="flex flex-col gap-2.5 px-4">
       {visibleCategories.map(category => (
         <Link
           key={category}
           href={`/c/${category}`}
-          className="relative flex h-32 items-end overflow-hidden rounded-card border border-guest-ink-muted/15 shadow-soft"
+          className="flex h-[84px] items-stretch overflow-hidden rounded-card border border-guest-ink-muted/15 bg-guest-paper shadow-soft"
         >
-          <Image
-            src={CATEGORY_IMAGE[category]}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 50vw, 33vw"
-            className="object-cover"
-          />
-          <span className="relative m-2 w-[calc(100%-1rem)] rounded-pill border border-white/15 bg-white/5 px-3 py-2 text-center text-sm font-medium text-white shadow-soft backdrop-blur-md">
-            {t(category)}
+          <span className="relative w-[84px] shrink-0">
+            <Image src={CATEGORY_IMAGE[category]} alt="" fill sizes="84px" className="object-cover" />
+          </span>
+          <span className="flex flex-1 items-center justify-between gap-3 px-4">
+            <span className="text-base font-medium text-guest-ink">{t(category)}</span>
+            <span aria-hidden className="text-guest-ink-muted">
+              ›
+            </span>
           </span>
         </Link>
       ))}

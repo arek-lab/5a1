@@ -45,7 +45,7 @@ export default async function OrderSuccessPage({
           {t('ordersLink')}
         </Link>
         <Link
-          href="/"
+          href="/amenities"
           className="rounded-pill border border-guest-ink-muted/30 px-6 py-3 text-base font-semibold text-guest-ink-muted hover:bg-guest-stone"
         >
           {t('backToServices')}

@@ -8,7 +8,17 @@
     "knowledge": "Knowledge base",
     "qr": "QR",
     "orders": "Orders",
-    "users": "Users"
+    "users": "Users",
+    "insightTicker": {
+      "title": "Concierge insights",
+      "empty": "No insights yet. This fills in once guests start chatting with the AI concierge."
+    },
+    "theme": {
+      "label": "Theme: {mode}",
+      "system": "auto",
+      "light": "light",
+      "dark": "dark"
+    }
   },
   "guest": {
     "nav": {
@@ -112,7 +122,9 @@
     "welcome": {
       "greetingWithName": "Welcome, {name}!",
       "greetingWithRoom": "Welcome to room {room}",
-      "scanCta": "Scan room code"
+      "scanCta": "Scan room code",
+      "amenitiesCta": "See what we've prepared for you",
+      "description": "A cozy hotel in the heart of the city — comfortable stay with 24/7 concierge service."
     },
     "theme": {
       "label": "Theme: {mode}",
@@ -219,7 +231,12 @@
       "includedLabel": "Included",
       "addFromTemplate": "Add from template",
       "addCustom": "Add custom",
-      "timeSensitiveLabel": "Time slot required"
+      "timeSensitiveLabel": "Time slot required",
+      "columns": {
+        "name": "Name",
+        "price": "Price",
+        "actions": "Actions"
+      }
     },
     "form": {
       "fields": {
@@ -269,6 +286,13 @@
       "resendInvite": "Resend invite",
       "deactivate": "Deactivate",
       "reactivate": "Reactivate",
+      "columns": {
+        "user": "User",
+        "status": "Status",
+        "lastLogin": "Last login",
+        "role": "Role",
+        "actions": "Actions"
+      },
       "status": {
         "active": "Active",
         "invited": "Invited",
@@ -334,7 +358,11 @@
       "title": "Knowledge base",
       "empty": "No FAQ entries added yet.",
       "addFromTemplate": "Add from template",
-      "addCustom": "Add custom"
+      "addCustom": "Add custom",
+      "columns": {
+        "question": "Question",
+        "actions": "Actions"
+      }
     },
     "local": {
       "title": "Local area",
@@ -447,7 +475,12 @@
     "list": {
       "empty": "No orders in this tab.",
       "room": "Room",
-      "noRoom": "No room"
+      "noRoom": "No room",
+      "columns": {
+        "service": "Service",
+        "status": "Status",
+        "actions": "Actions"
+      }
     },
     "errors": {
       "forbidden": "You don't have permission to change the order status.",

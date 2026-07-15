@@ -112,7 +112,7 @@ export function GuestOrdersPanel({ initialOrders }: { initialOrders: GuestOrder[
       <div className="flex flex-col items-center gap-4 py-12 text-center">
         <p className="text-guest-ink-muted">{t('empty.message')}</p>
         <Link
-          href="/"
+          href="/amenities"
           className="rounded-pill bg-guest-accent px-6 py-3 text-base font-semibold text-white hover:opacity-90"
         >
           {t('empty.cta')}
