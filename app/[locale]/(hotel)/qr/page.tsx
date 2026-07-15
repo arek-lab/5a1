@@ -26,7 +26,7 @@ export default async function QrPage() {
       <RequirePermission role={hotelUser.role} resource="qr_sessions" level="read">
         <main className="mx-auto max-w-4xl p-6">
           <h1 className="mb-6 text-2xl font-semibold">{t('page.title')}</h1>
-          <p className="rounded border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-900">
+          <p className="rounded-md border border-panel-warning/30 bg-panel-warning/10 px-4 py-3 text-sm text-panel-warning">
             {t('dpaBlocked.message')}
           </p>
         </main>

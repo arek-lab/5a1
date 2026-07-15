@@ -6,6 +6,10 @@ import type { HotelRole } from '@/lib/panel/rbac'
 import { changeRole, resendInvite, deactivateUser, reactivateUser } from './actions'
 import InviteForm from './invite-form'
 import TransferOwnershipModal from './transfer-ownership-modal'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export type HotelUserRecord = {
   id: string
@@ -25,17 +29,16 @@ interface Props {
 }
 
 const ASSIGNABLE_ROLES: HotelRole[] = ['admin', 'staff', 'viewer']
+const actionButtonClass = 'h-6 px-2 text-[11px]'
 
-function statusBadgeClass(status: string) {
+function statusBadgeVariant(status: string): 'default' | 'secondary' | 'outline' {
   switch (status) {
     case 'active':
-      return 'rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800'
+      return 'default'
     case 'invited':
-      return 'rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800'
-    case 'deactivated':
-      return 'rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600'
+      return 'outline'
     default:
-      return 'rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600'
+      return 'secondary'
   }
 }
 
@@ -84,100 +87,124 @@ export default function UserList({ users, canEdit, currentUserId, canTransferOwn
   return (
     <div className="space-y-6">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`list.errors.${error}`)}
         </p>
       )}
 
       {canEdit && (
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
             type="button"
-            className={`rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 ${inviting ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}`}
+            variant={inviting ? 'default' : 'outline'}
+            size="sm"
             onClick={() => setInviting(v => !v)}
           >
             {t('invite.toggle')}
-          </button>
+          </Button>
           {canTransferOwnership && <TransferOwnershipModal candidates={transferCandidates} />}
         </div>
       )}
 
       {canEdit && inviting && (
-        <div className="rounded border bg-gray-50 p-4 text-gray-900">
+        <div className="rounded-md border border-border bg-panel-bg p-4">
           <InviteForm onSent={() => setInviting(false)} />
         </div>
       )}
 
       {users.length === 0 && (
-        <p className="italic text-gray-500">{t('list.empty')}</p>
+        <p className="italic text-panel-ink-muted">{t('list.empty')}</p>
       )}
 
       {users.length > 0 && (
-        <ul className="divide-y rounded border">
-          {users.map(user => (
-            <li key={user.id} className="flex flex-wrap items-center justify-between gap-3 p-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{user.email}</span>
-                <span className={statusBadgeClass(user.status)}>
-                  {t(`list.status.${user.status}`)}
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-600">
+        <Table className="table-fixed">
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('list.columns.user')}</TableHead>
+              <TableHead className="w-44">{t('list.columns.lastLogin')}</TableHead>
+              <TableHead className="w-32">{t('list.columns.role')}</TableHead>
+              <TableHead className="w-56 text-right">{t('list.columns.actions')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map(user => (
+              <TableRow key={user.id} className="h-10">
+                <TableCell>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium">{user.email}</span>
+                    <Badge variant={statusBadgeVariant(user.status)}>
+                      {t(`list.status.${user.status}`)}
+                    </Badge>
+                  </div>
+                </TableCell>
+                <TableCell className="font-mono text-sm text-panel-ink-muted">
                   {user.last_login_at
                     ? new Date(user.last_login_at).toLocaleString()
                     : t('list.neverLoggedIn')}
-                </span>
-                {canEdit && user.role !== 'owner' ? (
-                  <select
-                    className="rounded border px-2 py-1 text-sm disabled:opacity-50"
-                    value={user.role}
-                    disabled={isPending}
-                    onChange={e => handleChangeRole(user.id, e.target.value as HotelRole)}
-                  >
-                    {ASSIGNABLE_ROLES.map(role => (
-                      <option key={role} value={role}>
-                        {t(`list.roles.${role}`)}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <span className="text-sm text-gray-600">{t(`list.roles.${user.role}`)}</span>
-                )}
-                {canEdit && user.status === 'invited' && (
-                  <button
-                    type="button"
-                    className="rounded border px-2 py-1 text-sm hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50"
-                    disabled={isPending}
-                    onClick={() => handleResendInvite(user.id)}
-                  >
-                    {t('list.resendInvite')}
-                  </button>
-                )}
-                {canEdit && user.status === 'active' && user.id !== currentUserId && (
-                  <button
-                    type="button"
-                    className="rounded border border-red-300 px-2 py-1 text-sm text-red-700 hover:bg-red-50 disabled:opacity-50"
-                    disabled={isPending}
-                    onClick={() => handleDeactivate(user.id)}
-                  >
-                    {t('list.deactivate')}
-                  </button>
-                )}
-                {canEdit && user.status === 'deactivated' && (
-                  <button
-                    type="button"
-                    className="rounded border border-green-300 px-2 py-1 text-sm text-green-700 hover:bg-green-50 disabled:opacity-50"
-                    disabled={isPending}
-                    onClick={() => handleReactivate(user.id)}
-                  >
-                    {t('list.reactivate')}
-                  </button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+                </TableCell>
+                <TableCell>
+                  {canEdit && user.role !== 'owner' ? (
+                    <Select
+                      value={user.role}
+                      disabled={isPending}
+                      onValueChange={value => handleChangeRole(user.id, value as HotelRole)}
+                    >
+                      <SelectTrigger size="sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ASSIGNABLE_ROLES.map(role => (
+                          <SelectItem key={role} value={role}>
+                            {t(`list.roles.${role}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <span className="text-sm text-panel-ink-muted">{t(`list.roles.${user.role}`)}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-end gap-1.5">
+                    {canEdit && user.status === 'invited' && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={actionButtonClass}
+                        disabled={isPending}
+                        onClick={() => handleResendInvite(user.id)}
+                      >
+                        {t('list.resendInvite')}
+                      </Button>
+                    )}
+                    {canEdit && user.status === 'active' && user.id !== currentUserId && (
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className={actionButtonClass}
+                        disabled={isPending}
+                        onClick={() => handleDeactivate(user.id)}
+                      >
+                        {t('list.deactivate')}
+                      </Button>
+                    )}
+                    {canEdit && user.status === 'deactivated' && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={actionButtonClass}
+                        disabled={isPending}
+                        onClick={() => handleReactivate(user.id)}
+                      >
+                        {t('list.reactivate')}
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
     </div>
   )

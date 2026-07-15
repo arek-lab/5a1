@@ -3,18 +3,20 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { cn } from '@/lib/utils'
 import type { NavItem } from '@/lib/panel/nav-items'
 
 interface Props {
   items: NavItem[]
+  children?: React.ReactNode
 }
 
-export function SidebarNav({ items }: Props) {
+export function SidebarNav({ items, children }: Props) {
   const pathname = usePathname()
   const t = useTranslations('panelNav')
 
   return (
-    <aside className="w-60 shrink-0 border-r bg-white">
+    <aside className="flex w-60 shrink-0 flex-col border-r border-border bg-panel-surface">
       <nav className="flex flex-col p-4">
         {items.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -23,15 +25,21 @@ export function SidebarNav({ items }: Props) {
               key={item.href}
               href={item.href}
               aria-current={isActive ? 'page' : undefined}
-              className={`rounded px-3 py-2 text-sm font-medium ${
-                isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              className={cn(
+                'rounded-md px-3 py-2 text-sm font-medium',
+                isActive
+                  ? 'bg-panel-bg text-panel-ink'
+                  : 'text-panel-ink-muted hover:bg-panel-bg hover:text-panel-ink'
+              )}
             >
               {t(item.labelKey)}
             </Link>
           )
         })}
       </nav>
+      {children && (
+        <div className="mt-auto flex flex-col gap-2 border-t border-border p-4">{children}</div>
+      )}
     </aside>
   )
 }

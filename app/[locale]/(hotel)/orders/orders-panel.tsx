@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { updateOrderStatus } from './actions'
 import { ALLOWED_TRANSITIONS, type OrderStatus } from '@/lib/orders/status'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 export type OrderRecord = {
   id: string
@@ -46,13 +49,6 @@ const TRANSITION_ACTION_KEY: Record<OrderStatus, string> = {
   fulfilled: 'fulfill',
   rejected: 'reject',
 }
-
-const tabButtonClass = (isActive: boolean) =>
-  `rounded border px-3 py-1.5 text-sm font-medium ${
-    isActive ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-  }`
-const statusButtonClass =
-  'rounded border px-2 py-1 text-sm hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50'
 
 function formatPrice(priceCents: number | null): string {
   if (priceCents === null) return ''
@@ -127,60 +123,69 @@ export default function OrdersPanel({ initialOrders, rooms, services, canEditSta
   return (
     <div className="space-y-4">
       {connectionLost && (
-        <p role="alert" className="rounded border border-yellow-300 bg-yellow-50 px-3 py-2 text-sm text-yellow-900">
+        <p role="alert" className="rounded-md border border-panel-warning/30 bg-panel-warning/10 px-3 py-2 text-sm text-panel-warning">
           {t('connection.lost')}
         </p>
       )}
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`errors.${error}`)}
         </p>
       )}
 
       <div className="flex items-center justify-between gap-3">
         <div className="flex gap-2">
-          <button type="button" className={tabButtonClass(tab === 'active')} onClick={() => setTab('active')}>
+          <Button
+            type="button"
+            variant={tab === 'active' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setTab('active')}
+          >
             {t('tabs.active')}
-          </button>
-          <button type="button" className={tabButtonClass(tab === 'history')} onClick={() => setTab('history')}>
+          </Button>
+          <Button
+            type="button"
+            variant={tab === 'history' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setTab('history')}
+          >
             {t('tabs.history')}
-          </button>
+          </Button>
         </div>
         {canExport && (
-          <a href={exportUrl} download className={statusButtonClass}>
-            {t('actions.export')}
-          </a>
+          <Button asChild variant="outline" size="sm">
+            <a href={exportUrl} download>{t('actions.export')}</a>
+          </Button>
         )}
       </div>
 
       {visibleOrders.length === 0 ? (
-        <p className="italic text-gray-500">{t('list.empty')}</p>
+        <p className="italic text-panel-ink-muted">{t('list.empty')}</p>
       ) : (
-        <ul className="divide-y rounded border">
+        <ul className={cn('divide-y divide-border rounded-md border border-border')}>
           {visibleOrders.map(order => (
             <li key={order.id} className="flex flex-wrap items-center justify-between gap-3 p-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium text-gray-900">{order.serviceName}</span>
-                <span className="text-sm text-gray-500">
+                <span className="font-medium">{order.serviceName}</span>
+                <span className="text-sm text-panel-ink-muted">
                   {order.roomNumber ? `${t('list.room')} ${order.roomNumber}` : t('list.noRoom')}
                 </span>
-                <span className="text-sm text-gray-500">{formatPrice(order.priceCents)}</span>
-                <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
-                  {t(`status.${order.status}`)}
-                </span>
+                <span className="font-mono text-sm text-panel-ink-muted">{formatPrice(order.priceCents)}</span>
+                <Badge variant="secondary">{t(`status.${order.status}`)}</Badge>
               </div>
               {canEditStatus && (
                 <div className="flex gap-2">
                   {ALLOWED_TRANSITIONS[order.status].map(target => (
-                    <button
+                    <Button
                       key={target}
                       type="button"
-                      className={statusButtonClass}
+                      variant="outline"
+                      size="sm"
                       disabled={isPending}
                       onClick={() => handleStatusChange(order.id, target)}
                     >
                       {t(`actions.${TRANSITION_ACTION_KEY[target]}`)}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               )}

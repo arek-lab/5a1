@@ -5,16 +5,12 @@ import { useTranslations } from 'next-intl'
 import { deleteKnowledgeEntry } from './actions'
 import KnowledgeForm from './knowledge-form'
 import type { KnowledgeRecord } from './knowledge-list'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   entries: KnowledgeRecord[]
   canEdit: boolean
 }
-
-const toolbarButtonClass =
-  'rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 hover:text-gray-900'
-const rowButtonClass =
-  'rounded border px-2 py-1 text-sm hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50'
 
 export default function LocalAreaSection({ entries, canEdit }: Props) {
   const t = useTranslations('knowledge')
@@ -35,56 +31,54 @@ export default function LocalAreaSection({ entries, canEdit }: Props) {
   return (
     <div className="space-y-4">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`form.errors.${error}`)}
         </p>
       )}
 
       {canEdit && (
-        <button
+        <Button
           type="button"
-          className={`${toolbarButtonClass} ${addingCustom ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}`}
+          variant={addingCustom ? 'default' : 'outline'}
+          size="sm"
           onClick={() => setAddingCustom(v => !v)}
         >
           {t('local.addCustom')}
-        </button>
+        </Button>
       )}
 
       {canEdit && addingCustom && (
-        <div className="rounded border bg-gray-50 p-4 text-gray-900">
+        <div className="rounded-md border border-border bg-panel-bg p-4">
           <KnowledgeForm category="local" onSaved={() => setAddingCustom(false)} />
         </div>
       )}
 
       {entries.length === 0 && (
-        <p className="italic text-gray-500">{t('local.empty')}</p>
+        <p className="italic text-panel-ink-muted">{t('local.empty')}</p>
       )}
 
-      <ul className="divide-y rounded border">
+      <ul className="divide-y divide-border rounded-md border border-border">
         {entries.map(entry => (
           <li key={entry.id} className="p-3">
             {editingId === entry.id ? (
               <KnowledgeForm category="local" entry={entry} onSaved={() => setEditingId(null)} />
             ) : (
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <span className="text-sm text-gray-600">{entry.content}</span>
+                <span className="text-sm text-panel-ink-muted">{entry.content}</span>
                 {canEdit && (
                   <div className="flex shrink-0 gap-2">
-                    <button
-                      type="button"
-                      className={rowButtonClass}
-                      onClick={() => setEditingId(entry.id)}
-                    >
+                    <Button type="button" variant="outline" size="sm" onClick={() => setEditingId(entry.id)}>
                       {t('form.actions.edit')}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
-                      className={rowButtonClass}
+                      variant="outline"
+                      size="sm"
                       disabled={isPending}
                       onClick={() => handleDelete(entry)}
                     >
                       {t('form.actions.delete')}
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>

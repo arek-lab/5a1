@@ -5,6 +5,11 @@ import { useTranslations } from 'next-intl'
 import type { KnowledgeCategory } from '@/lib/panel/knowledge-categories'
 import { createKnowledgeEntry, updateKnowledgeEntry } from './actions'
 import type { KnowledgeRecord } from './knowledge-list'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface Props {
   category: KnowledgeCategory
@@ -51,58 +56,56 @@ export default function KnowledgeForm({ category, entry, onSaved }: Props) {
     })
   }
 
-  const inputClass = 'w-full rounded border px-2 py-1'
-  const labelClass = 'flex flex-col gap-1 text-sm font-medium'
-
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`errors.${error}`)}
         </p>
       )}
       {category === 'faq' && (
-        <label className={labelClass}>
-          {t('fields.question')}
-          <input className={inputClass} value={question} onChange={e => setQuestion(e.target.value)} required />
-        </label>
+        <div className="space-y-1">
+          <Label htmlFor="knowledge-question">{t('fields.question')}</Label>
+          <Input id="knowledge-question" value={question} onChange={e => setQuestion(e.target.value)} required />
+        </div>
       )}
-      <label className={labelClass}>
-        {t('fields.content')}
-        <textarea className={inputClass} value={content} onChange={e => setContent(e.target.value)} required />
-      </label>
-      <label className={labelClass}>
-        {t('fields.language')}
-        <select className={inputClass} value={language} onChange={e => setLanguage(e.target.value)}>
-          <option value="pl">PL</option>
-          <option value="en">EN</option>
-        </select>
-      </label>
-      <label className={labelClass}>
-        {t('fields.validFrom')}
-        <input
-          className={inputClass}
+      <div className="space-y-1">
+        <Label htmlFor="knowledge-content">{t('fields.content')}</Label>
+        <Textarea id="knowledge-content" value={content} onChange={e => setContent(e.target.value)} required />
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="knowledge-language">{t('fields.language')}</Label>
+        <Select value={language} onValueChange={setLanguage}>
+          <SelectTrigger id="knowledge-language" className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="pl">PL</SelectItem>
+            <SelectItem value="en">EN</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="knowledge-valid-from">{t('fields.validFrom')}</Label>
+        <Input
+          id="knowledge-valid-from"
           type="date"
           value={validFrom}
           onChange={e => setValidFrom(e.target.value)}
         />
-      </label>
-      <label className={labelClass}>
-        {t('fields.validUntil')}
-        <input
-          className={inputClass}
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="knowledge-valid-until">{t('fields.validUntil')}</Label>
+        <Input
+          id="knowledge-valid-until"
           type="date"
           value={validUntil}
           onChange={e => setValidUntil(e.target.value)}
         />
-      </label>
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-      >
+      </div>
+      <Button type="submit" disabled={isPending}>
         {isPending ? t('actions.saving') : t('actions.save')}
-      </button>
+      </Button>
     </form>
   )
 }

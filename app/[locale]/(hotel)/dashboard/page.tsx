@@ -5,6 +5,7 @@ import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
 import { getReadiness } from '@/lib/panel/readiness'
+import { InsightTicker } from '@/components/panel/insight-ticker'
 
 export default async function HotelDashboardPage() {
   const hotelUser = await getHotelUser()
@@ -33,14 +34,17 @@ export default async function HotelDashboardPage() {
   const t = await getTranslations('onboarding')
 
   return (
-    <main>
-      <h1>Hotel Dashboard</h1>
+    <main className="mx-auto max-w-4xl space-y-6 p-6">
+      <h1 className="text-2xl font-semibold">Hotel Dashboard</h1>
       {showBanner && (
-        <p>
+        <p className="rounded-md border border-panel-accent/30 bg-panel-accent/10 px-4 py-3 text-sm text-panel-ink">
           {t('banner.cta')} — {t('readiness.label', { percent: readinessPercentage })}{' '}
-          <Link href="/onboarding">{t('banner.cta')}</Link>
+          <Link href="/onboarding" className="font-medium text-panel-accent underline underline-offset-2">
+            {t('banner.cta')}
+          </Link>
         </p>
       )}
+      <InsightTicker insights={[]} />
     </main>
   )
 }

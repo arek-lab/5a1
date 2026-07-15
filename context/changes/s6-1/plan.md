@@ -406,31 +406,31 @@ Brak migracji danych — czysto zmiana warstwy prezentacji na istniejących, dzi
 
 #### Automated
 
-- [x] 3.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
-- [x] 3.2 Bundle-size guard zielony
-- [x] 3.3 Brak literałów hex w `components/guest/` i `app/[locale]/(guest)/`
+- [x] 3.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji — 92ef948
+- [x] 3.2 Bundle-size guard zielony — 92ef948
+- [x] 3.3 Brak literałów hex w `components/guest/` i `app/[locale]/(guest)/` — 92ef948
 
 #### Manual
 
-- [x] 3.4 Ekran główny/karta usługi/Concierge zgodne ze `style.md` §1.4
-- [x] 3.5 Stany greyed/disabled nadal widoczne i czytelne
-- [x] 3.6 Dark mode czytelny na welcome/home
-- [x] 3.7 Ręczny przełącznik motywu (system/jasny/ciemny) działa bez FOUC i przetrwa nawigację
+- [x] 3.4 Ekran główny/karta usługi/Concierge zgodne ze `style.md` §1.4 — 92ef948
+- [x] 3.5 Stany greyed/disabled nadal widoczne i czytelne — 92ef948
+- [x] 3.6 Dark mode czytelny na welcome/home — 92ef948
+- [x] 3.7 Ręczny przełącznik motywu (system/jasny/ciemny) działa bez FOUC i przetrwa nawigację — 92ef948
 
 ### Phase 4: Retrofit panelu — shared + route-embedded na shadcn/ui
 
 #### Automated
 
-- [ ] 4.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
-- [ ] 4.2 Brak literałów hex w plikach panelu/admin
-- [ ] 4.3 Testy RBAC z S2.1 nadal zielone
+- [x] 4.1 `npm run build`/`typecheck`/`lint`/`test` przechodzą bez regresji
+- [x] 4.2 Brak literałów hex w plikach panelu/admin
+- [x] 4.3 Testy RBAC z S2.1 nadal zielone
 
 #### Manual
 
-- [ ] 4.4 Tabele/formularze/modale zgodne ze `style.md` §2
-- [ ] 4.5 Transfer ownership modal nadal blokuje dezaktywację ostatniego Ownera
-- [ ] 4.6 Insight ticker renderuje się na dashboardzie
-- [ ] 4.7 Dark mode czytelny na dashboard/inbox zamówień
+- [x] 4.4 Tabele/formularze/modale zgodne ze `style.md` §2
+- [x] 4.5 Transfer ownership modal nadal blokuje dezaktywację ostatniego Ownera
+- [x] 4.6 Insight ticker renderuje się na dashboardzie
+- [x] 4.7 Dark mode czytelny na dashboard/inbox zamówień
 
 ### Phase 5: Weryfikacja dostępności (WCAG AA)
 

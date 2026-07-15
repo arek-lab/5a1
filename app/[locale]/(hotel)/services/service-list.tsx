@@ -6,6 +6,9 @@ import { SERVICE_CATEGORIES, type ServiceCategory } from '@/lib/panel/service-ca
 import { toggleServiceActive, toggleServicePin } from './actions'
 import ServiceForm from './service-form'
 import TemplatePicker from './template-picker'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 export type ServiceRecord = {
   id: string
@@ -27,23 +30,7 @@ interface Props {
   canEdit: boolean
 }
 
-function statusBadgeClass(variant: 'active' | 'inactive' | 'pinned' | 'timeSensitive') {
-  switch (variant) {
-    case 'active':
-      return 'rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800'
-    case 'inactive':
-      return 'rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600'
-    case 'pinned':
-      return 'rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800'
-    case 'timeSensitive':
-      return 'rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800'
-  }
-}
-
-const toolbarButtonClass =
-  'rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 hover:text-gray-900'
-const rowButtonClass =
-  'rounded border px-2 py-1 text-sm hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50'
+const actionButtonClass = 'h-6 flex-1 px-2 text-[11px]'
 
 export default function ServiceList({ services, canEdit }: Props) {
   const t = useTranslations('services')
@@ -72,43 +59,45 @@ export default function ServiceList({ services, canEdit }: Props) {
   return (
     <div className="space-y-6">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`form.errors.${error}`)}
         </p>
       )}
 
       {canEdit && (
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
-            className={`${toolbarButtonClass} ${pickingTemplate ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}`}
+            variant={pickingTemplate ? 'default' : 'outline'}
+            size="sm"
             onClick={() => setPickingTemplate(v => !v)}
           >
             {t('list.addFromTemplate')}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            className={`${toolbarButtonClass} ${addingCustom ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}`}
+            variant={addingCustom ? 'default' : 'outline'}
+            size="sm"
             onClick={() => setAddingCustom(v => !v)}
           >
             {t('list.addCustom')}
-          </button>
+          </Button>
         </div>
       )}
 
       {canEdit && pickingTemplate && (
-        <div className="rounded border bg-gray-50 p-4 text-gray-900">
+        <div className="rounded-md border border-border bg-panel-bg p-4">
           <TemplatePicker />
         </div>
       )}
       {canEdit && addingCustom && (
-        <div className="rounded border bg-gray-50 p-4 text-gray-900">
+        <div className="rounded-md border border-border bg-panel-bg p-4">
           <ServiceForm onSaved={() => setAddingCustom(false)} />
         </div>
       )}
 
       {services.length === 0 && (
-        <p className="italic text-gray-500">{t('list.empty')}</p>
+        <p className="italic text-panel-ink-muted">{t('list.empty')}</p>
       )}
 
       {SERVICE_CATEGORIES.map(category => {
@@ -117,69 +106,83 @@ export default function ServiceList({ services, canEdit }: Props) {
 
         return (
           <section key={category}>
-            <h2 className="mb-2 border-b pb-1 text-lg font-semibold">
+            <h2 className="mb-2 border-b border-border pb-1 text-lg font-semibold">
               {t(`categories.${category}`)}
             </h2>
-            <ul className="divide-y rounded border">
-              {items.map(service => (
-                <li key={service.id} className="p-3">
-                  {editingId === service.id ? (
-                    <ServiceForm service={service} onSaved={() => setEditingId(null)} />
-                  ) : (
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-medium">{service.name}</span>
-                        <span className={statusBadgeClass(service.is_active ? 'active' : 'inactive')}>
-                          {service.is_active ? t('list.activeLabel') : t('list.inactiveLabel')}
-                        </span>
-                        {service.is_pinned && (
-                          <span className={statusBadgeClass('pinned')}>{t('list.pinnedLabel')}</span>
-                        )}
-                        {service.is_time_sensitive && (
-                          <span className={statusBadgeClass('timeSensitive')}>
-                            {t('list.timeSensitiveLabel')}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="w-20 text-right text-sm text-gray-600">
+            <Table className="table-fixed">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('list.columns.name')}</TableHead>
+                  <TableHead className="w-20 text-right">{t('list.columns.price')}</TableHead>
+                  {canEdit && <TableHead className="w-[23rem] text-right">{t('list.columns.actions')}</TableHead>}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.map(service => (
+                  <TableRow key={service.id} className="h-10">
+                    {editingId === service.id ? (
+                      <TableCell colSpan={canEdit ? 3 : 2} className="whitespace-normal py-3">
+                        <ServiceForm service={service} onSaved={() => setEditingId(null)} />
+                      </TableCell>
+                    ) : (
+                      <>
+                        <TableCell className="whitespace-normal">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">{service.name}</span>
+                            <Badge variant={service.is_active ? 'default' : 'secondary'}>
+                              {service.is_active ? t('list.activeLabel') : t('list.inactiveLabel')}
+                            </Badge>
+                            {service.is_pinned && (
+                              <Badge variant="outline">{t('list.pinnedLabel')}</Badge>
+                            )}
+                            {service.is_time_sensitive && (
+                              <Badge variant="outline">{t('list.timeSensitiveLabel')}</Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-panel-ink-muted">
                           {service.price_cents === null
                             ? t('list.includedLabel')
                             : (service.price_cents / 100).toFixed(2)}
-                        </span>
+                        </TableCell>
                         {canEdit && (
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              className={rowButtonClass}
-                              onClick={() => setEditingId(service.id)}
-                            >
-                              {t('form.actions.edit')}
-                            </button>
-                            <button
-                              type="button"
-                              className={rowButtonClass}
-                              disabled={isPending}
-                              onClick={() => handleToggleActive(service)}
-                            >
-                              {service.is_active ? t('form.actions.deactivate') : t('form.actions.activate')}
-                            </button>
-                            <button
-                              type="button"
-                              className={rowButtonClass}
-                              disabled={isPending}
-                              onClick={() => handleTogglePin(service)}
-                            >
-                              {service.is_pinned ? t('form.actions.unpin') : t('form.actions.pin')}
-                            </button>
-                          </div>
+                          <TableCell>
+                            <div className="flex gap-1.5 px-[5px]">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className={actionButtonClass}
+                                onClick={() => setEditingId(service.id)}
+                              >
+                                {t('form.actions.edit')}
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className={actionButtonClass}
+                                disabled={isPending}
+                                onClick={() => handleToggleActive(service)}
+                              >
+                                {service.is_active ? t('form.actions.deactivate') : t('form.actions.activate')}
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className={actionButtonClass}
+                                disabled={isPending}
+                                onClick={() => handleTogglePin(service)}
+                              >
+                                {service.is_pinned ? t('form.actions.unpin') : t('form.actions.pin')}
+                              </Button>
+                            </div>
+                          </TableCell>
                         )}
-                      </div>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </section>
         )
       })}

@@ -4,6 +4,10 @@ import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import type { HotelRole } from '@/lib/panel/rbac'
 import { inviteUser } from './actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface Props {
   onSent?: () => void
@@ -38,41 +42,39 @@ export default function InviteForm({ onSent }: Props) {
     })
   }
 
-  const inputClass = 'w-full rounded border px-2 py-1'
-  const labelClass = 'flex flex-col gap-1 text-sm font-medium'
-
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`errors.${error}`)}
         </p>
       )}
-      <label className={labelClass}>
-        {t('fields.email')}
-        <input
-          className={inputClass}
+      <div className="space-y-1">
+        <Label htmlFor="invite-email">{t('fields.email')}</Label>
+        <Input
+          id="invite-email"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
         />
-      </label>
-      <label className={labelClass}>
-        {t('fields.role')}
-        <select className={inputClass} value={role} onChange={e => setRole(e.target.value as HotelRole)}>
-          {INVITABLE_ROLES.map(r => (
-            <option key={r} value={r}>{tRoles(r)}</option>
-          ))}
-        </select>
-      </label>
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-      >
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="invite-role">{t('fields.role')}</Label>
+        <Select value={role} onValueChange={value => setRole(value as HotelRole)}>
+          <SelectTrigger id="invite-role" className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {INVITABLE_ROLES.map(r => (
+              <SelectItem key={r} value={r}>{tRoles(r)}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <Button type="submit" disabled={isPending}>
         {isPending ? t('actions.sending') : t('actions.send')}
-      </button>
+      </Button>
     </form>
   )
 }

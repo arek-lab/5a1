@@ -22,7 +22,7 @@ export default async function ProfileReadonly({ initialValues }: Props) {
     <dl className="space-y-3">
       {fields.map(([label, value]) => (
         <div key={label}>
-          <dt className="text-sm font-medium text-gray-600">{label}</dt>
+          <dt className="text-sm font-medium text-panel-ink-muted">{label}</dt>
           <dd className="text-base">{value || '—'}</dd>
         </div>
       ))}

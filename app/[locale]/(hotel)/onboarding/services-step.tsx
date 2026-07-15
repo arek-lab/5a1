@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 
 export type ActiveServiceSummary = {
   id: string
@@ -19,7 +20,7 @@ export default function ServicesStep({ activeServices, canEdit }: Props) {
   return (
     <div className="space-y-4">
       {activeServices.length === 0 ? (
-        <p className="italic text-gray-500">{t('empty')}</p>
+        <p className="italic text-panel-ink-muted">{t('empty')}</p>
       ) : (
         <ul className="list-disc space-y-1 pl-5 text-sm">
           {activeServices.map(service => (
@@ -28,12 +29,9 @@ export default function ServicesStep({ activeServices, canEdit }: Props) {
         </ul>
       )}
       {canEdit && (
-        <Link
-          href="/services"
-          className="inline-block rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          {t('manageButton')}
-        </Link>
+        <Button asChild size="sm">
+          <Link href="/services">{t('manageButton')}</Link>
+        </Button>
       )}
     </div>
   )

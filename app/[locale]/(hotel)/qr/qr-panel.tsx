@@ -11,6 +11,10 @@ import {
   updateCheckOutAction,
   createRoomAction,
 } from './actions'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export type RoomWithQr = {
   id: string
@@ -35,17 +39,6 @@ interface Props {
 }
 
 const AUTO_ROTATE_INTERVAL_MS = 5 * 60 * 1000
-
-const rowButtonClass =
-  'rounded border px-2 py-1 text-sm hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50'
-const toolbarButtonClass =
-  'rounded border px-3 py-1.5 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50'
-
-function statusBadgeClass(variant: 'active' | 'inactive') {
-  return variant === 'active'
-    ? 'rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800'
-    : 'rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600'
-}
 
 function toDatetimeLocalValue(iso: string): string {
   const date = new Date(iso)
@@ -165,12 +158,12 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
   return (
     <div className="space-y-6">
       {error && (
-        <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {t(`errors.${error}`)}
         </p>
       )}
 
-      <section className="rounded border p-4">
+      <section className="rounded-md border border-border bg-panel-surface p-4">
         <h2 className="mb-3 text-lg font-semibold">{t('reception.title')}</h2>
         {receptionQr?.image ? (
           <div className="flex flex-wrap items-start gap-6">
@@ -179,140 +172,110 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
               dangerouslySetInnerHTML={{ __html: receptionQr.image }}
             />
             <div className="space-y-2">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-panel-ink-muted">
                 {t('reception.countdown')}: <span className="font-mono">{countdown}</span>
               </p>
-              <p className="text-sm text-gray-600">
-                {t('reception.sessionCount')}: <span className="font-medium">{sessionCount}</span>
+              <p className="text-sm text-panel-ink-muted">
+                {t('reception.sessionCount')}: <span className="font-mono">{sessionCount}</span>
               </p>
               {canEdit && (
-                <button
-                  type="button"
-                  className={toolbarButtonClass}
-                  disabled={isPending}
-                  onClick={handleManualRotate}
-                >
+                <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
                   {t('reception.rotateNow')}
-                </button>
+                </Button>
               )}
             </div>
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="italic text-gray-500">{t('reception.empty')}</p>
+            <p className="italic text-panel-ink-muted">{t('reception.empty')}</p>
             {canEdit && (
-              <button
-                type="button"
-                className={toolbarButtonClass}
-                disabled={isPending}
-                onClick={handleManualRotate}
-              >
+              <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
                 {t('reception.rotateNow')}
-              </button>
+              </Button>
             )}
           </div>
         )}
       </section>
 
-      <section className="rounded border p-4">
+      <section className="rounded-md border border-border bg-panel-surface p-4">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">{t('rooms.title')}</h2>
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/qr/print" className={toolbarButtonClass}>
-              {t('rooms.printLink')}
-            </Link>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/qr/print">{t('rooms.printLink')}</Link>
+            </Button>
             {canManageRooms && !isAddingRoom && (
-              <button
-                type="button"
-                className={toolbarButtonClass}
-                disabled={isPending}
-                onClick={openAddRoomForm}
-              >
+              <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={openAddRoomForm}>
                 {t('rooms.addRoom')}
-              </button>
+              </Button>
             )}
           </div>
         </div>
 
         {canManageRooms && isAddingRoom && (
           <form
-            className="mb-4 flex flex-wrap items-end gap-2 rounded border p-3"
+            className="mb-4 flex flex-wrap items-end gap-2 rounded-md border border-border p-3"
             onSubmit={e => {
               e.preventDefault()
               handleAddRoomSubmit()
             }}
           >
-            <label className="flex flex-col text-sm">
-              {t('rooms.roomNumberLabel')}
-              <input
+            <div className="space-y-1">
+              <Label htmlFor="new-room-number">{t('rooms.roomNumberLabel')}</Label>
+              <Input
+                id="new-room-number"
                 type="text"
                 required
                 value={newRoomNumber}
                 onChange={e => setNewRoomNumber(e.target.value)}
-                className="rounded border px-2 py-1 text-sm"
               />
-            </label>
-            <label className="flex flex-col text-sm">
-              {t('rooms.roomTypeLabel')}
-              <input
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="new-room-type">{t('rooms.roomTypeLabel')}</Label>
+              <Input
+                id="new-room-type"
                 type="text"
                 value={newRoomType}
                 onChange={e => setNewRoomType(e.target.value)}
-                className="rounded border px-2 py-1 text-sm"
               />
-            </label>
-            <button type="submit" className={rowButtonClass} disabled={isPending}>
+            </div>
+            <Button type="submit" variant="outline" size="sm" disabled={isPending}>
               {t('rooms.confirm')}
-            </button>
-            <button
-              type="button"
-              className={rowButtonClass}
-              disabled={isPending}
-              onClick={closeAddRoomForm}
-            >
+            </Button>
+            <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={closeAddRoomForm}>
               {t('rooms.cancel')}
-            </button>
+            </Button>
           </form>
         )}
 
         {rooms.length === 0 ? (
-          <p className="italic text-gray-500">{t('rooms.empty')}</p>
+          <p className="italic text-panel-ink-muted">{t('rooms.empty')}</p>
         ) : (
-          <ul className="divide-y rounded border">
+          <ul className="divide-y divide-border rounded-md border border-border">
             {rooms.map(room => (
               <li key={room.id} className="flex flex-wrap items-center justify-between gap-3 p-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-medium">{room.roomNumber}</span>
-                  {room.roomType && <span className="text-sm text-gray-500">{room.roomType}</span>}
-                  <span className={statusBadgeClass(room.activeQr ? 'active' : 'inactive')}>
+                  {room.roomType && <span className="text-sm text-panel-ink-muted">{room.roomType}</span>}
+                  <Badge variant={room.activeQr ? 'default' : 'secondary'}>
                     {room.activeQr ? t('rooms.activeLabel') : t('rooms.inactiveLabel')}
-                  </span>
+                  </Badge>
                   {room.activeReservation && (
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-panel-ink-muted">
                       {t('rooms.checkOutLabel')}: {formatCheckOut(room.activeReservation.checkOut)}
                     </span>
                   )}
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   {canEdit && (
-                    <button
-                      type="button"
-                      className={rowButtonClass}
-                      disabled={isPending}
-                      onClick={() => handleToggleRoom(room)}
-                    >
+                    <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={() => handleToggleRoom(room)}>
                       {room.activeQr ? t('rooms.deactivate') : t('rooms.activate')}
-                    </button>
+                    </Button>
                   )}
                   {canEdit && editingRoomId !== room.id && (
-                    <button
-                      type="button"
-                      className={rowButtonClass}
-                      disabled={isPending}
-                      onClick={() => openReservationForm(room)}
-                    >
+                    <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={() => openReservationForm(room)}>
                       {room.activeReservation ? t('rooms.editCheckOut') : t('rooms.checkIn')}
-                    </button>
+                    </Button>
                   )}
                 </div>
                 {canEdit && editingRoomId === room.id && (
@@ -323,24 +286,19 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
                       handleReservationSubmit(room)
                     }}
                   >
-                    <input
+                    <Input
                       type="datetime-local"
                       required
                       value={checkOutInput}
                       onChange={e => setCheckOutInput(e.target.value)}
-                      className="rounded border px-2 py-1 text-sm"
+                      className="w-auto"
                     />
-                    <button type="submit" className={rowButtonClass} disabled={isPending}>
+                    <Button type="submit" variant="outline" size="sm" disabled={isPending}>
                       {t('rooms.confirm')}
-                    </button>
-                    <button
-                      type="button"
-                      className={rowButtonClass}
-                      disabled={isPending}
-                      onClick={closeReservationForm}
-                    >
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={closeReservationForm}>
                       {t('rooms.cancel')}
-                    </button>
+                    </Button>
                   </form>
                 )}
               </li>

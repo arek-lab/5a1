@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { SERVICE_TEMPLATES, type ServiceTemplate } from '@/lib/panel/service-templates'
 import { createServiceFromTemplate } from './actions'
+import { Button } from '@/components/ui/button'
 
 export default function TemplatePicker() {
   const t = useTranslations()
@@ -32,7 +33,7 @@ export default function TemplatePicker() {
   return (
     <div>
       {error && (
-        <p role="alert" className="mb-3 rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="mb-3 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {tErrors(error)}
         </p>
       )}
@@ -42,20 +43,21 @@ export default function TemplatePicker() {
           return (
             <li
               key={template.key}
-              className="flex items-center justify-between gap-2 rounded border bg-white p-2 text-gray-900"
+              className="flex items-center justify-between gap-2 rounded-md border border-border bg-panel-surface p-2"
             >
               <div className="flex flex-col">
                 <span className="font-medium">{t(template.nameKey)}</span>
-                <span className="text-xs text-gray-500">{tCategories(template.category)}</span>
+                <span className="text-xs text-panel-ink-muted">{tCategories(template.category)}</span>
               </div>
-              <button
+              <Button
                 type="button"
-                className="rounded border px-2 py-1 text-sm text-gray-900 hover:bg-gray-100 disabled:opacity-50"
+                variant="outline"
+                size="sm"
                 disabled={isPending || added}
                 onClick={() => handleAdd(template)}
               >
                 {tList('addFromTemplate')}
-              </button>
+              </Button>
             </li>
           )
         })}

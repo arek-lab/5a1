@@ -86,7 +86,7 @@ export default async function OnboardingPage({
         ) : activeStepKey === 'knowledge' ? (
           <KnowledgeStep faqEntries={faqEntries} canEdit={canWriteKnowledge} />
         ) : (
-          <p className="italic text-gray-500">{t('comingSoon')}</p>
+          <p className="italic text-panel-ink-muted">{t('comingSoon')}</p>
         )}
       </OnboardingWizardShell>
     </RequirePermission>

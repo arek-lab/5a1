@@ -3,6 +3,19 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { transferOwnership } from './actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 export type TransferCandidate = {
   id: string
@@ -50,75 +63,71 @@ export default function TransferOwnershipModal({ candidates, onDone }: Props) {
   if (candidates.length === 0) return null
 
   return (
-    <div>
-      <button
-        type="button"
-        className="rounded border border-amber-400 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-50"
-        onClick={() => setOpen(true)}
-      >
-        {t('toggle')}
-      </button>
+    <Dialog open={open} onOpenChange={value => (value ? setOpen(true) : handleClose())}>
+      <DialogTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          className="border-panel-warning/50 text-panel-warning hover:bg-panel-warning/10"
+        >
+          {t('toggle')}
+        </Button>
+      </DialogTrigger>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded bg-white p-5 text-gray-900 shadow-lg">
-            <h2 className="mb-3 text-lg font-semibold">{t('title')}</h2>
-            <p className="mb-4 text-sm text-gray-600">{t('warning')}</p>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogDescription>{t('warning')}</DialogDescription>
+        </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
-              {error && (
-                <p role="alert" className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
-                  {t(`errors.${error}`)}
-                </p>
-              )}
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {error && (
+            <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {t(`errors.${error}`)}
+            </p>
+          )}
 
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                {t('fields.target')}
-                <select
-                  className="w-full rounded border px-2 py-1"
-                  value={targetId}
-                  onChange={e => {
-                    setTargetId(e.target.value)
-                    setConfirmation('')
-                  }}
-                >
-                  {candidates.map(c => (
-                    <option key={c.id} value={c.id}>{c.email}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                {t('fields.confirmation', { email: target?.email ?? '' })}
-                <input
-                  className="w-full rounded border px-2 py-1"
-                  type="text"
-                  value={confirmation}
-                  onChange={e => setConfirmation(e.target.value)}
-                  autoComplete="off"
-                />
-              </label>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  className="rounded border px-3 py-1.5 text-sm hover:bg-gray-100"
-                  onClick={handleClose}
-                >
-                  {t('actions.cancel')}
-                </button>
-                <button
-                  type="submit"
-                  disabled={isPending || !confirmationMatches}
-                  className="rounded bg-amber-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
-                >
-                  {isPending ? t('actions.sending') : t('actions.confirm')}
-                </button>
-              </div>
-            </form>
+          <div className="space-y-1">
+            <Label htmlFor="transfer-target">{t('fields.target')}</Label>
+            <Select
+              value={targetId}
+              onValueChange={value => {
+                setTargetId(value)
+                setConfirmation('')
+              }}
+            >
+              <SelectTrigger id="transfer-target" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {candidates.map(c => (
+                  <SelectItem key={c.id} value={c.id}>{c.email}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-      )}
-    </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="transfer-confirmation">{t('fields.confirmation', { email: target?.email ?? '' })}</Label>
+            <Input
+              id="transfer-confirmation"
+              type="text"
+              value={confirmation}
+              onChange={e => setConfirmation(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={handleClose}>
+              {t('actions.cancel')}
+            </Button>
+            <Button type="submit" disabled={isPending || !confirmationMatches}>
+              {isPending ? t('actions.sending') : t('actions.confirm')}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
