@@ -8,6 +8,7 @@ const MAX_HISTORY_TURNS = 10;
 const FALLBACK_PREFIX = '[FALLBACK]';
 const ESCALATE_PREFIX = '[ESCALATE]';
 const ESCALATION_STREAK_THRESHOLD = 3;
+const PREFIX_CHECK_LENGTH = Math.max(FALLBACK_PREFIX.length, ESCALATE_PREFIX.length);
 const QUICK_REPLY_KEYS = ['breakfast', 'wifi', 'parking', 'checkout', 'pets', 'area'] as const;
 
 type ChatMessage = {
@@ -119,6 +120,8 @@ export function ConciergeChat({
       const decoder = new TextDecoder();
       let buffer = '';
       let accumulated = '';
+      let revealed = false;
+      let suppressed = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -132,7 +135,16 @@ export function ConciergeChat({
           const payload = JSON.parse(event) as { type: string; text?: string };
           if (payload.type === 'chunk' && payload.text) {
             accumulated += payload.text;
-            updateAssistant({ content: accumulated });
+            if (revealed) {
+              updateAssistant({ content: accumulated });
+            } else if (!suppressed && accumulated.length >= PREFIX_CHECK_LENGTH) {
+              if (accumulated.startsWith(FALLBACK_PREFIX) || accumulated.startsWith(ESCALATE_PREFIX)) {
+                suppressed = true;
+              } else {
+                revealed = true;
+                updateAssistant({ content: accumulated });
+              }
+            }
           } else if (payload.type === 'error') {
             consecutiveFallbackCount.current += 1;
             updateAssistant({ isFallback: true, isStreaming: false });
@@ -152,7 +164,7 @@ export function ConciergeChat({
               }
             } else {
               consecutiveFallbackCount.current = 0;
-              updateAssistant({ isStreaming: false });
+              updateAssistant({ content: accumulated, isStreaming: false });
             }
           }
         }

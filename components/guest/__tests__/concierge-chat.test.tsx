@@ -78,6 +78,54 @@ describe('ConciergeChat', () => {
     expect(screen.queryByText('[FALLBACK] Nie znam odpowiedzi.')).toBeNull()
   })
 
+  it('never flashes the raw [FALLBACK]-prefixed text while it streams in, even split across chunks', async () => {
+    let releaseNextChunk: (() => void) | null = null
+    const encoder = new TextEncoder()
+    const frames = [
+      '[',
+      'FALLBACK',
+      '] Nie znam odpowiedzi.',
+    ]
+
+    const body = new ReadableStream<Uint8Array>({
+      async pull(controller) {
+        for (const frame of frames) {
+          await new Promise<void>(resolve => {
+            releaseNextChunk = resolve
+          })
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'chunk', text: frame })}\n\n`))
+        }
+        await new Promise<void>(resolve => {
+          releaseNextChunk = resolve
+        })
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'done' })}\n\n`))
+        controller.close()
+      },
+    })
+
+    global.fetch = vi.fn().mockResolvedValue({ ok: true, body }) as unknown as typeof fetch
+
+    renderChat()
+    await sendQuestion('Czy hotel ma helipad?')
+
+    for (let i = 0; i < frames.length + 1; i += 1) {
+      await waitFor(() => expect(releaseNextChunk).toBeTruthy())
+      const release = releaseNextChunk!
+      releaseNextChunk = null
+      release()
+
+      expect(screen.queryByText(/\[FALLBACK\]/)).toBeNull()
+      expect(screen.queryByText(/^\[/)).toBeNull()
+    }
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('Nie mam odpowiedzi na to pytanie. Skontaktuj się z recepcją: +48123456789')
+      ).toBeTruthy()
+    )
+    expect(screen.queryByText(/\[FALLBACK\]/)).toBeNull()
+  })
+
   it('renders the fallback bubble on an error frame', async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
