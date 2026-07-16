@@ -670,6 +670,21 @@ export type Database = {
         Args: { p_reservation_id: string }
         Returns: undefined
       }
+      rotate_reception_qr: {
+        Args: { p_expires_at: string; p_property_id: string; p_rotates_every: string }
+        Returns: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          init_token: string
+          is_active: boolean
+          property_id: string
+          room_id: string | null
+          rotates_every: string | null
+          type: Database["public"]["Enums"]["qr_type"]
+          used_at: string | null
+        }
+      }
       set_tenant_context: {
         Args: { p_property_id: string; p_session_id?: string }
         Returns: undefined

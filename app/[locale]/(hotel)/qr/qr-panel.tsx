@@ -64,7 +64,7 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
   const t = useTranslations('qr')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const [countdown, setCountdown] = useState(() => formatCountdown(receptionQr?.expiresAt ?? null))
+  const [countdown, setCountdown] = useState('--:--')
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null)
   const [checkOutInput, setCheckOutInput] = useState('')
   const [isAddingRoom, setIsAddingRoom] = useState(false)
@@ -72,6 +72,7 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
   const [newRoomType, setNewRoomType] = useState('')
 
   useEffect(() => {
+    setCountdown(formatCountdown(receptionQr?.expiresAt ?? null))
     const tick = setInterval(() => setCountdown(formatCountdown(receptionQr?.expiresAt ?? null)), 1000)
     return () => clearInterval(tick)
   }, [receptionQr?.expiresAt])

@@ -34,31 +34,17 @@ function makeQrRow(overrides: Partial<Tables<'qr_codes'>> = {}): Tables<'qr_code
   }
 }
 
-function makeUpdateChain(error: Error | null = null) {
-  const chain: { eq: ReturnType<typeof vi.fn>; then: typeof Promise.prototype.then } = {
-    eq: vi.fn(),
-    then: (onFulfilled, onRejected) =>
-      Promise.resolve({ error }).then(onFulfilled as never, onRejected),
-  }
-  chain.eq.mockReturnValue(chain)
-  return chain
-}
-
-function makeClient({
+function makeReceptionClient({
   dpaSignedAt,
-  insertData,
-  callOrder,
-  insertCapture,
-  updateError = null,
-  insertError = null,
+  rpcData,
+  rpcCapture,
+  rpcError = null,
   dpaError = null,
 }: {
   dpaSignedAt: string | null
-  insertData: Tables<'qr_codes'>
-  callOrder?: string[]
-  insertCapture?: { data: unknown }
-  updateError?: Error | null
-  insertError?: Error | null
+  rpcData: Tables<'qr_codes'>
+  rpcCapture?: { args: unknown }
+  rpcError?: Error | null
   dpaError?: Error | null
 }) {
   const propertiesBuilder = {
@@ -68,6 +54,77 @@ function makeClient({
           data: dpaError ? null : { dpa_signed_at: dpaSignedAt },
           error: dpaError,
         }),
+      }),
+    }),
+  }
+
+  return {
+    from: vi.fn((table: string) => {
+      if (table === 'properties') return propertiesBuilder
+      throw new Error(`unexpected table: ${table}`)
+    }),
+    rpc: vi.fn((_fn: string, args: unknown) => {
+      if (rpcCapture) rpcCapture.args = args
+      return Promise.resolve({ data: rpcError ? null : rpcData, error: rpcError })
+    }),
+  }
+}
+
+describe('generateReceptionQR', () => {
+  beforeEach(() => vi.resetAllMocks())
+
+  it('calls rotate_reception_qr RPC with property_id, expires_at ~15min from now, rotates_every=5 minutes', async () => {
+    const rpcCapture: { args: unknown } = { args: null }
+    mockCreateClient.mockReturnValue(makeReceptionClient({ dpaSignedAt: '2024-01-01', rpcData: makeQrRow(), rpcCapture }) as never)
+
+    const before = Date.now()
+    await generateReceptionQR(PROP)
+    const after = Date.now()
+
+    const args = rpcCapture.args as Record<string, unknown>
+    expect(args.p_property_id).toBe(PROP)
+    expect(args.p_rotates_every).toBe('5 minutes')
+    const expiresMs = new Date(args.p_expires_at as string).getTime()
+    expect(expiresMs).toBeGreaterThanOrEqual(before + 14 * 60 * 1000)
+    expect(expiresMs).toBeLessThanOrEqual(after + 16 * 60 * 1000)
+  })
+
+  it('throws DpaNotSignedError when dpa_signed_at is null', async () => {
+    mockCreateClient.mockReturnValue(makeReceptionClient({ dpaSignedAt: null, rpcData: makeQrRow() }) as never)
+
+    await expect(generateReceptionQR(PROP)).rejects.toThrow(DpaNotSignedError)
+  })
+
+  it('throws when DPA query itself returns a DB error', async () => {
+    const dbError = new Error('connection refused')
+    mockCreateClient.mockReturnValue(makeReceptionClient({ dpaSignedAt: null, rpcData: makeQrRow(), dpaError: dbError }) as never)
+
+    await expect(generateReceptionQR(PROP)).rejects.toThrow('connection refused')
+  })
+
+  it('throws when the RPC returns a DB error', async () => {
+    const dbError = new Error('rpc failed')
+    mockCreateClient.mockReturnValue(makeReceptionClient({ dpaSignedAt: '2024-01-01', rpcData: makeQrRow(), rpcError: dbError }) as never)
+
+    await expect(generateReceptionQR(PROP)).rejects.toThrow('rpc failed')
+  })
+})
+
+function makeRoomClient({
+  dpaSignedAt,
+  insertData,
+  insertCapture,
+  insertError = null,
+}: {
+  dpaSignedAt: string | null
+  insertData: Tables<'qr_codes'>
+  insertCapture?: { data: unknown }
+  insertError?: Error | null
+}) {
+  const propertiesBuilder = {
+    select: vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({ data: { dpa_signed_at: dpaSignedAt }, error: null }),
       }),
     }),
   }
@@ -82,12 +139,8 @@ function makeClient({
     from: vi.fn((table: string) => {
       if (table === 'properties') return propertiesBuilder
       return {
-        update: vi.fn(() => {
-          callOrder?.push('update')
-          return makeUpdateChain(updateError)
-        }),
+        update: vi.fn().mockReturnValue(makeUpdateChain()),
         insert: vi.fn((data: unknown) => {
-          callOrder?.push('insert')
           if (insertCapture) insertCapture.data = data
           return insertBuilder
         }),
@@ -96,63 +149,15 @@ function makeClient({
   }
 }
 
-describe('generateReceptionQR', () => {
-  beforeEach(() => vi.resetAllMocks())
-
-  it('calls update before insert with same property_id + type=reception filter', async () => {
-    const callOrder: string[] = []
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: makeQrRow(), callOrder }) as never)
-
-    await generateReceptionQR(PROP)
-
-    expect(callOrder).toEqual(['update', 'insert'])
-  })
-
-  it('inserts row with type=reception, expires_at ~15min from now, rotates_every=5 minutes, is_active=true', async () => {
-    const insertCapture: { data: unknown } = { data: null }
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: makeQrRow(), insertCapture }) as never)
-
-    const before = Date.now()
-    await generateReceptionQR(PROP)
-    const after = Date.now()
-
-    const inserted = insertCapture.data as Record<string, unknown>
-    expect(inserted.property_id).toBe(PROP)
-    expect(inserted.type).toBe('reception')
-    expect(inserted.is_active).toBe(true)
-    expect(inserted.rotates_every).toBe('5 minutes')
-    const expiresMs = new Date(inserted.expires_at as string).getTime()
-    expect(expiresMs).toBeGreaterThanOrEqual(before + 14 * 60 * 1000)
-    expect(expiresMs).toBeLessThanOrEqual(after + 16 * 60 * 1000)
-  })
-
-  it('throws DpaNotSignedError when dpa_signed_at is null', async () => {
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: null, insertData: makeQrRow() }) as never)
-
-    await expect(generateReceptionQR(PROP)).rejects.toThrow(DpaNotSignedError)
-  })
-
-  it('throws when DPA query itself returns a DB error', async () => {
-    const dbError = new Error('connection refused')
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: null, insertData: makeQrRow(), dpaError: dbError }) as never)
-
-    await expect(generateReceptionQR(PROP)).rejects.toThrow('connection refused')
-  })
-
-  it('throws when update returns a DB error', async () => {
-    const dbError = new Error('update failed')
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: makeQrRow(), updateError: dbError }) as never)
-
-    await expect(generateReceptionQR(PROP)).rejects.toThrow('update failed')
-  })
-
-  it('throws when insert returns a DB error', async () => {
-    const dbError = new Error('insert failed')
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: makeQrRow(), insertError: dbError }) as never)
-
-    await expect(generateReceptionQR(PROP)).rejects.toThrow('insert failed')
-  })
-})
+function makeUpdateChain(error: Error | null = null) {
+  const chain: { eq: ReturnType<typeof vi.fn>; then: typeof Promise.prototype.then } = {
+    eq: vi.fn(),
+    then: (onFulfilled, onRejected) =>
+      Promise.resolve({ error }).then(onFulfilled as never, onRejected),
+  }
+  chain.eq.mockReturnValue(chain)
+  return chain
+}
 
 describe('generateRoomQR', () => {
   beforeEach(() => vi.resetAllMocks())
@@ -160,7 +165,7 @@ describe('generateRoomQR', () => {
   it('inserts row with type=room, room_id set, expires_at=null, is_active=true', async () => {
     const insertCapture: { data: unknown } = { data: null }
     const roomRow = makeQrRow({ type: 'room', room_id: ROOM, expires_at: null, rotates_every: null })
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: roomRow, insertCapture }) as never)
+    mockCreateClient.mockReturnValue(makeRoomClient({ dpaSignedAt: '2024-01-01', insertData: roomRow, insertCapture }) as never)
 
     await generateRoomQR(PROP, ROOM)
 
@@ -174,7 +179,7 @@ describe('generateRoomQR', () => {
 
   it('throws DpaNotSignedError when dpa_signed_at is null', async () => {
     const roomRow = makeQrRow({ type: 'room', room_id: ROOM })
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: null, insertData: roomRow }) as never)
+    mockCreateClient.mockReturnValue(makeRoomClient({ dpaSignedAt: null, insertData: roomRow }) as never)
 
     await expect(generateRoomQR(PROP, ROOM)).rejects.toThrow(DpaNotSignedError)
   })
@@ -182,7 +187,7 @@ describe('generateRoomQR', () => {
   it('throws when insert returns a DB error', async () => {
     const dbError = new Error('insert failed')
     const roomRow = makeQrRow({ type: 'room', room_id: ROOM, expires_at: null, rotates_every: null })
-    mockCreateClient.mockReturnValue(makeClient({ dpaSignedAt: '2024-01-01', insertData: roomRow, insertError: dbError }) as never)
+    mockCreateClient.mockReturnValue(makeRoomClient({ dpaSignedAt: '2024-01-01', insertData: roomRow, insertError: dbError }) as never)
 
     await expect(generateRoomQR(PROP, ROOM)).rejects.toThrow('insert failed')
   })

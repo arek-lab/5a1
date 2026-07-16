@@ -15,10 +15,12 @@ export async function getActiveReceptionQr(propertyId: string): Promise<ActiveRe
     .eq('property_id', propertyId)
     .eq('type', 'reception')
     .eq('is_active', true)
-    .maybeSingle()
+    .order('created_at', { ascending: false })
+    .limit(1)
 
   if (error) throw error
-  if (!data) return null
+  const row = data?.[0]
+  if (!row) return null
 
-  return { id: data.id, initToken: data.init_token, expiresAt: data.expires_at }
+  return { id: row.id, initToken: row.init_token, expiresAt: row.expires_at }
 }

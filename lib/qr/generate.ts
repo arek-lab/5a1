@@ -27,30 +27,15 @@ export async function generateReceptionQR(
 
   const supabase = createServiceRoleClient()
 
-  const { error: updateError } = await supabase
-    .from('qr_codes')
-    .update({ is_active: false })
-    .eq('property_id', propertyId)
-    .eq('type', 'reception')
-    .eq('is_active', true)
-
-  if (updateError) throw updateError
-
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
 
-  const { data, error: insertError } = await supabase
-    .from('qr_codes')
-    .insert({
-      property_id: propertyId,
-      type: 'reception',
-      expires_at: expiresAt,
-      rotates_every: '5 minutes',
-      is_active: true,
-    })
-    .select()
-    .single()
+  const { data, error } = await supabase.rpc('rotate_reception_qr', {
+    p_property_id: propertyId,
+    p_expires_at: expiresAt,
+    p_rotates_every: '5 minutes',
+  })
 
-  if (insertError) throw insertError
+  if (error) throw error
   return data
 }
 

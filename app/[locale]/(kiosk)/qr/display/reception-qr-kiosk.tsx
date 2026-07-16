@@ -34,12 +34,13 @@ export default function ReceptionQrKiosk({ hotelName, initial }: Props) {
   const t = useTranslations('qr')
   const [state, setState] = useState<QrState>(initial)
   const [clockOffsetMs, setClockOffsetMs] = useState(0)
-  const [countdown, setCountdown] = useState(() => formatCountdown(initial.expiresAt, 0))
+  const [countdown, setCountdown] = useState('--:--')
   const [, startTransition] = useTransition()
   const attemptedRotateForId = useRef<string | null>(null)
   const pollIntervalRef = useRef(POLL_INTERVAL_MS)
 
   useEffect(() => {
+    setCountdown(formatCountdown(state.expiresAt, clockOffsetMs))
     const tick = setInterval(() => {
       setCountdown(formatCountdown(state.expiresAt, clockOffsetMs))
     }, 1000)

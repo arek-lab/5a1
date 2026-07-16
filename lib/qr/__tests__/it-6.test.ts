@@ -57,4 +57,27 @@ describe('IT-6: QR generation DPA gate (real Supabase)', () => {
     expect(qr.type).toBe('room')
     expect(qr.room_id).toBe(roomId)
   }, 15_000)
+
+  it('Test 4 — concurrent reception QR rotations leave exactly one active row', async () => {
+    const results = await Promise.allSettled([
+      generateReceptionQR(propertyId),
+      generateReceptionQR(propertyId),
+      generateReceptionQR(propertyId),
+    ])
+
+    for (const result of results) {
+      expect(result.status).toBe('fulfilled')
+    }
+
+    const db = createServiceRoleClient()
+    const { data: activeRows, error } = await db
+      .from('qr_codes')
+      .select('id')
+      .eq('property_id', propertyId)
+      .eq('type', 'reception')
+      .eq('is_active', true)
+    if (error) throw error
+
+    expect(activeRows).toHaveLength(1)
+  }, 15_000)
 })
