@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
@@ -15,10 +15,11 @@ export default async function QrPage() {
 
   const supabase = await createServerClient()
   const t = await getTranslations('qr')
+  const locale = await getLocale()
 
   const { data: property } = await supabase
     .from('properties')
-    .select('dpa_signed_at')
+    .select('dpa_signed_at, timezone')
     .eq('id', hotelUser.propertyId)
     .single()
 
@@ -97,6 +98,8 @@ export default async function QrPage() {
           sessionCount={sessionCount}
           canEdit={canEdit}
           canManageRooms={canManageRooms}
+          locale={locale}
+          timeZone={property.timezone}
         />
       </main>
     </RequirePermission>

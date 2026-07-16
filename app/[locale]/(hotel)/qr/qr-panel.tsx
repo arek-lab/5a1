@@ -36,6 +36,8 @@ interface Props {
   sessionCount: number
   canEdit: boolean
   canManageRooms: boolean
+  locale: string
+  timeZone: string
 }
 
 const AUTO_ROTATE_INTERVAL_MS = 5 * 60 * 1000
@@ -46,8 +48,10 @@ function toDatetimeLocalValue(iso: string): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
-function formatCheckOut(iso: string): string {
-  return new Date(iso).toLocaleString()
+function formatCheckOut(iso: string, locale: string, timeZone: string): string {
+  return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
+    new Date(iso)
+  )
 }
 
 function formatCountdown(expiresAt: string | null): string {
@@ -60,7 +64,7 @@ function formatCountdown(expiresAt: string | null): string {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, canManageRooms }: Props) {
+export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, canManageRooms, locale, timeZone }: Props) {
   const t = useTranslations('qr')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
@@ -277,7 +281,7 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
                   </Badge>
                   {room.activeReservation && (
                     <span className="text-sm text-panel-ink-muted">
-                      {t('rooms.checkOutLabel')}: {formatCheckOut(room.activeReservation.checkOut)}
+                      {t('rooms.checkOutLabel')}: {formatCheckOut(room.activeReservation.checkOut, locale, timeZone)}
                     </span>
                   )}
                 </div>
