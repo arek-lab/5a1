@@ -169,7 +169,11 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // `_next/static`/`_next/image` alone left `_next/webpack-hmr` unmatched by the
+  // negative lookahead, so the HMR websocket upgrade was routed through the
+  // Supabase session lookup + next-intl rewrite below instead of passing straight
+  // through — a constructed NextResponse can't fulfill a 101 upgrade.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

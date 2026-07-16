@@ -24,10 +24,37 @@ vi.mock('@/lib/analytics/capture', () => ({
 
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
-import proxy from '../proxy'
+import proxy, { config } from '../proxy'
 
 const mockCreateServiceRoleClient = vi.mocked(createServiceRoleClient)
 const mockCaptureEvent = vi.mocked(captureEvent)
+
+describe('proxy: matcher', () => {
+  // Regression test for the 2026-07-16 HMR-websocket bug: a matcher that excludes
+  // only `_next/static`/`_next/image` still routes `_next/webpack-hmr` through the
+  // Supabase/next-intl logic below, and a constructed NextResponse can't fulfill a
+  // 101 upgrade -> silent HMR desync (phantom hydration mismatches, double PostHog
+  // init). Every `_next/*` path must stay excluded.
+  const matcher = new RegExp(`^${config.matcher[0]}$`)
+
+  it('excludes all _next/* internal paths, including webpack-hmr', () => {
+    expect(matcher.test('/_next/webpack-hmr')).toBe(false)
+    expect(matcher.test('/_next/static/chunks/main.js')).toBe(false)
+    expect(matcher.test('/_next/image')).toBe(false)
+  })
+
+  it('excludes favicon and static image extensions', () => {
+    expect(matcher.test('/favicon.ico')).toBe(false)
+    expect(matcher.test('/icons/icon.svg')).toBe(false)
+    expect(matcher.test('/photo.png')).toBe(false)
+  })
+
+  it('still matches real page and API routes', () => {
+    expect(matcher.test('/dashboard')).toBe(true)
+    expect(matcher.test('/pl/qr')).toBe(true)
+    expect(matcher.test('/api/orders')).toBe(true)
+  })
+})
 
 const PROP = 'prop-abc'
 const SESSION_ID = 'session-1'

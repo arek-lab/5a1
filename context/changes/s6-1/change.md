@@ -65,3 +65,38 @@ HMR websocket → cichy desync JS/CSS chunków), nie regres w kodzie aplikacji.
 `package.json`'s `build` już unikał Turbopacka (`--webpack`); brakowało tego samego
 dla `dev`. Naprawa: `"dev": "next dev --webpack"` w `package.json` — bez zmian w
 komponentach. Build + testy zostają zielone.
+
+### Faza 5 — prawdziwa przyczyna znaleziona: `proxy.ts` matcher, nie Turbopack (2026-07-16)
+
+Powyższa diagnoza ("defekt Turbopacka") była błędna co do przyczyny, poprawna co
+do objawów. Rzeczywisty winowajca: `proxy.ts`'s `config.matcher` wykluczał tylko
+`_next/static`/`_next/image`, nie `_next/webpack-hmr` — więc każdy websocket
+handshake HMR był routowany przez lookup sesji Supabase i `next-intl`'s
+`handleI18nRouting` zamiast przejść bez zmian. Skonstruowany `NextResponse`
+(rewrite/redirect) nie może zrealizować `101 Switching Protocols`, stąd
+`ERR_INVALID_HTTP_RESPONSE` na `wss://.../_next/webpack-hmr` i cichy desync
+JS/CSS chunków (brakujące klasy/`mt-auto` w `sidebar-nav.tsx`, podwójny init
+PostHoga) — nie ograniczenie frameworku, tylko nasz błąd w matcherze.
+
+Naprawa: matcher rozszerzony na cały `_next/*`:
+```ts
+matcher: ['/((?!_next|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)']
+```
+Dodatkowo `app/providers.tsx` — guard `posthog.__loaded` przed `posthog.init(...)`,
+niezależnie od przyczyny podwójnej inicjalizacji.
+
+Zweryfikowano ręcznie w przeglądarce po fixie: brak hydration mismatch na
+`SidebarNav` zarówno przy zimnym starcie (`npm run dev`, natychmiastowy
+hard-reload, zero edycji w sesji) jak i po "rozgrzaniu" HMR (kilka edycji w
+innych plikach przed hard-reloadem) — potwierdza że to był rzeczywiście ten
+sam mechanizm w obu wariantach, nie coś odrębnego ujawniającego się dopiero
+po HMR.
+
+Skutek uboczny tej (błędnej) diagnozy: `"dev": "next dev --webpack"` z commita
+`4b2add5` (2026-07-16 09:02) zostało wprowadzone jako obejście *zanim* znaleziono
+prawdziwą przyczynę. Skoro `proxy.ts` matcher naprawia rzeczywisty bug HMR,
+ten wpis w `package.json` nie jest już potrzebny i powinien wrócić do zwykłego
+`"next dev"` (Turbopack) — patrz `CLAUDE.md`. Dopóki to nie zostanie
+zweryfikowane pod Turbopackiem (a nie pod obecnie aktywnym `--webpack`), sekcja
+"Znane ograniczenie środowiska" w `CLAUDE.md` zostaje zaktualizowana, ale
+`package.json` wymaga osobnego świadomego kroku.

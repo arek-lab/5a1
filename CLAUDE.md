@@ -73,15 +73,22 @@ Skills must not write to `context/archive/`. Archived changes are immutable; if 
 - Sequential: zadanie B potrzebuje outputu A, lub zakres niejasny — najpierw zrozum.
 - Background: research i analiza (nie modyfikacje plików), wyniki nie blokują dalszej pracy.
 
-**Znane ograniczenie środowiska — Turbopack dev:**
-`next dev` z Turbopackiem ma w tym środowisku niedziałający HMR websocket
-(`wss://.../_next/webpack-hmr` → `ERR_INVALID_HTTP_RESPONSE`), co po cichu
-desynchronizuje JS/CSS chunki i objawia się jako fałszywe błędy w konsoli
-przeglądarki: "Encountered a script tag...", hydration mismatch na komponentach
-klienckich, podwójna inicjalizacja bibliotek (np. PostHog) — mimo że kod jest
-poprawny (build + testy zielone). Dlatego `package.json` ma `dev`/`build` spięte
-na `--webpack` (nie Turbopack). Jeśli taki błąd wróci: najpierw sprawdź
-`npm run build` + `npm test` — jeśli oba zielone, to prawie na pewno to samo
-środowiskowe ograniczenie Turbopacka, nie regres w kodzie. Szczegóły:
-`context/changes/s6-1/change.md` (Faza 5).
+**HMR websocket przez `proxy.ts` (naprawione, było błędnie diagnozowane jako "Turbopack"):**
+`wss://.../_next/webpack-hmr` dostawał `ERR_INVALID_HTTP_RESPONSE`, co po cichu
+desynchronizowało JS/CSS chunki i objawiało się jako fałszywe błędy w konsoli:
+"Encountered a script tag...", hydration mismatch na `<aside>` w
+`components/panel/sidebar-nav.tsx`, podwójna inicjalizacja PostHoga — mimo że kod
+był poprawny (build + testy zielone). Pierwotnie uznane za nienaprawialne
+ograniczenie Turbopacka; rzeczywista przyczyna: `proxy.ts`'s `config.matcher`
+wykluczał `_next/static`/`_next/image`, ale nie `_next/webpack-hmr` — handshake
+HMR był routowany przez lookup sesji Supabase + `next-intl` zamiast przejść bez
+zmian, a skonstruowany `NextResponse` nie może zrealizować `101 Switching
+Protocols`. Naprawione rozszerzeniem matchera na cały `_next/*` w `proxy.ts`.
+`package.json`'s `"dev": "next dev --webpack"` (z commita `4b2add5`, wprowadzone
+*przed* znalezieniem tej przyczyny) nie jest już potrzebne dla tego objawu i
+czeka na osobno zweryfikowany powrót do zwykłego `next dev` (Turbopack) — patrz
+`context/changes/s6-1/change.md` (Faza 5) po szczegóły statusu tej rewersji.
+Jeśli podobny błąd konsoli wróci: najpierw sprawdź `npm run build` +
+`npm test` — jeśli oba zielone, sprawdź `proxy.ts`'s matcher zanim uznasz to za
+ograniczenie frameworku. Szczegóły: `context/changes/s6-1/change.md` (Faza 5).
 
