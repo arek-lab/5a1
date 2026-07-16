@@ -23,7 +23,9 @@ export default function AcceptGate() {
     }
   }, [])
 
-  if (status === 'checking') return null
+  if (status === 'checking') {
+    return <main data-theme="panel" className="min-h-screen bg-panel-bg" />
+  }
   if (status === 'expired') return <ExpiredInvite />
   return <AcceptForm />
 }

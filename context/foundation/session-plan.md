@@ -445,3 +445,26 @@ fontami), tekst skrócony do samego "Wróć"/"Back" (klucz `guest.categories.bac
 `messages/pl.json`/`en.json`). Testy `service-card.test.tsx` (3/3) przechodzą bez zmian — nie
 sprawdzały renderowania zdjęcia. Czysto wizualne + jeden nowy link — zero zmian schematu/RBAC. Poza
 formalnym DoD S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.
+
+### 2026-07-16 — Fix: dopełnienie retrofitu — ekrany błędów/potwierdzeń/przekierowań pominięte w Fazie 3
+Faza 3 planu S6.1 (`context/changes/s6-1/plan.md`, punkt 5) wyprowadziła listę stron gościa do
+retrofitu z `components/guest/*` + głównych tras `(guest)/**`, pomijając strony, które celowo żyją
+poza route groupami `(guest)`/`(hotel-auth)` (muszą renderować się nawet gdy sesja gościa/panelu
+zawiedzie, więc nie dziedziczą `data-theme` z layoutu grupy). W efekcie cztery realne, osiągalne
+ekrany zostały na surowym Tailwind gray albo całkowicie bez stylowania: `app/[locale]/error/page.tsx`
+(błąd skanu/QR gościa), `app/[locale]/offline/page.tsx` (offline gościa),
+`app/[locale]/(hotel-auth)/unauthorized/page.tsx` (access denied panelu) i
+`app/[locale]/invite/accept/{accept-form,accept-gate,expired-invite}.tsx` (aktywacja konta
+zaproszonego pracownika). Naprawiono zgodnie z wzorcem już ustalonym w Fazie 4 dla stron poza
+layoutem grupy (`(hotel-auth)/login/login-form.tsx`, `admin/login/login-form.tsx`): lokalny
+`data-theme="guest"`/`data-theme="panel"` na najbliższym wrapperze; guest-side czysty Tailwind +
+tokeny `--guest-*` (wzorzec 1:1 z `(guest)/room-required/page.tsx`); panel-side shadcn
+`Button`/`Input`/`Label` już zainstalowane w `components/ui/`, ten sam pattern
+`border-destructive/30 bg-destructive/10 text-destructive` na komunikaty błędu co w
+`login-form.tsx`. `app/global-error.tsx` (Next.js root error boundary, celowo bez Tailwind — może
+renderować się, gdy sam root layout padnie) i `components/analytics/consent-banner.tsx` (celowo
+neutralny, renderowany nad obiema stronami platformy przed ustaleniem `data-theme`) świadomie
+zostawione poza zakresem tego fixu. Czysto wizualne — zero zmian w `requireGuestSession()`,
+`resolveErrorGroup`/`getErrorPageBranding`, `createBrowserClient().auth.*`, `router.push`,
+walidacji formularza. `npm run build`/`typecheck`/`lint` zielone bez regresji. Poza formalnym DoD
+S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.

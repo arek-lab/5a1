@@ -5,12 +5,15 @@ export default async function OfflinePage() {
   const t = await getTranslations('guest.offline')
 
   return (
-    <main className="flex min-h-[70vh] flex-col items-center justify-center gap-4 px-4 py-6 text-center">
-      <h1 className="text-2xl font-semibold text-gray-900">{t('heading')}</h1>
-      <p className="text-gray-700">{t('body')}</p>
+    <main
+      data-theme="guest"
+      className="flex min-h-[70vh] flex-col items-center justify-center gap-4 px-4 py-6 text-center font-ui text-guest-ink"
+    >
+      <h1 className="font-display text-2xl font-semibold text-guest-ink">{t('heading')}</h1>
+      <p className="text-guest-ink-muted">{t('body')}</p>
       <Link
         href="/"
-        className="mt-4 rounded-full border px-6 py-3 text-base font-semibold text-gray-700 hover:bg-gray-50"
+        className="mt-4 rounded-pill border border-guest-ink-muted/30 px-6 py-3 text-base font-semibold text-guest-ink hover:bg-guest-paper"
       >
         {t('retry')}
       </Link>
