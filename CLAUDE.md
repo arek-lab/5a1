@@ -73,3 +73,15 @@ Skills must not write to `context/archive/`. Archived changes are immutable; if 
 - Sequential: zadanie B potrzebuje outputu A, lub zakres niejasny — najpierw zrozum.
 - Background: research i analiza (nie modyfikacje plików), wyniki nie blokują dalszej pracy.
 
+**Znane ograniczenie środowiska — Turbopack dev:**
+`next dev` z Turbopackiem ma w tym środowisku niedziałający HMR websocket
+(`wss://.../_next/webpack-hmr` → `ERR_INVALID_HTTP_RESPONSE`), co po cichu
+desynchronizuje JS/CSS chunki i objawia się jako fałszywe błędy w konsoli
+przeglądarki: "Encountered a script tag...", hydration mismatch na komponentach
+klienckich, podwójna inicjalizacja bibliotek (np. PostHog) — mimo że kod jest
+poprawny (build + testy zielone). Dlatego `package.json` ma `dev`/`build` spięte
+na `--webpack` (nie Turbopack). Jeśli taki błąd wróci: najpierw sprawdź
+`npm run build` + `npm test` — jeśli oba zielone, to prawie na pewno to samo
+środowiskowe ograniczenie Turbopacka, nie regres w kodzie. Szczegóły:
+`context/changes/s6-1/change.md` (Faza 5).
+
