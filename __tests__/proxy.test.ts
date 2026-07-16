@@ -144,14 +144,14 @@ describe('proxy: admin auth', () => {
     const response = await proxy(requestWithAdminCookie('http://localhost/admin'))
 
     expect(response.status).toBe(307)
-    expect(response.headers.get('location')).toBe('http://localhost/admin/login')
+    expect(response.headers.get('location')).toBe('http://localhost:3000/admin/login')
   })
 
   it('redirects /admin to /admin/login when cookie is wrong', async () => {
     const response = await proxy(requestWithAdminCookie('http://localhost/admin', 'wrong-token'))
 
     expect(response.status).toBe(307)
-    expect(response.headers.get('location')).toBe('http://localhost/admin/login')
+    expect(response.headers.get('location')).toBe('http://localhost:3000/admin/login')
   })
 
   it('allows /admin through when cookie matches ADMIN_ACCESS_TOKEN', async () => {

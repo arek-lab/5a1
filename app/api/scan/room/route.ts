@@ -6,6 +6,7 @@ import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
+import { absoluteUrl } from '@/lib/http/app-url'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -23,17 +24,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const sessionId = request.cookies.get('__Host-session')?.value
   if (!sessionId) {
-    return NextResponse.redirect(new URL('/error?type=missing_session_cookie', request.url))
+    return NextResponse.redirect(absoluteUrl('/error?type=missing_session_cookie'))
   }
 
   const roomId = request.nextUrl.searchParams.get('room_id')
   if (!roomId) {
-    return NextResponse.redirect(new URL('/error?type=room_qr_not_found', request.url))
+    return NextResponse.redirect(absoluteUrl('/error?type=room_qr_not_found'))
   }
 
   const validation = await validateRoomScan({ sessionId, roomId })
   if (!validation.ok) {
-    const redirectUrl = new URL(`/error?type=${validation.error}`, request.url)
+    const redirectUrl = absoluteUrl(`/error?type=${validation.error}`)
     if (validation.session) redirectUrl.searchParams.set('property_id', validation.session.property_id)
     return NextResponse.redirect(redirectUrl)
   }
@@ -69,7 +70,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   // Supabase SSR client reads existing anonymous session from request cookies and
   // writes refreshed tokens to the redirect response.
-  const response = NextResponse.redirect(new URL('/', request.url))
+  const response = NextResponse.redirect(absoluteUrl('/'))
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { error: refreshError } = await supabase.auth.refreshSession()
   if (refreshError) {
-    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    const redirectUrl = absoluteUrl('/error?type=auth_failed')
     redirectUrl.searchParams.set('property_id', validation.session.property_id)
     return NextResponse.redirect(redirectUrl)
   }

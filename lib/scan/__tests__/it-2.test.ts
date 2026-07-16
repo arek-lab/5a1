@@ -105,7 +105,7 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     const response = await receptionGET(request)
 
     expect(response.status).toBe(307)
-    expect(response.headers.get('location')).toMatch(/http:\/\/localhost\/$/)
+    expect(response.headers.get('location')).toMatch(/^http:\/\/localhost:3000\/$/)
 
     const allCookies = response.cookies.getAll()
     const sessionCookie = allCookies.find((c) => c.name === '__Host-session')
@@ -151,7 +151,7 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     const response = await roomGET(request)
 
     expect(response.status).toBe(307)
-    expect(response.headers.get('location')).toMatch(/http:\/\/localhost\/$/)
+    expect(response.headers.get('location')).toMatch(/^http:\/\/localhost:3000\/$/)
 
     const db = createServiceRoleClient()
     const { data: session } = await db.from('sessions').select().eq('id', capturedSessionId).single()

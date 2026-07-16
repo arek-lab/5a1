@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
+import { absoluteUrl } from '@/lib/http/app-url'
 import type { Database } from './lib/supabase/database.types'
 
 const handleI18nRouting = createIntlMiddleware(routing)
@@ -19,7 +20,7 @@ export default async function proxy(request: NextRequest) {
     if (pathname !== '/admin/login') {
       const adminToken = request.cookies.get('admin_token')?.value
       if (!adminToken || adminToken !== process.env.ADMIN_ACCESS_TOKEN) {
-        return NextResponse.redirect(new URL('/admin/login', request.url))
+        return NextResponse.redirect(absoluteUrl('/admin/login'))
       }
     }
     return NextResponse.next()
@@ -66,12 +67,12 @@ export default async function proxy(request: NextRequest) {
       // Session row exists even for the expired/revoked branches — only a missing row
       // (!session) has no property to attach to the redirect.
       if (!session) {
-        redirectUrl = new URL('/error?type=session_revoked', request.url)
+        redirectUrl = absoluteUrl('/error?type=session_revoked')
       } else if (session.revoked) {
-        redirectUrl = new URL('/error?type=session_revoked', request.url)
+        redirectUrl = absoluteUrl('/error?type=session_revoked')
         redirectUrl.searchParams.set('property_id', session.property_id)
       } else {
-        redirectUrl = new URL('/error?type=session_expired', request.url)
+        redirectUrl = absoluteUrl('/error?type=session_expired')
         redirectUrl.searchParams.set('property_id', session.property_id)
       }
 

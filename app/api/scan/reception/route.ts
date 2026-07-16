@@ -6,6 +6,7 @@ import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
+import { absoluteUrl } from '@/lib/http/app-url'
 import type { Database } from '@/lib/supabase/database.types'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -23,12 +24,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const initToken = request.nextUrl.searchParams.get('init_token')
   if (!initToken) {
-    return NextResponse.redirect(new URL('/error?type=token_not_found', request.url))
+    return NextResponse.redirect(absoluteUrl('/error?type=token_not_found'))
   }
 
   const tokenResult = await findAndConsumeToken(initToken)
   if (!tokenResult.ok) {
-    const redirectUrl = new URL(`/error?type=${tokenResult.error}`, request.url)
+    const redirectUrl = absoluteUrl(`/error?type=${tokenResult.error}`)
     if (tokenResult.qr) redirectUrl.searchParams.set('property_id', tokenResult.qr.property_id)
     return NextResponse.redirect(redirectUrl)
   }
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // Supabase SSR client writes auth cookies to the redirect response.
   // The response variable is captured by the setAll closure so cookies land on the
   // outgoing redirect rather than being orphaned in next/headers.
-  const response = NextResponse.redirect(new URL('/', request.url))
+  const response = NextResponse.redirect(absoluteUrl('/'))
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -64,7 +65,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   } = await supabase.auth.signInAnonymously()
 
   if (signInError || !user) {
-    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    const redirectUrl = absoluteUrl('/error?type=auth_failed')
     redirectUrl.searchParams.set('property_id', qr.property_id)
     return NextResponse.redirect(redirectUrl)
   }
@@ -78,7 +79,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { error: refreshError } = await supabase.auth.refreshSession()
   if (refreshError) {
-    const redirectUrl = new URL('/error?type=auth_failed', request.url)
+    const redirectUrl = absoluteUrl('/error?type=auth_failed')
     redirectUrl.searchParams.set('property_id', qr.property_id)
     return NextResponse.redirect(redirectUrl)
   }
