@@ -411,7 +411,13 @@
       "countdown": "Następna rotacja za",
       "sessionCount": "Aktywne sesje na tym kodzie",
       "rotateNow": "Rotuj teraz",
-      "empty": "Brak aktywnego kodu QR recepcji."
+      "empty": "Brak aktywnego kodu QR recepcji.",
+      "openDisplay": "Otwórz widok na tablet"
+    },
+    "kiosk": {
+      "instruction": "Zeskanuj ten kod, aby się zameldować",
+      "refreshing": "Odświeżanie…",
+      "unavailable": "Kod QR recepcji jest chwilowo niedostępny."
     },
     "rooms": {
       "title": "Pokoje",

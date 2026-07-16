@@ -411,7 +411,13 @@
       "countdown": "Next rotation in",
       "sessionCount": "Active sessions on this code",
       "rotateNow": "Rotate now",
-      "empty": "No active reception QR code."
+      "empty": "No active reception QR code.",
+      "openDisplay": "Open tablet display"
+    },
+    "kiosk": {
+      "instruction": "Scan this code to check in",
+      "refreshing": "Refreshing…",
+      "unavailable": "Reception QR is not available right now."
     },
     "rooms": {
       "title": "Rooms",

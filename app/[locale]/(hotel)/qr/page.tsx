@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
 import { generateQRImage } from '@/lib/qr/image'
+import { getActiveReceptionQr } from '@/lib/qr/query'
 import { getActiveReceptionSessionCount } from '@/lib/qr/session-count'
 import RequirePermission from '@/components/panel/require-permission'
 import QrPanel, { type RoomWithQr } from './qr-panel'
@@ -34,14 +35,8 @@ export default async function QrPage() {
     )
   }
 
-  const [{ data: receptionQr }, { data: rooms }, { data: roomQrs }, sessionCount] = await Promise.all([
-    supabase
-      .from('qr_codes')
-      .select('id, init_token, created_at, expires_at')
-      .eq('property_id', hotelUser.propertyId)
-      .eq('type', 'reception')
-      .eq('is_active', true)
-      .maybeSingle(),
+  const [receptionQr, { data: rooms }, { data: roomQrs }, sessionCount] = await Promise.all([
+    getActiveReceptionQr(hotelUser.propertyId),
     supabase
       .from('rooms')
       .select('id, room_number, room_type, room_active_reservation_id')
@@ -83,7 +78,7 @@ export default async function QrPage() {
 
   const receptionQrImage = receptionQr
     ? await generateQRImage(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/scan/reception?init_token=${receptionQr.init_token}`
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/scan/reception?init_token=${receptionQr.initToken}`
       )
     : null
 
@@ -96,7 +91,7 @@ export default async function QrPage() {
         <h1 className="mb-6 text-2xl font-semibold">{t('page.title')}</h1>
         <QrPanel
           receptionQr={
-            receptionQr ? { id: receptionQr.id, expiresAt: receptionQr.expires_at, image: receptionQrImage } : null
+            receptionQr ? { id: receptionQr.id, expiresAt: receptionQr.expiresAt, image: receptionQrImage } : null
           }
           rooms={roomsWithQr}
           sessionCount={sessionCount}

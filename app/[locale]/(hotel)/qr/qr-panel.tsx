@@ -178,21 +178,35 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
               <p className="text-sm text-panel-ink-muted">
                 {t('reception.sessionCount')}: <span className="font-mono">{sessionCount}</span>
               </p>
-              {canEdit && (
-                <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
-                  {t('reception.rotateNow')}
+              <div className="flex flex-wrap items-center gap-2">
+                {canEdit && (
+                  <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
+                    {t('reception.rotateNow')}
+                  </Button>
+                )}
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/qr/display" target="_blank" rel="noopener noreferrer">
+                    {t('reception.openDisplay')}
+                  </Link>
                 </Button>
-              )}
+              </div>
             </div>
           </div>
         ) : (
           <div className="space-y-2">
             <p className="italic text-panel-ink-muted">{t('reception.empty')}</p>
-            {canEdit && (
-              <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
-                {t('reception.rotateNow')}
+            <div className="flex flex-wrap items-center gap-2">
+              {canEdit && (
+                <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={handleManualRotate}>
+                  {t('reception.rotateNow')}
+                </Button>
+              )}
+              <Button asChild variant="outline" size="sm">
+                <Link href="/qr/display" target="_blank" rel="noopener noreferrer">
+                  {t('reception.openDisplay')}
+                </Link>
               </Button>
-            )}
+            </div>
           </div>
         )}
       </section>
