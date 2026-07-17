@@ -519,6 +519,43 @@ wcześniej — SW nie przechwytuje requestów bez dopasowanej trasy). `npm test`
 `tsc --noEmit` zielone. Ręczna weryfikacja w przeglądarce (DevTools → Application → Cache Storage)
 nie została wykonana w tej sesji — zalecana przed uznaniem za w pełni zweryfikowane.
 
+### 2026-07-17 — Fix: `insufficient_auth` po skanie (recepcja + pokój) — trzy nakładające się przyczyny
+Zgłoszone przez użytkownika po fixie S7.1 (wpis wyżej): pierwsza wizyta na `/` po **każdym** skanie
+(recepcja i pokój) pokazywała pełny ekran `/error?type=insufficient_auth`, ręczny powrót na stronę
+główną od razu pokazywał poprawny stan (`auth_level` 1 albo 2). Rozwiązanie wymagało trzech
+niezależnych fixów, bo pierwotna diagnoza (race na nagłówkach z `proxy.ts`, fallback w
+`lib/guest/session.ts`) nie wystarczyła — objaw utrzymywał się dalej.
+1. **Instrumentacja + retry w `getGuestSessionContext`** (`lib/guest/session.ts`): każda gałąź
+   zwracająca `null` była całkowicie cicha — dodano `Sentry.captureMessage`/`captureException` +
+   jeden retry (150ms) dla zapytania `properties`, na wypadek przejściowego błędu połączenia zaraz
+   po zapisach ze skanu. Pierwsze wdrożenie nie wysyłało zdarzeń do Sentry wcale — `captureMessage`
+   był fire-and-forget, a `redirect()` kończył request zanim SDK zdążył wysłać event; naprawiono
+   dodając `await Sentry.flush(2000)` po każdym capture. Dopiero to ujawniło prawdziwy sygnał:
+   `guest_session_null: no session headers and no session cookie` na `GET /` — realny brak
+   `__Host-session` w żądaniu, nie błąd zapytania do bazy.
+2. **`app/sw.ts`: `NetworkFirst` zamiast `StaleWhileRevalidate` dla stron gościa.** `/` (i inne
+   `GUEST_NAV_PATTERNS`) był cache'owany w `pages` po samym URL bez wymiaru sesji —
+   `StaleWhileRevalidate` malował od razu starą stronę z poprzedniej wizyty na tym urządzeniu (np.
+   wcześniejszy błąd z dzisiejszych testów), zanim SW zdążył odświeżyć w tle. Dokładnie ten sam
+   mechanizm co w fixie "wyloguj pobyt" wyżej — tam naprawiony ręcznym `caches.delete(...)` z
+   poziomu klienta przed submitem formularza, co nie działa dla skanu recepcji (żaden JS appki nie
+   ładuje się przed przekierowaniem zainicjowanym przez aparat telefonu). Zmiana na `NetworkFirst`
+   (3s timeout, konwencja z `guest-orders-status`) naprawiła **skan pokoju** natychmiast.
+3. **`SameSite=Lax` zamiast `Strict` dla `__Host-session` i `scan_retry_count`**
+   (`app/api/scan/reception/route.ts`, `lib/scan/retry.ts`). Po (2) skan pokoju działał, ale
+   recepcja dalej pokazywała błąd za pierwszym razem. Różnica: recepcja mintuje **nowe** cookie
+   sesji w trakcie przekierowania zainicjowanego spoza appki (aparat telefonu otwiera link z kodu
+   QR) — udokumentowane zachowanie `SameSite=Strict` gubi świeżo ustawione cookie właśnie na
+   pierwszej nawigacji z zewnętrznego źródła. Skan pokoju czyta tylko już istniejące cookie przy
+   nawigacji z JS wewnątrz appki, więc nie był dotknięty. `Lax` nadal blokuje cookie w cross-site
+   subrequestach/POST-ach, dopuszcza tylko top-level GET — dokładnie ten przypadek. Po tej zmianie
+   użytkownik potwierdził na żywo (Railway), że obie ścieżki (recepcja + pokój) działają poprawnie
+   za pierwszym razem.
+`npm run typecheck`/`lint`/`test` (402/402, w tym `lib/scan/__tests__/it-2.test.ts` na realnym
+Supabase) zielone po każdym z trzech commitów. Poza formalnym zakresem jakiejkolwiek sesji z
+`session-plan.md` — kontynuacja diagnostyki z S7.1, udokumentowana tu z tego samego powodu co
+wpisy powyżej.
+
 ---
 
 ## FAZA 7 — Wydajność
