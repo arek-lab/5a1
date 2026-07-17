@@ -1,14 +1,7 @@
 /// <reference lib="webworker" />
 
 import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from 'serwist';
-import {
-  CacheFirst,
-  ExpirationPlugin,
-  NetworkFirst,
-  NetworkOnly,
-  Serwist,
-  StaleWhileRevalidate,
-} from 'serwist';
+import { CacheFirst, ExpirationPlugin, NetworkFirst, NetworkOnly, Serwist } from 'serwist';
 import { isGuestNavigationRequest, isGuestOrdersGet, isNetworkOnlyApi } from '@/lib/sw/matchers';
 
 declare global {
@@ -44,7 +37,20 @@ const runtimeCaching: RuntimeCaching[] = [
     // document into a cache literally named "pages" on every next/link
     // client-side navigation. Reusing that name here means a page visited
     // only via soft navigation still shows up as a cache hit offline.
-    handler: new StaleWhileRevalidate({ cacheName: 'pages' }),
+    //
+    // NetworkFirst, not StaleWhileRevalidate: these pages are session/identity-bound
+    // (auth level, guest name, room), and the cache key is the URL alone with no
+    // per-session dimension. StaleWhileRevalidate painted the previous cache entry
+    // instantly on every visit — after a QR scan (reception, opened by the phone's
+    // camera app with no app JS loaded yet to pre-purge the cache) that meant the
+    // guest's very first "/" load showed a stale entry from an earlier device visit
+    // (e.g. a prior insufficient_auth error page) while the SW quietly refetched the
+    // correct one in the background, only visible on a second, manual reload. Same
+    // root cause as the sign-out cache purge in components/guest/sign-out-tile.tsx,
+    // just untriggered here since no client JS runs before an externally-opened scan
+    // redirect. NetworkFirst always prefers a live response when the network is up;
+    // the cache is only a fallback when it's genuinely offline.
+    handler: new NetworkFirst({ cacheName: 'pages', networkTimeoutSeconds: 3 }),
   },
   {
     matcher: isGuestOrdersGet,
