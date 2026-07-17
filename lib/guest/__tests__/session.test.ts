@@ -14,8 +14,13 @@ vi.mock('react', async () => {
   const actual = await vi.importActual<typeof import('react')>('react')
   return { ...actual, cache: (fn: unknown) => fn }
 })
+vi.mock('@sentry/nextjs', () => ({
+  captureMessage: vi.fn(),
+  captureException: vi.fn(),
+}))
 
 import { headers, cookies } from 'next/headers'
+import * as Sentry from '@sentry/nextjs'
 import { withTenantContext } from '@/lib/supabase/tenant'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { getGuestSessionContext } from '../session'
@@ -24,6 +29,7 @@ const mockHeaders = vi.mocked(headers)
 const mockCookies = vi.mocked(cookies)
 const mockWithTenantContext = vi.mocked(withTenantContext)
 const mockCreateServiceRoleClient = vi.mocked(createServiceRoleClient)
+const mockCaptureMessage = vi.mocked(Sentry.captureMessage)
 
 function headersWith(values: Record<string, string>) {
   return {
@@ -218,6 +224,68 @@ describe('getGuestSessionContext', () => {
       aiBotName: 'Hela',
       phoneReception: '+48123456789',
     })
+  })
+
+  it('retries the properties fetch once on a transient error and still returns context', async () => {
+    mockHeaders.mockResolvedValue(
+      headersWith({
+        'x-property-id': 'prop-1',
+        'x-session-id': 'sess-1',
+        'x-session-auth-level': '1',
+      })
+    )
+    let propertiesCallCount = 0
+    mockWithTenantContext.mockResolvedValue({
+      from: vi.fn((table: string) => ({
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({
+            single: vi.fn(async () => {
+              if (table === 'properties') {
+                propertiesCallCount += 1
+                if (propertiesCallCount === 1) {
+                  return { data: null, error: { message: 'connection reset' } }
+                }
+                return { data: { name: 'Hotel Test', logo_url: null }, error: null }
+              }
+              return { data: null }
+            }),
+          })),
+        })),
+      })),
+    } as never)
+
+    const result = await getGuestSessionContext()
+
+    expect(propertiesCallCount).toBe(2)
+    expect(result?.propertyName).toBe('Hotel Test')
+    expect(mockCaptureMessage).not.toHaveBeenCalled()
+  })
+
+  it('returns null and reports to Sentry when the properties fetch errors twice', async () => {
+    mockHeaders.mockResolvedValue(
+      headersWith({
+        'x-property-id': 'prop-1',
+        'x-session-id': 'sess-1',
+        'x-session-auth-level': '1',
+      })
+    )
+    mockWithTenantContext.mockResolvedValue({
+      from: vi.fn(() => ({
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({
+            single: vi.fn(async () => ({ data: null, error: { message: 'connection reset' } })),
+          })),
+        })),
+      })),
+    } as never)
+
+    const result = await getGuestSessionContext()
+
+    expect(result).toBeNull()
+    expect(mockCaptureMessage).toHaveBeenCalledWith(
+      'guest_session_null: properties fetch returned no row after retry',
+      expect.objectContaining({ level: 'warning' })
+    )
   })
 
   it('returns a null guestFirstName and roomNumber when the session has no reservation or room', async () => {

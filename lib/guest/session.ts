@@ -1,7 +1,12 @@
 import { cache } from 'react'
 import { cookies, headers } from 'next/headers'
+import * as Sentry from '@sentry/nextjs'
 import { withTenantContext } from '@/lib/supabase/tenant'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 export type GuestSessionContext = {
   propertyId: string
@@ -50,12 +55,18 @@ async function resolveSessionCore(requestHeaders: Headers): Promise<SessionCore 
   const cookieSessionId = cookieStore.get('__Host-session')?.value
   if (!cookieSessionId) return null
 
-  const { data: session } = await createServiceRoleClient()
+  const { data: session, error } = await createServiceRoleClient()
     .from('sessions')
     .select('id, property_id, auth_level, reservation_id, room_id')
     .eq('id', cookieSessionId)
     .single()
-  if (!session) return null
+  if (!session) {
+    Sentry.captureMessage('guest_session_null: cookie fallback session lookup found no row', {
+      level: 'warning',
+      extra: { cookieSessionId, error },
+    })
+    return null
+  }
 
   return {
     sessionId: session.id,
@@ -71,7 +82,13 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
 
   const core = await resolveSessionCore(requestHeaders)
   if (!core) return null
-  if (core.authLevel < 1) return null
+  if (core.authLevel < 1) {
+    Sentry.captureMessage('guest_session_null: authLevel < 1', {
+      level: 'warning',
+      extra: { sessionId: core.sessionId, propertyId: core.propertyId, authLevel: core.authLevel },
+    })
+    return null
+  }
 
   const { sessionId, propertyId, authLevel, reservationId, roomId } = core
 
@@ -80,16 +97,20 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     client = await withTenantContext(
       new Headers({ 'x-property-id': propertyId, 'x-session-id': sessionId })
     )
-  } catch {
+  } catch (err) {
+    Sentry.captureException(err, { extra: { sessionId, propertyId } })
     return null
   }
 
-  const [{ data: property }, reservationResult, roomResult] = await Promise.all([
+  const fetchProperty = () =>
     client
       .from('properties')
       .select('name, logo_url, ai_bot_name, phone_reception')
       .eq('id', propertyId)
-      .single(),
+      .single()
+
+  const [propertyResult, reservationResult, roomResult] = await Promise.all([
+    fetchProperty(),
     reservationId
       ? client
           .from('reservations')
@@ -102,7 +123,26 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
       : Promise.resolve({ data: null }),
   ])
 
-  if (!property) return null
+  let property = propertyResult.data
+  // A transient PgBouncer/network blip right after the scan route's own writes is more
+  // plausible here than a genuinely missing property row, so one short retry before giving up.
+  if (!property) {
+    await sleep(150)
+    const retryResult = await fetchProperty()
+    property = retryResult.data
+    if (!property) {
+      Sentry.captureMessage('guest_session_null: properties fetch returned no row after retry', {
+        level: 'warning',
+        extra: {
+          sessionId,
+          propertyId,
+          firstError: propertyResult.error,
+          retryError: retryResult.error,
+        },
+      })
+      return null
+    }
+  }
 
   return {
     propertyId,
