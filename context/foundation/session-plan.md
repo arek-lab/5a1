@@ -556,6 +556,25 @@ Supabase) zielone po każdym z trzech commitów. Poza formalnym zakresem jakiejk
 `session-plan.md` — kontynuacja diagnostyki z S7.1, udokumentowana tu z tego samego powodu co
 wpisy powyżej.
 
+### 2026-07-17 — Fix: deprecation warning `sentry.client.config.ts` przy buildzie
+Zgłoszone przez użytkownika: `npm run build` wypisywał ostrzeżenie deprecacji Sentry —
+`sentry.client.config.ts` przestanie działać pod Turbopackiem, zalecana migracja do
+`instrumentation-client.ts`. Zamieniono plik konfiguracyjny klienta na natywną konwencję Next.js
+16 `instrumentation-client.ts` (root, bo brak katalogu `src/`) — Next.js ładuje ten plik
+automatycznie przed hydracją, niezależnie od bundlera, więc nie zależy już od wstrzykiwania przez
+plugin webpacka Sentry. Usunięto przy okazji ręczny `import '@/sentry.client.config'` w
+`app/providers.tsx` (komentarz "explicit import needed for Turbopack (webpack plugin doesn't run
+in dev)") — to był obejście dokładnie tej luki, którą zamyka natywna konwencja; dwa równoległe
+wywołania `Sentry.init()` po stronie klienta groziłyby zresztą własnym ostrzeżeniem SDK. Po
+buildzie Sentry zgłosił kolejne żądanie: `instrumentation-client.ts` musi eksportować
+`onRouterTransitionStart`, żeby SDK mógł instrumentować nawigacje — dodano
+`export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;`. Zweryfikowano, że
+`instrumentation.ts` (init serwer/edge + `onRequestError`) i `app/global-error.tsx`
+(`Sentry.captureException` w root error boundary) nie wymagały zmian — obejmują inne warstwy
+(serwer, React render errors) i nie są dotknięte tą deprecacją. Poza formalnym zakresem
+jakiejkolwiek sesji z `session-plan.md` — konserwacja obserwowalności, udokumentowana tu z tego
+samego powodu co wpisy powyżej.
+
 ---
 
 ## FAZA 7 — Wydajność
