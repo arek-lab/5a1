@@ -195,4 +195,55 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     expect(response.headers.get('location')).toContain('error')
     expect(response.headers.get('location')).toContain('outside_window')
   }, 15_000)
+
+  it('Test 5 — wrong_auth_level bounces to /scan twice, then to /error on the 3rd attempt', async () => {
+    const db = createServiceRoleClient()
+
+    // auth_level 2 with no room_id assigned -> does not match the scanned room, so this
+    // hits wrong_auth_level, not the already_active no-op (which requires a matching room_id).
+    const { data: wrongLevelSession, error: sessErr } = await db
+      .from('sessions')
+      .insert({
+        property_id: propertyId,
+        auth_level: 2,
+        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        reception_scan_at: new Date().toISOString(),
+      })
+      .select()
+      .single()
+    if (sessErr) throw sessErr
+
+    let cookieHeader = `__Host-session=${wrongLevelSession.id}`
+
+    const attempt1 = await roomGET(
+      new NextRequest(`http://localhost/api/scan/room?room_id=${roomId}`, {
+        headers: { cookie: cookieHeader },
+      })
+    )
+    expect(attempt1.headers.get('location')).toContain('/scan?retry=1')
+    const retryCookie1 = attempt1.cookies.get('scan_retry_count')
+    expect(retryCookie1?.value).toBe('1')
+    cookieHeader = `__Host-session=${wrongLevelSession.id}; scan_retry_count=${retryCookie1!.value}`
+
+    const attempt2 = await roomGET(
+      new NextRequest(`http://localhost/api/scan/room?room_id=${roomId}`, {
+        headers: { cookie: cookieHeader },
+      })
+    )
+    expect(attempt2.headers.get('location')).toContain('/scan?retry=1')
+    const retryCookie2 = attempt2.cookies.get('scan_retry_count')
+    expect(retryCookie2?.value).toBe('2')
+    cookieHeader = `__Host-session=${wrongLevelSession.id}; scan_retry_count=${retryCookie2!.value}`
+
+    const attempt3 = await roomGET(
+      new NextRequest(`http://localhost/api/scan/room?room_id=${roomId}`, {
+        headers: { cookie: cookieHeader },
+      })
+    )
+    expect(attempt3.headers.get('location')).toContain('/error')
+    expect(attempt3.headers.get('location')).toContain('wrong_auth_level')
+    expect(attempt3.cookies.get('scan_retry_count')?.value).toBeFalsy()
+
+    await db.from('sessions').delete().eq('id', wrongLevelSession.id)
+  }, 30_000)
 })

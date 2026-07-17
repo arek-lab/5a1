@@ -12,6 +12,14 @@ export function RoomQrScanner() {
   const [cameraError, setCameraError] = useState(false)
 
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('retry')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- location.search is unreadable during SSR; this syncs one-time banner visibility after mount
+      setRejectionMessage('Nie udało się połączyć z pokojem. Spróbuj zeskanować ponownie.')
+      window.history.replaceState(null, '', '/scan')
+    }
+  }, [])
+
+  useEffect(() => {
     const video = videoRef.current
     if (!video) return
 

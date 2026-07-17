@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { validateRoomScan, upgradeSession } from '@/lib/scan/room'
+import { retryOrErrorRedirect, clearScanRetryCookie } from '@/lib/scan/retry'
 import { checkScanRateLimit } from '@/lib/rate-limit/scan'
 import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
@@ -30,13 +31,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const validation = await validateRoomScan({ sessionId, roomId })
   if (!validation.ok) {
+    if (validation.error === 'wrong_auth_level') {
+      return retryOrErrorRedirect(request, validation.error, validation.session?.property_id)
+    }
     const redirectUrl = absoluteUrl(`/error?type=${validation.error}`)
     if (validation.session) redirectUrl.searchParams.set('property_id', validation.session.property_id)
     return NextResponse.redirect(redirectUrl)
   }
 
   if (validation.status === 'already_active') {
-    return NextResponse.redirect(absoluteUrl('/'))
+    const response = NextResponse.redirect(absoluteUrl('/'))
+    clearScanRetryCookie(response)
+    return response
   }
 
   const { reservation } = validation
@@ -92,9 +98,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { error: refreshError } = await supabase.auth.refreshSession()
   if (refreshError) {
-    const redirectUrl = absoluteUrl('/error?type=auth_failed')
-    redirectUrl.searchParams.set('property_id', validation.session.property_id)
-    return NextResponse.redirect(redirectUrl)
+    return retryOrErrorRedirect(request, 'auth_failed', validation.session.property_id)
   }
 
   void captureEvent(
@@ -102,5 +106,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     { distinctId: sessionId, propertyId: validation.session.property_id }
   )
 
+  clearScanRetryCookie(response)
   return response
 }
