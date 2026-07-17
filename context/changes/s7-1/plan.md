@@ -269,18 +269,18 @@ wywoływana z aplikacji.
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint` (2 pre-existing errors unrelated to this session, in `qr-panel.tsx`/`reception-qr-kiosk.tsx`, not touched here)
-- [x] 1.3 Unit/integration tests pass: `npm run test` (396/396, incl. updated `proxy.test.ts` + `session.test.ts` and 2 new header-forwarding tests)
-- [x] 1.4 Build passes: `npm run build`
+- [x] 1.1 Type checking passes: `npm run typecheck` — 51830f1
+- [x] 1.2 Linting passes: `npm run lint` (2 pre-existing errors unrelated to this session, in `qr-panel.tsx`/`reception-qr-kiosk.tsx`, not touched here) — 51830f1
+- [x] 1.3 Unit/integration tests pass: `npm run test` (396/396, incl. updated `proxy.test.ts` + `session.test.ts` and 2 new header-forwarding tests) — 51830f1
+- [x] 1.4 Build passes: `npm run build` — 51830f1
 
 #### Manual
 
-- [x] 1.5 DevTools Network pokazuje spadek liczby sekwencyjnych zapytań Supabase
-- [x] 1.6 Revoke sesji → natychmiastowy redirect `session_revoked`
-- [x] 1.7 Izolacja tenantowa: property A nie widzi danych property B
-- [x] 1.8 `loading.tsx` widoczny przy pierwszej nawigacji
-- [x] 1.9 `/my-stay` pokazuje poprawne dane po refaktorze `session.ts`
+- [x] 1.5 DevTools Network pokazuje spadek liczby sekwencyjnych zapytań Supabase — 51830f1
+- [x] 1.6 Revoke sesji → natychmiastowy redirect `session_revoked` — 51830f1
+- [x] 1.7 Izolacja tenantowa: property A nie widzi danych property B — 51830f1
+- [x] 1.8 `loading.tsx` widoczny przy pierwszej nawigacji — 51830f1
+- [x] 1.9 `/my-stay` pokazuje poprawne dane po refaktorze `session.ts` — 51830f1
 
 **Uwaga (implementacja):** `loading.tsx` (Krok 4) jest plikiem na poziomie grupy `(guest)` zgodnie
 z konwencją App Router — automatycznie owija w Suspense wyłącznie `page.tsx`/dzieci, NIE

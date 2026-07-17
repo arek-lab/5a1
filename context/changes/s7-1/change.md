@@ -1,7 +1,7 @@
 ---
 change_id: s7-1
 title: Eliminacja sekwencyjnych round-tripów Supabase w aplikacji gościa
-status: implementing
+status: implemented
 created: 2026-07-17
 updated: 2026-07-17
 archived_at: null
