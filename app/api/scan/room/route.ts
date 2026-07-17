@@ -13,13 +13,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
   const rateLimit = await checkScanRateLimit(ip)
   if (!rateLimit.allowed) {
-    return new NextResponse(null, {
-      status: 429,
-      headers: {
-        'Retry-After': String(rateLimit.retryAfter),
-        'X-RateLimit-Remaining': '0',
-      },
-    })
+    const response = NextResponse.redirect(absoluteUrl('/error?type=rate_limited'))
+    response.headers.set('Retry-After', String(rateLimit.retryAfter))
+    return response
   }
 
   const sessionId = request.cookies.get('__Host-session')?.value
@@ -37,6 +33,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const redirectUrl = absoluteUrl(`/error?type=${validation.error}`)
     if (validation.session) redirectUrl.searchParams.set('property_id', validation.session.property_id)
     return NextResponse.redirect(redirectUrl)
+  }
+
+  if (validation.status === 'already_active') {
+    return NextResponse.redirect(absoluteUrl('/'))
   }
 
   const { reservation } = validation

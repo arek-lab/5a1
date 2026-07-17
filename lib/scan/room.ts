@@ -6,7 +6,14 @@ export async function validateRoomScan(params: {
   sessionId: string
   roomId: string
 }): Promise<
-  | { ok: true; session: Tables<'sessions'>; room: Tables<'rooms'>; reservation: Tables<'reservations'> }
+  | {
+      ok: true
+      status: 'fresh'
+      session: Tables<'sessions'>
+      room: Tables<'rooms'>
+      reservation: Tables<'reservations'>
+    }
+  | { ok: true; status: 'already_active'; session: Tables<'sessions'> }
   | { ok: false; error: RoomScanError; session?: Tables<'sessions'> }
 > {
   const supabase = createServiceRoleClient()
@@ -21,7 +28,12 @@ export async function validateRoomScan(params: {
   if (session.revoked) return { ok: false, error: 'session_revoked', session }
   if (new Date(session.expires_at) <= new Date())
     return { ok: false, error: 'session_expired', session }
-  if (session.auth_level !== 1) return { ok: false, error: 'wrong_auth_level', session }
+  if (session.auth_level !== 1) {
+    if (session.auth_level === 2 && session.room_id === params.roomId) {
+      return { ok: true, status: 'already_active', session }
+    }
+    return { ok: false, error: 'wrong_auth_level', session }
+  }
 
   const { data: qrCode, error: qrError } = await supabase
     .from('qr_codes')
@@ -65,7 +77,7 @@ export async function validateRoomScan(params: {
 
   if (reservationError || !reservation) return { ok: false, error: 'no_active_reservation', session }
 
-  return { ok: true, session, room, reservation }
+  return { ok: true, status: 'fresh', session, room, reservation }
 }
 
 export async function upgradeSession(params: {

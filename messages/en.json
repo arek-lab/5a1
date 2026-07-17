@@ -107,6 +107,10 @@
         "heading": "Access denied",
         "body": "You don't have sufficient access to view this page. Please scan the QR code in your room or at reception."
       },
+      "rateLimited": {
+        "heading": "Too many attempts",
+        "body": "Too many codes were scanned in a short time. Please wait a moment and try again."
+      },
       "generic": {
         "heading": "Something went wrong",
         "body": "We couldn't process this request. Please try again or contact reception."

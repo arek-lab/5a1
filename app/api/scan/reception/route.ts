@@ -13,13 +13,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
   const rateLimit = await checkScanRateLimit(ip)
   if (!rateLimit.allowed) {
-    return new NextResponse(null, {
-      status: 429,
-      headers: {
-        'Retry-After': String(rateLimit.retryAfter),
-        'X-RateLimit-Remaining': '0',
-      },
-    })
+    const response = NextResponse.redirect(absoluteUrl('/error?type=rate_limited'))
+    response.headers.set('Retry-After', String(rateLimit.retryAfter))
+    return response
   }
 
   const initToken = request.nextUrl.searchParams.get('init_token')

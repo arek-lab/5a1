@@ -10,6 +10,7 @@ const GROUP_KEY: Record<ReturnType<typeof resolveErrorGroup>, string> = {
   expired: 'expired',
   invalid: 'invalid',
   insufficient_access: 'insufficientAccess',
+  rate_limited: 'rateLimited',
   generic: 'generic',
 }
 

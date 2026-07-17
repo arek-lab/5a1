@@ -107,6 +107,10 @@
         "heading": "Brak dostępu",
         "body": "Nie masz wystarczających uprawnień, aby zobaczyć tę stronę. Zeskanuj kod QR w pokoju lub na recepcji."
       },
+      "rateLimited": {
+        "heading": "Zbyt wiele prób",
+        "body": "Zeskanowano zbyt wiele kodów w krótkim czasie. Odczekaj chwilę i spróbuj ponownie."
+      },
       "generic": {
         "heading": "Coś poszło nie tak",
         "body": "Nie udało się przetworzyć tego żądania. Spróbuj ponownie lub skontaktuj się z recepcją."

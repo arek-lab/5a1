@@ -1,6 +1,6 @@
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 
-export type ErrorGroup = 'expired' | 'invalid' | 'insufficient_access' | 'generic'
+export type ErrorGroup = 'expired' | 'invalid' | 'insufficient_access' | 'rate_limited' | 'generic'
 
 const EXPIRED = new Set(['token_expired', 'session_expired'])
 const INVALID = new Set([
@@ -12,12 +12,14 @@ const INVALID = new Set([
   'auth_failed',
 ])
 const INSUFFICIENT_ACCESS = new Set(['insufficient_auth', 'wrong_auth_level'])
+const RATE_LIMITED = new Set(['rate_limited'])
 
 export function resolveErrorGroup(type: string | undefined): ErrorGroup {
   if (type === undefined) return 'generic'
   if (EXPIRED.has(type)) return 'expired'
   if (INVALID.has(type)) return 'invalid'
   if (INSUFFICIENT_ACCESS.has(type)) return 'insufficient_access'
+  if (RATE_LIMITED.has(type)) return 'rate_limited'
   return 'generic'
 }
 

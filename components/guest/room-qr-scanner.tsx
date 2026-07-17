@@ -7,6 +7,7 @@ import { isRoomScanUrl } from '@/lib/guest/room-scan-url'
 export function RoomQrScanner() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const scannerRef = useRef<QrScanner | null>(null)
+  const matchedRef = useRef(false)
   const [rejectionMessage, setRejectionMessage] = useState<string | null>(null)
   const [cameraError, setCameraError] = useState(false)
 
@@ -17,7 +18,10 @@ export function RoomQrScanner() {
     const scanner = new QrScanner(
       video,
       (result) => {
+        if (matchedRef.current) return
         if (isRoomScanUrl(result.data, window.location.origin)) {
+          matchedRef.current = true
+          scanner.stop()
           window.location.href = result.data
           return
         }
