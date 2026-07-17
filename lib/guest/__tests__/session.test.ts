@@ -17,6 +17,7 @@ vi.mock('react', async () => {
 vi.mock('@sentry/nextjs', () => ({
   captureMessage: vi.fn(),
   captureException: vi.fn(),
+  flush: vi.fn().mockResolvedValue(true),
 }))
 
 import { headers, cookies } from 'next/headers'

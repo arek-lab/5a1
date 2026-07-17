@@ -53,7 +53,18 @@ async function resolveSessionCore(requestHeaders: Headers): Promise<SessionCore 
 
   const cookieStore = await cookies()
   const cookieSessionId = cookieStore.get('__Host-session')?.value
-  if (!cookieSessionId) return null
+  if (!cookieSessionId) {
+    Sentry.captureMessage('guest_session_null: no session headers and no session cookie', {
+      level: 'warning',
+      extra: {
+        hasPropertyIdHeader: Boolean(propertyId),
+        hasSessionIdHeader: Boolean(sessionId),
+        hasAuthLevelHeader: Boolean(authLevelHeader),
+      },
+    })
+    await Sentry.flush(2000)
+    return null
+  }
 
   const { data: session, error } = await createServiceRoleClient()
     .from('sessions')
@@ -65,6 +76,10 @@ async function resolveSessionCore(requestHeaders: Headers): Promise<SessionCore 
       level: 'warning',
       extra: { cookieSessionId, error },
     })
+    // Fire-and-forget capture calls can get dropped if the redirect() that follows ends the
+    // request before the SDK's queued network send goes out — flush explicitly so these
+    // diagnostic events are actually delivered instead of silently vanishing.
+    await Sentry.flush(2000)
     return null
   }
 
@@ -87,6 +102,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
       level: 'warning',
       extra: { sessionId: core.sessionId, propertyId: core.propertyId, authLevel: core.authLevel },
     })
+    await Sentry.flush(2000)
     return null
   }
 
@@ -99,6 +115,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     )
   } catch (err) {
     Sentry.captureException(err, { extra: { sessionId, propertyId } })
+    await Sentry.flush(2000)
     return null
   }
 
@@ -140,6 +157,7 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
           retryError: retryResult.error,
         },
       })
+      await Sentry.flush(2000)
       return null
     }
   }
