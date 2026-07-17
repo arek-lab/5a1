@@ -1,6 +1,5 @@
 'use client';
 
-import '@/sentry.client.config'; // explicit import needed for Turbopack (webpack plugin doesn't run in dev)
 import { posthog } from '@/lib/posthog/client';
 import { isDoNotTrackEnabled } from '@/lib/analytics/dnt';
 import { PostHogProvider } from 'posthog-js/react';
