@@ -27,7 +27,10 @@ export function retryOrErrorRedirect(
     maxAge: 600,
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    // Lax, not Strict: the room QR (printed, on the door) can also be scanned by the
+    // phone's native camera app rather than RoomQrScanner — same class of freshly-set
+    // cookie getting dropped on an externally-initiated top-level navigation.
+    sameSite: 'lax',
   })
   return response
 }

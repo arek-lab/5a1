@@ -80,10 +80,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.redirect(redirectUrl)
   }
 
+  // Lax, not Strict: this cookie is minted mid-redirect on a top-level navigation that
+  // usually arrives from outside the app (the phone's camera app opening the QR link) —
+  // Strict is documented to drop a freshly-set cookie on exactly that first external-entry
+  // navigation, which showed up in production as insufficient_auth on the very first reception
+  // scan, self-healing on the guest's next (in-site) navigation. Lax still blocks the cookie
+  // from cross-site subrequests/POSTs; it only additionally allows top-level GET navigations.
   response.cookies.set('__Host-session', session.id, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
   })
 

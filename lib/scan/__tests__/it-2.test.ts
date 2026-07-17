@@ -112,7 +112,7 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     expect(sessionCookie).toBeDefined()
     expect(sessionCookie?.httpOnly).toBe(true)
     expect(sessionCookie?.secure).toBe(true)
-    expect(sessionCookie?.sameSite).toBe('strict')
+    expect(sessionCookie?.sameSite).toBe('lax')
     expect(sessionCookie?.path).toBe('/')
 
     // Capture for downstream tests (Tests 2 and 3)
