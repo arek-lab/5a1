@@ -2,26 +2,41 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('next/headers', () => ({
   headers: vi.fn(),
+  cookies: vi.fn(),
 }))
 vi.mock('@/lib/supabase/tenant', () => ({
   withTenantContext: vi.fn(),
+}))
+vi.mock('@/lib/supabase/service-role', () => ({
+  createServiceRoleClient: vi.fn(),
 }))
 vi.mock('react', async () => {
   const actual = await vi.importActual<typeof import('react')>('react')
   return { ...actual, cache: (fn: unknown) => fn }
 })
 
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import { withTenantContext } from '@/lib/supabase/tenant'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { getGuestSessionContext } from '../session'
 
 const mockHeaders = vi.mocked(headers)
+const mockCookies = vi.mocked(cookies)
 const mockWithTenantContext = vi.mocked(withTenantContext)
+const mockCreateServiceRoleClient = vi.mocked(createServiceRoleClient)
 
 function headersWith(values: Record<string, string>) {
   return {
     get: (key: string) => values[key] ?? null,
   } as unknown as Headers
+}
+
+function noCookie() {
+  return { get: () => undefined } as unknown as Awaited<ReturnType<typeof cookies>>
+}
+
+function cookieWith(sessionId: string) {
+  return { get: () => ({ value: sessionId }) } as unknown as Awaited<ReturnType<typeof cookies>>
 }
 
 function makeClient(responses: {
@@ -55,8 +70,24 @@ describe('getGuestSessionContext', () => {
     vi.resetAllMocks()
   })
 
-  it('returns null when x-property-id header is absent (withTenantContext throws)', async () => {
+  it('returns null with no session headers and no session cookie', async () => {
     mockHeaders.mockResolvedValue(headersWith({}))
+    mockCookies.mockResolvedValue(noCookie())
+
+    const result = await getGuestSessionContext()
+
+    expect(result).toBeNull()
+    expect(mockWithTenantContext).not.toHaveBeenCalled()
+  })
+
+  it('returns null when x-property-id header is present but withTenantContext rejects it', async () => {
+    mockHeaders.mockResolvedValue(
+      headersWith({
+        'x-property-id': 'prop-1',
+        'x-session-id': 'sess-1',
+        'x-session-auth-level': '1',
+      })
+    )
     mockWithTenantContext.mockRejectedValue(new Error('Missing or invalid x-property-id header'))
 
     const result = await getGuestSessionContext()
@@ -64,11 +95,68 @@ describe('getGuestSessionContext', () => {
     expect(result).toBeNull()
   })
 
-  it('returns null when the x-session-auth-level header is missing', async () => {
-    mockHeaders.mockResolvedValue(
-      headersWith({ 'x-property-id': 'prop-1', 'x-session-id': 'sess-1' })
+  it('returns null when headers are missing and the cookie session row is not found', async () => {
+    mockHeaders.mockResolvedValue(headersWith({}))
+    mockCookies.mockResolvedValue(cookieWith('sess-1'))
+    mockCreateServiceRoleClient.mockReturnValue({
+      from: () => ({ select: () => ({ eq: () => ({ single: async () => ({ data: null }) }) }) }),
+    } as never)
+
+    const result = await getGuestSessionContext()
+
+    expect(result).toBeNull()
+  })
+
+  it('falls back to a direct session read when the auth-level header is momentarily missing', async () => {
+    mockHeaders.mockResolvedValue(headersWith({}))
+    mockCookies.mockResolvedValue(cookieWith('sess-1'))
+    mockCreateServiceRoleClient.mockReturnValue({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: async () => ({
+              data: {
+                id: 'sess-1',
+                property_id: 'prop-1',
+                auth_level: 2,
+                reservation_id: 'res-1',
+                room_id: 'room-1',
+              },
+            }),
+          }),
+        }),
+      }),
+    } as never)
+    mockWithTenantContext.mockResolvedValue(
+      makeClient({
+        property: { name: 'Hotel Test', logo_url: null },
+        reservation: { guest_first_name: 'Jan' },
+        room: { room_number: '204' },
+      }) as never
     )
-    mockWithTenantContext.mockResolvedValue(makeClient({}) as never)
+
+    const result = await getGuestSessionContext()
+
+    expect(result?.sessionId).toBe('sess-1')
+    expect(result?.propertyId).toBe('prop-1')
+    expect(result?.authLevel).toBe(2)
+    expect(result?.roomNumber).toBe('204')
+  })
+
+  it('returns null when the fallback session read has auth_level 0', async () => {
+    mockHeaders.mockResolvedValue(headersWith({}))
+    mockCookies.mockResolvedValue(cookieWith('sess-1'))
+    mockCreateServiceRoleClient.mockReturnValue({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: async () => ({
+              data: { id: 'sess-1', property_id: 'prop-1', auth_level: 0, reservation_id: null, room_id: null },
+            }),
+          }),
+        }),
+      }),
+    } as never)
 
     const result = await getGuestSessionContext()
 
