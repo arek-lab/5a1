@@ -11,6 +11,7 @@ const GROUP_KEY: Record<ReturnType<typeof resolveErrorGroup>, string> = {
   invalid: 'invalid',
   insufficient_access: 'insufficientAccess',
   rate_limited: 'rateLimited',
+  signed_out: 'signedOut',
   generic: 'generic',
 }
 

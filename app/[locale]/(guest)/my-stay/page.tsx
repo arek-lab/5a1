@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireGuestSession } from '@/lib/guest/require-session';
+import { SignOutTile } from '@/components/guest/sign-out-tile';
 
 function formatDate(value: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).format(
@@ -44,6 +45,8 @@ export default async function MyStayPage() {
       >
         {t('ordersLink')}
       </Link>
+
+      <SignOutTile />
     </main>
   );
 }

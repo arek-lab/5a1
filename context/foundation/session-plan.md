@@ -476,6 +476,26 @@ zostawione poza zakresem tego fixu. Czysto wizualne — zero zmian w `requireGue
 walidacji formularza. `npm run build`/`typecheck`/`lint` zielone bez regresji. Poza formalnym DoD
 S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.
 
+### 2026-07-17 — Kafel "Wyloguj pobyt" na `/my-stay`
+Na wniosek użytkownika: aplikacja gościa nie miała żadnego sposobu na ręczne zakończenie sesji —
+`__Host-session` żyła aż do wygaśnięcia albo revoke z panelu, co utrudniało testowanie różnych
+scenariuszy (inny pokój/poziom auth) na tym samym urządzeniu bez czyszczenia cookies w devtoolsach.
+Dodano: (1) `app/api/guest/sign-out/route.ts` — POST-only route handler (brak GET, żeby zwykły
+link/prefetch nie mógł wywołać akcji destrukcyjnej): oznacza wiersz `sessions.revoked = true`
+(`createServiceRoleClient`, spójnie z `lib/anomaly/detect.ts`), usuwa cookie `__Host-session` z
+`Secure`+`Path=/` (ten sam gotcha co w `proxy.ts` — bez tego browser cicho odrzuca Set-Cookie),
+przekierowuje na `/error?type=signed_out`. (2) `lib/guest/error-copy.ts` +
+`app/[locale]/error/page.tsx` — nowa grupa błędu `signed_out` (nie recykluje `insufficient_access`,
+żeby świadome wylogowanie nie brzmiało jak błąd dostępu), z własnym komunikatem "Wylogowano" w
+`messages/pl.json`/`en.json`. (3) `components/guest/sign-out-tile.tsx` — nowy client component,
+styl skopiowany z `service-card.tsx` (`rounded-card`/`border-guest-ink-muted/15`/`bg-guest-paper/65`/
+`shadow-soft`/`backdrop-blur-lg`, bez nowej zależności wizualnej typu lucide/shadcn `Card`), zwykły
+`<form method="post">` do route handlera + `window.confirm` przed submitem jako jedyny powód
+`'use client'`. Wpięty w `app/[locale]/(guest)/my-stay/page.tsx` pod istniejącym linkiem
+`ordersLink`; strona zostaje Server Component. `npm test` (400/400) i `tsc --noEmit` zielone bez
+regresji. Poza formalnym zakresem jakiejkolwiek sesji z `session-plan.md` — nowa, wcześniej
+nieplanowana funkcja, udokumentowana tu z tego samego powodu co wpisy powyżej.
+
 ---
 
 ## FAZA 7 — Wydajność

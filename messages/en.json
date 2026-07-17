@@ -36,7 +36,9 @@
       "roomLabel": "Room number",
       "checkInLabel": "Check-in",
       "checkOutLabel": "Check-out",
-      "ordersLink": "View my orders"
+      "ordersLink": "View my orders",
+      "signOutTile": "Sign out of stay",
+      "signOutConfirm": "Are you sure you want to end your stay session? You'll need to scan the QR code again."
     },
     "roomRequired": {
       "title": "Scan your room code",
@@ -110,6 +112,10 @@
       "rateLimited": {
         "heading": "Too many attempts",
         "body": "Too many codes were scanned in a short time. Please wait a moment and try again."
+      },
+      "signedOut": {
+        "heading": "Signed out",
+        "body": "Your stay session has ended. Scan the QR code again to sign in."
       },
       "generic": {
         "heading": "Something went wrong",

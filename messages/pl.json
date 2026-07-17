@@ -36,7 +36,9 @@
       "roomLabel": "Numer pokoju",
       "checkInLabel": "Zameldowanie",
       "checkOutLabel": "Wymeldowanie",
-      "ordersLink": "Zobacz moje zamówienia"
+      "ordersLink": "Zobacz moje zamówienia",
+      "signOutTile": "Wyloguj pobyt",
+      "signOutConfirm": "Czy na pewno chcesz zakończyć sesję pobytu? Będziesz musiał zeskanować kod QR ponownie."
     },
     "roomRequired": {
       "title": "Zeskanuj kod pokoju",
@@ -110,6 +112,10 @@
       "rateLimited": {
         "heading": "Zbyt wiele prób",
         "body": "Zeskanowano zbyt wiele kodów w krótkim czasie. Odczekaj chwilę i spróbuj ponownie."
+      },
+      "signedOut": {
+        "heading": "Wylogowano",
+        "body": "Sesja pobytu została zakończona. Zeskanuj kod QR ponownie, aby się zalogować."
       },
       "generic": {
         "heading": "Coś poszło nie tak",
