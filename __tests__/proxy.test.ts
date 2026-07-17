@@ -59,7 +59,18 @@ describe('proxy: matcher', () => {
 const PROP = 'prop-abc'
 const SESSION_ID = 'session-1'
 
-function makeAdmin(session: { id: string; revoked: boolean; expires_at: string; property_id: string; last_seen_at: string } | null) {
+function makeAdmin(
+  session: {
+    id: string
+    revoked: boolean
+    expires_at: string
+    property_id: string
+    last_seen_at: string
+    auth_level: number
+    reservation_id: string | null
+    room_id: string | null
+  } | null
+) {
   const updateEq = vi.fn().mockResolvedValue({ error: null })
   const update = vi.fn().mockReturnValue({ eq: updateEq })
   const single = vi.fn().mockResolvedValue({ data: session })
@@ -76,6 +87,9 @@ function makeSession(overrides: Partial<{ lastSeenAt: string }> = {}) {
     expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
     property_id: PROP,
     last_seen_at: overrides.lastSeenAt ?? new Date().toISOString(),
+    auth_level: 2,
+    reservation_id: 'res-1',
+    room_id: 'room-1',
   }
 }
 
@@ -125,6 +139,37 @@ describe('proxy: guest_session_returned', () => {
 
     expect(mockCaptureEvent).not.toHaveBeenCalled()
     expect(admin.update).not.toHaveBeenCalled()
+  })
+})
+
+describe('proxy: guest session headers forwarded to downstream request', () => {
+  beforeEach(() => vi.resetAllMocks())
+
+  it('forwards auth_level/reservation_id/room_id from the sessions row, without a second lookup', async () => {
+    const admin = makeAdmin(makeSession())
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    const response = await proxy(requestWithSession('http://localhost/api/some-route'))
+
+    expect(response.headers.get('x-middleware-request-x-property-id')).toBe(PROP)
+    expect(response.headers.get('x-middleware-request-x-session-id')).toBe(SESSION_ID)
+    expect(response.headers.get('x-middleware-request-x-session-auth-level')).toBe('2')
+    expect(response.headers.get('x-middleware-request-x-session-reservation-id')).toBe('res-1')
+    expect(response.headers.get('x-middleware-request-x-session-room-id')).toBe('room-1')
+    // Exactly one `sessions` lookup for the whole request (the last_seen_at update is skipped
+    // for /api/ routes) — the second lookup this test used to require in lib/guest/session.ts
+    // is gone now that auth_level/reservation_id/room_id are forwarded via headers instead.
+    expect(admin.from).toHaveBeenCalledTimes(1)
+  })
+
+  it('omits reservation/room headers when the session has neither', async () => {
+    const admin = makeAdmin({ ...makeSession(), reservation_id: null, room_id: null })
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    const response = await proxy(requestWithSession('http://localhost/api/some-route'))
+
+    expect(response.headers.get('x-middleware-request-x-session-reservation-id')).toBeNull()
+    expect(response.headers.get('x-middleware-request-x-session-room-id')).toBeNull()
   })
 })
 

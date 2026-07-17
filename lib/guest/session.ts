@@ -28,60 +28,48 @@ export const getGuestSessionContext = cache(async (): Promise<GuestSessionContex
     return null
   }
 
+  // proxy.ts already looked up this session row (revoked/expired check) and forwards the
+  // columns we need as headers — avoids a second `sessions` round-trip for the same row.
   const sessionId = requestHeaders.get('x-session-id')
   const propertyId = requestHeaders.get('x-property-id')
-  if (!sessionId || !propertyId) return null
+  const authLevelHeader = requestHeaders.get('x-session-auth-level')
+  const reservationId = requestHeaders.get('x-session-reservation-id')
+  const roomId = requestHeaders.get('x-session-room-id')
+  if (!sessionId || !propertyId || !authLevelHeader) return null
 
-  const { data: session } = await client
-    .from('sessions')
-    .select('id, property_id, auth_level, reservation_id, room_id')
-    .eq('id', sessionId)
-    .single()
+  const authLevel = Number(authLevelHeader)
+  if (authLevel < 1) return null
 
-  if (!session || session.auth_level < 1) return null
-
-  const { data: property } = await client
-    .from('properties')
-    .select('name, logo_url, ai_bot_name, phone_reception')
-    .eq('id', session.property_id)
-    .single()
+  const [{ data: property }, reservationResult, roomResult] = await Promise.all([
+    client
+      .from('properties')
+      .select('name, logo_url, ai_bot_name, phone_reception')
+      .eq('id', propertyId)
+      .single(),
+    reservationId
+      ? client
+          .from('reservations')
+          .select('guest_first_name, check_in, check_out')
+          .eq('id', reservationId)
+          .single()
+      : Promise.resolve({ data: null }),
+    roomId
+      ? client.from('rooms').select('room_number').eq('id', roomId).single()
+      : Promise.resolve({ data: null }),
+  ])
 
   if (!property) return null
 
-  let guestFirstName: string | null = null
-  let checkIn: string | null = null
-  let checkOut: string | null = null
-  if (session.reservation_id) {
-    const { data: reservation } = await client
-      .from('reservations')
-      .select('guest_first_name, check_in, check_out')
-      .eq('id', session.reservation_id)
-      .single()
-    guestFirstName = reservation?.guest_first_name ?? null
-    checkIn = reservation?.check_in ?? null
-    checkOut = reservation?.check_out ?? null
-  }
-
-  let roomNumber: string | null = null
-  if (session.room_id) {
-    const { data: room } = await client
-      .from('rooms')
-      .select('room_number')
-      .eq('id', session.room_id)
-      .single()
-    roomNumber = room?.room_number ?? null
-  }
-
   return {
-    propertyId: session.property_id,
-    sessionId: session.id,
-    authLevel: session.auth_level,
-    guestFirstName,
-    checkIn,
-    checkOut,
-    roomNumber,
-    roomId: session.room_id,
-    reservationId: session.reservation_id,
+    propertyId,
+    sessionId,
+    authLevel,
+    guestFirstName: reservationResult.data?.guest_first_name ?? null,
+    checkIn: reservationResult.data?.check_in ?? null,
+    checkOut: reservationResult.data?.check_out ?? null,
+    roomNumber: roomResult.data?.room_number ?? null,
+    roomId,
+    reservationId,
     propertyName: property.name,
     logoUrl: property.logo_url,
     aiBotName: property.ai_bot_name,

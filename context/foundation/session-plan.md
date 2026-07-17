@@ -373,6 +373,13 @@ sesji). Osobna sesja powinna dodać kolumnę `properties.description`/`descripti
 panelu (np. `app/[locale]/(hotel)/onboarding` lub sekcja profilu hotelu) i podmienić placeholder w
 `hotel-description.tsx` na dane z bazy.
 
+**TODO (poza zakresem, zarejestrowane 2026-07-17 podczas S7.1):** panel hotelowy ma analogiczny
+problem wydajnościowy jak ten naprawiony w S7.1 dla apki gościa — `lib/panel/auth.ts`
+(`getHotelUser`) i `app/[locale]/(hotel)/layout.tsx` wywołują `supabase.auth.getUser()`
+niezależnie od siebie (dwa round-tripy do serwera Auth zamiast jednego), a middleware (`proxy.ts`)
+osobno pobiera claims JWT bez przekazania ich dalej. Osobna sesja powinna zastosować ten sam wzorzec
+(dedup przez nagłówki z middleware + `Promise.all`) do warstwy auth panelu.
+
 ### 2026-07-15 — Kafle amenities poziome + CTA do udogodnień na "Dziś"
 Na wniosek użytkownika, w trakcie trwania S6.1: `components/guest/category-grid.tsx` —
 `/amenities` przebudowane z siatki 2×2 na pionową listę poziomych kafli pełnej szerokości
@@ -468,3 +475,39 @@ zostawione poza zakresem tego fixu. Czysto wizualne — zero zmian w `requireGue
 `resolveErrorGroup`/`getErrorPageBranding`, `createBrowserClient().auth.*`, `router.push`,
 walidacji formularza. `npm run build`/`typecheck`/`lint` zielone bez regresji. Poza formalnym DoD
 S6.1, udokumentowane tu z tego samego powodu co wpisy powyżej.
+
+---
+
+## FAZA 7 — Wydajność
+
+### S7.1 — Eliminacja sekwencyjnych round-tripów Supabase w aplikacji gościa [luka odkryta 2026-07-17]
+**Scope:** Naprawa łańcucha renderowania każdej strony gościa (`GuestLayout` → `requireGuestSession()`
+→ `getGuestSessionContext()`), który dziś wykonuje do 7 sekwencyjnych round-tripów sieciowych do
+Supabase przed pierwszym renderem: (1) `lib/supabase/tenant.ts` — usunięcie wywołania RPC
+`set_tenant_context` z `withTenantContext()` (klient `service_role` ma `BYPASSRLS`, RPC nie chroni
+niczego, tylko kosztuje round-trip — realną izolacją tenantową pozostają `.eq('property_id', …)` w
+kodzie); (2) `proxy.ts` — middleware rozszerza istniejące zapytanie `sessions` o
+`auth_level`/`reservation_id`/`room_id` i przekazuje je przez nagłówki (`x-session-auth-level`,
+`x-session-reservation-id`, `x-session-room-id`), `x-property-id` ustawiane bezpośrednio z wyniku
+tego zapytania zamiast czekać na `getClaims()`; (3) `lib/guest/session.ts` — usunięcie
+zduplikowanego drugiego `SELECT` na `sessions` (dane już w nagłówkach z (2)), oraz zamiana
+sekwencyjnych `await` na `properties`/`reservations`/`rooms` na jeden `Promise.all`; (4)
+`app/[locale]/(guest)/loading.tsx` — streaming fallback (Suspense) dla całej grupy tras gościa, tak
+żeby powłoka renderowała się natychmiast zamiast czekać na pełny łańcuch danych. `getClaims()` w
+middleware **zostaje** (odświeżanie cookies Supabase Auth — poza bezpiecznym zakresem tej sesji).
+**DoD:** DevTools Network na `/` (guest) pokazuje spadek z ~7 do ~2-3 sekwencyjnych round-tripów do
+Supabase; rewokacja sesji nadal natychmiastowa (revoke w bazie → kolejne żądanie → redirect
+`session_revoked` bez opóźnienia); RLS/izolacja tenantowa nietknięta (gość property A nie widzi
+danych property B); pierwsza nawigacja pokazuje `loading.tsx` zamiast pustego ekranu;
+`npm run typecheck`/`lint`/`test` zielone bez regresji.
+**Blokery:** brak — dotyka wyłącznie istniejącego kodu warstwy sesji gościa (S1.2, S3.1).
+**Uwaga:** zarejestrowana na wniosek użytkownika po zgłoszeniu "każda strona ładuje się ~2s mimo
+PWA" na produkcji Railway (2026-07-17). Diagnoza: `proxy.ts` + `lib/guest/session.ts` +
+`lib/supabase/tenant.ts` wykonują nadmiarową, sekwencyjną pracę sieciową na każdym żądaniu; brak
+`loading.tsx` w całej aplikacji potęguje odczuwalny efekt. Panel hotelowy ma analogiczny problem
+(`lib/panel/auth.ts`/`(hotel)/layout.tsx`, podwójne `auth.getUser()`) — odnotowany jako TODO w
+sekcji "Prace dodatkowe" powyżej, poza zakresem S7.1. Region Railway vs Supabase (kolokacja) nie
+zweryfikowany w tej sesji — do ręcznego sprawdzenia przez użytkownika w dashboardach. Twarde
+ograniczenie HITL (`context/archive/decisions_log.md:92,577`, natychmiastowa rewokacja sesji)
+respektowane — żadna zmiana nie cache'uje stanu `revoked`/`expires_at`. Patrz
+`context/changes/s7-1/change.md`.

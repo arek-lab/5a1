@@ -49,11 +49,14 @@ export default async function proxy(request: NextRequest) {
   }
 
   const sessionId = request.cookies.get('__Host-session')?.value
+  // Populated below when a valid, non-expired, non-revoked guest session exists — forwarded as
+  // headers so lib/guest/session.ts doesn't need a second `sessions` lookup for the same row.
+  let guestSessionHeaders: Record<string, string> | null = null
   if (sessionId) {
     const admin = createServiceRoleClient()
     const { data: session } = await admin
       .from('sessions')
-      .select('id, revoked, expires_at, property_id, last_seen_at')
+      .select('id, revoked, expires_at, property_id, last_seen_at, auth_level, reservation_id, room_id')
       .eq('id', sessionId)
       .single()
 
@@ -100,6 +103,14 @@ export default async function proxy(request: NextRequest) {
         .update({ last_seen_at: new Date().toISOString() })
         .eq('id', session.id)
     }
+
+    guestSessionHeaders = {
+      'x-property-id': session.property_id,
+      'x-session-id': session.id,
+      'x-session-auth-level': String(session.auth_level),
+      ...(session.reservation_id ? { 'x-session-reservation-id': session.reservation_id } : {}),
+      ...(session.room_id ? { 'x-session-room-id': session.room_id } : {}),
+    }
   }
 
   let supabaseResponse = NextResponse.next({ request })
@@ -140,6 +151,15 @@ export default async function proxy(request: NextRequest) {
   }
   if (typeof meta?.session_id === 'string') {
     requestHeaders.set('x-session-id', meta.session_id)
+  }
+
+  // guestSessionHeaders comes straight from the `sessions` row already fetched above (same
+  // request), so it's authoritative and doesn't wait on getClaims() — overrides the JWT-derived
+  // x-property-id/x-session-id fallback above when a guest session cookie is present.
+  if (guestSessionHeaders) {
+    for (const [key, value] of Object.entries(guestSessionHeaders)) {
+      requestHeaders.set(key, value)
+    }
   }
 
   // API routes: auth refresh + header injection only; skip locale routing to avoid

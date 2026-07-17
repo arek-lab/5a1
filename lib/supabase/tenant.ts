@@ -5,7 +5,7 @@ import { createServiceRoleClient } from './service-role'
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-// Returns a service_role client with RLS context set for the request.
+// Returns a service_role client, validated against the tenant headers set by the middleware.
 // Throws if x-property-id header is absent or not a valid UUID.
 export async function withTenantContext(
   headers: Pick<Headers, 'get'>
@@ -20,11 +20,9 @@ export async function withTenantContext(
     throw new Error('Invalid x-session-id header')
   }
 
-  const client = createServiceRoleClient()
-  await client.rpc('set_tenant_context', {
-    p_property_id: propertyId,
-    ...(sessionId !== null ? { p_session_id: sessionId } : {}),
-  })
-
-  return client
+  // service_role bypasses RLS entirely (BYPASSRLS), so current_setting('app.property_id') —
+  // set by set_tenant_context — is never evaluated for this client. Tenant isolation here is
+  // enforced solely by the explicit .eq('property_id', …) filters in each caller's query; no
+  // RPC round-trip is needed to establish it.
+  return createServiceRoleClient()
 }
