@@ -496,6 +496,29 @@ styl skopiowany z `service-card.tsx` (`rounded-card`/`border-guest-ink-muted/15`
 regresji. Poza formalnym zakresem jakiejkolwiek sesji z `session-plan.md` — nowa, wcześniej
 nieplanowana funkcja, udokumentowana tu z tego samego powodu co wpisy powyżej.
 
+### 2026-07-17 — Fix: wyloguj pobyt zostawiał stare auth_level w cache SW
+Zgłoszone przez użytkownika: po wylogowaniu i ponownym skanie kodu recepcji (świeża sesja,
+`auth_level = 1`) aplikacja od razu pokazywała treść z poprzedniej sesji (`auth_level = 2`).
+Przyczyna: `app/sw.ts`'s `runtimeCaching` trzyma strony gościa (`/`, `/my-stay`, `/amenities`, ...,
+patrz `GUEST_NAV_PATTERNS` w `lib/sw/matchers.ts`) w cache `pages` przez `StaleWhileRevalidate`
+kluczowanym wyłącznie po URL — cache nie wie, że sesja/tożsamość gościa się zmieniła. Fix z S7-1
+(`app/api/guest/sign-out/route.ts`) czyścił tylko `__Host-session` cookie + `sessions.revoked` po
+stronie serwera; sam browser cache `pages` (i analogicznie `guest-orders-status`, też per-sesja)
+zostawał nietknięty, więc pierwsza nawigacja po ponownym skanie (redirect na `/` z
+`app/api/scan/reception/route.ts`) trafiała w stary, zbuforowany HTML z poprzedniej, wyższej
+sesji — zanim SW zdążył zrewalidować w tle. To nie tylko UX bug: to realny wyciek prywatnych
+danych poprzedniego gościa (numer pokoju, rezerwacja) na to samo urządzenie. Naprawiono w
+`components/guest/sign-out-tile.tsx`: przed właściwym submitem formularza czyści
+`caches.delete('pages')` + `caches.delete('guest-orders-status')` (Cache Storage API dostępne też
+z kontekstu okna, nie tylko z SW) — nazwy cache wyniesione do nowej stałej
+`GUEST_SESSION_CACHE_NAMES` w `lib/sw/matchers.ts`, żeby nie dryfowały względem `app/sw.ts`.
+Submit robiony programowo (`form.submit()`, które celowo nie odpala zdarzenia `submit` — brak
+ryzyka pętli/podwójnego wysłania) dopiero po `clearGuestCaches()`. Dodatkowo `/api/guest/*` dopisane
+do `isNetworkOnlyApi` w `lib/sw/matchers.ts` dla jawności (funkcjonalnie nieinterceptowane już
+wcześniej — SW nie przechwytuje requestów bez dopasowanej trasy). `npm test` (400/400) i
+`tsc --noEmit` zielone. Ręczna weryfikacja w przeglądarce (DevTools → Application → Cache Storage)
+nie została wykonana w tej sesji — zalecana przed uznaniem za w pełni zweryfikowane.
+
 ---
 
 ## FAZA 7 — Wydajność

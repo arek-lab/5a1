@@ -39,9 +39,16 @@ export function isNetworkOnlyApi({ request, url }: MatchInput): boolean {
     (request.method === 'POST' && url.pathname.startsWith('/api/concierge/')) ||
     url.pathname.startsWith('/api/scan/') ||
     url.pathname.startsWith('/api/auth/') ||
+    url.pathname.startsWith('/api/guest/') ||
     (request.method === 'POST' && url.pathname.startsWith('/api/invite/')) ||
     (request.method === 'POST' && url.pathname.startsWith('/api/panel/')) ||
     (request.method === 'POST' && url.pathname.startsWith('/api/cron/')) ||
     url.pathname.startsWith('/api/orders/stream')
   )
 }
+
+// Runtime cache names from app/sw.ts's `runtimeCaching` that hold session-scoped HTML/data
+// (kept in sync by hand — sw.ts's `pages` name is fixed by @serwist/next's cacheOnNavigation,
+// see the comment there). Purged on sign-out (components/guest/sign-out-tile.tsx) so a
+// re-scanned session never paints from the previous guest's stale cached page.
+export const GUEST_SESSION_CACHE_NAMES = ['pages', 'guest-orders-status'] as const
