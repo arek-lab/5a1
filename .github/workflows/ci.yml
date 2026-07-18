@@ -31,6 +31,22 @@ jobs:
       - run: npm ci
       - run: npx tsc --noEmit
 
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # test:unit wyklucza 13 plików integracyjnych (it-*.test.ts,
+      # hotel-users-rls, sweep, checkout-recalc) — wymagają żywego Supabase
+      # z service_role i mutują dane; nie odpalamy ich na sekretach CI.
+      # Pełny pakiet (411 testów) pozostaje lokalnym gate'em przed pushem.
+      - run: npm run test:unit
+
   bundle-budget:
     name: Bundle budget
     runs-on: ubuntu-latest

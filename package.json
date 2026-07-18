@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run --exclude \"**/it-*.test.ts\" --exclude \"**/hotel-users-rls.test.ts\" --exclude \"**/sweep.test.ts\" --exclude \"**/checkout-recalc.test.ts\"",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "size": "size-limit"
