@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useNowSeconds } from '@/lib/panel/use-now-seconds'
 
 export type RoomWithQr = {
   id: string
@@ -54,9 +55,9 @@ function formatCheckOut(iso: string, locale: string, timeZone: string): string {
   )
 }
 
-function formatCountdown(expiresAt: string | null): string {
-  if (!expiresAt) return '--:--'
-  const remainingMs = new Date(expiresAt).getTime() - Date.now()
+function formatCountdown(expiresAt: string | null, nowMs: number | null): string {
+  if (!expiresAt || nowMs === null) return '--:--'
+  const remainingMs = new Date(expiresAt).getTime() - nowMs
   if (remainingMs <= 0) return '00:00'
   const totalSeconds = Math.floor(remainingMs / 1000)
   const minutes = Math.floor(totalSeconds / 60)
@@ -68,18 +69,17 @@ export default function QrPanel({ receptionQr, rooms, sessionCount, canEdit, can
   const t = useTranslations('qr')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const [countdown, setCountdown] = useState('--:--')
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null)
   const [checkOutInput, setCheckOutInput] = useState('')
   const [isAddingRoom, setIsAddingRoom] = useState(false)
   const [newRoomNumber, setNewRoomNumber] = useState('')
   const [newRoomType, setNewRoomType] = useState('')
 
-  useEffect(() => {
-    setCountdown(formatCountdown(receptionQr?.expiresAt ?? null))
-    const tick = setInterval(() => setCountdown(formatCountdown(receptionQr?.expiresAt ?? null)), 1000)
-    return () => clearInterval(tick)
-  }, [receptionQr?.expiresAt])
+  const nowSeconds = useNowSeconds()
+  const countdown = formatCountdown(
+    receptionQr?.expiresAt ?? null,
+    nowSeconds === null ? null : nowSeconds * 1000
+  )
 
   useEffect(() => {
     const rotate = setInterval(() => {

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { ensureReceptionQRFresh } from './actions'
+import { useNowSeconds } from '@/lib/panel/use-now-seconds'
 
 type QrState = {
   id: string | null
@@ -20,9 +21,9 @@ const REFRESHING_POLL_INTERVAL_MS = 3 * 1000
 const ROTATE_THRESHOLD_MS = 60 * 1000
 const MAX_JITTER_MS = 4 * 1000
 
-function formatCountdown(expiresAt: string | null, clockOffsetMs: number): string {
-  if (!expiresAt) return '--:--'
-  const remainingMs = new Date(expiresAt).getTime() - (Date.now() + clockOffsetMs)
+function formatCountdown(expiresAt: string | null, clockOffsetMs: number, nowMs: number | null): string {
+  if (!expiresAt || nowMs === null) return '--:--'
+  const remainingMs = new Date(expiresAt).getTime() - (nowMs + clockOffsetMs)
   if (remainingMs <= 0) return '00:00'
   const totalSeconds = Math.floor(remainingMs / 1000)
   const minutes = Math.floor(totalSeconds / 60)
@@ -34,18 +35,16 @@ export default function ReceptionQrKiosk({ hotelName, initial }: Props) {
   const t = useTranslations('qr')
   const [state, setState] = useState<QrState>(initial)
   const [clockOffsetMs, setClockOffsetMs] = useState(0)
-  const [countdown, setCountdown] = useState('--:--')
   const [, startTransition] = useTransition()
   const attemptedRotateForId = useRef<string | null>(null)
   const pollIntervalRef = useRef(POLL_INTERVAL_MS)
 
-  useEffect(() => {
-    setCountdown(formatCountdown(state.expiresAt, clockOffsetMs))
-    const tick = setInterval(() => {
-      setCountdown(formatCountdown(state.expiresAt, clockOffsetMs))
-    }, 1000)
-    return () => clearInterval(tick)
-  }, [state.expiresAt, clockOffsetMs])
+  const nowSeconds = useNowSeconds()
+  const countdown = formatCountdown(
+    state.expiresAt,
+    clockOffsetMs,
+    nowSeconds === null ? null : nowSeconds * 1000
+  )
 
   useEffect(() => {
     let cancelled = false
