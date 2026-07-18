@@ -173,6 +173,36 @@ describe('proxy: guest session headers forwarded to downstream request', () => {
   })
 })
 
+describe('proxy: __Host-session cookie persistence', () => {
+  beforeEach(() => vi.resetAllMocks())
+
+  // Regression test for the 2026-07-18 "guest logged out overnight" bug: the cookie was
+  // minted without an expiry (browser-session cookie), so mobile OSes killing the
+  // browser/PWA process wiped it mid-stay while the sessions row was still valid until
+  // check-out + 2h. Page navigations must re-issue the cookie with the row's expires_at.
+  it('re-issues the session cookie on page routes with the row expires_at', async () => {
+    const session = makeSession()
+    const admin = makeAdmin(session)
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    const response = await proxy(requestWithSession('http://localhost/'))
+
+    const cookie = response.cookies.get('__Host-session')
+    expect(cookie?.value).toBe(SESSION_ID)
+    expect(new Date(cookie!.expires!).getTime()).toBe(new Date(session.expires_at).getTime())
+    expect(cookie?.httpOnly).toBe(true)
+    expect(cookie?.secure).toBe(true)
+    expect(cookie?.sameSite).toBe('lax')
+    expect(cookie?.path).toBe('/')
+  })
+
+  it('does not touch the session cookie when no session cookie is present', async () => {
+    const response = await proxy(new NextRequest('http://localhost/'))
+
+    expect(response.cookies.get('__Host-session')).toBeUndefined()
+  })
+})
+
 describe('proxy: admin auth', () => {
   const ORIGINAL_TOKEN = process.env.ADMIN_ACCESS_TOKEN
 

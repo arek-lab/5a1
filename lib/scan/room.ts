@@ -85,7 +85,7 @@ export async function upgradeSession(params: {
   roomId: string
   reservationId: string
   checkOut: string
-}): Promise<void> {
+}): Promise<{ expiresAt: string }> {
   const supabase = createServiceRoleClient()
 
   const expiresAt = new Date(new Date(params.checkOut).getTime() + 2 * 60 * 60 * 1000).toISOString()
@@ -102,4 +102,5 @@ export async function upgradeSession(params: {
     .eq('id', params.sessionId)
 
   if (error) throw error
+  return { expiresAt }
 }

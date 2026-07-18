@@ -5,6 +5,7 @@ import { routing } from './i18n/routing'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
 import { absoluteUrl } from '@/lib/http/app-url'
+import { setSessionCookie } from '@/lib/guest/session-cookie'
 import type { Database } from './lib/supabase/database.types'
 
 const handleI18nRouting = createIntlMiddleware(routing)
@@ -52,6 +53,10 @@ export default async function proxy(request: NextRequest) {
   // Populated below when a valid, non-expired, non-revoked guest session exists — forwarded as
   // headers so lib/guest/session.ts doesn't need a second `sessions` lookup for the same row.
   let guestSessionHeaders: Record<string, string> | null = null
+  // When set, the outgoing page response re-issues __Host-session with this expiry so the
+  // cookie tracks the row's expires_at — it may move when reception extends the check-out,
+  // and cookies minted before the fix carried no expiry at all (browser-session cookies).
+  let guestSessionExpiresAt: string | null = null
   if (sessionId) {
     const admin = createServiceRoleClient()
     const { data: session } = await admin
@@ -103,6 +108,8 @@ export default async function proxy(request: NextRequest) {
         .update({ last_seen_at: new Date().toISOString() })
         .eq('id', session.id)
     }
+
+    guestSessionExpiresAt = session.expires_at
 
     guestSessionHeaders = {
       'x-property-id': session.property_id,
@@ -185,6 +192,10 @@ export default async function proxy(request: NextRequest) {
   supabaseResponse.cookies.getAll().forEach((cookie) => {
     intlResponse.cookies.set(cookie)
   })
+
+  if (sessionId && guestSessionExpiresAt) {
+    setSessionCookie(intlResponse, sessionId, guestSessionExpiresAt)
+  }
 
   return intlResponse
 }

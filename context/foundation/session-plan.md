@@ -575,6 +575,33 @@ buildzie Sentry zgłosił kolejne żądanie: `instrumentation-client.ts` musi ek
 jakiejkolwiek sesji z `session-plan.md` — konserwacja obserwowalności, udokumentowana tu z tego
 samego powodu co wpisy powyżej.
 
+### 2026-07-18 — Fix: gość "wylogowany" po nocy mimo ważnej sesji do check-out (cookie sesyjne bez expiry)
+Zgłoszone przez użytkownika: testowe logowanie pokoju 102 z poprzedniego dnia, następnego dnia
+telefon pokazuje stan wylogowany, choć check-out jest 2026-07-31. Weryfikacja w bazie potwierdziła,
+że wiersz `sessions` był w pełni ważny (`auth_level=2`, `revoked=false`,
+`expires_at=2026-07-31T11:13Z` = check-out + 2h) — problem był wyłącznie po stronie klienta:
+`__Host-session` było ustawiane **bez `expires`/`maxAge`**, czyli jako cookie sesyjne
+przeglądarki. Mobilne OS-y ubijają proces przeglądarki/PWA między wizytami (np. przez noc), co
+kasuje cookies sesyjne — gość wracał bez cookie, `proxy.ts` nie widział sesji i aplikacja
+zachowywała się jak po wylogowaniu, mimo ważnej sesji serwerowej. Fix w trzech punktach, wspólny
+helper `lib/guest/session-cookie.ts` (`setSessionCookie` — trwałe cookie z `expires` lustrzanym do
+`sessions.expires_at`, zachowany `SameSite=Lax` z fixu 2026-07-17):
+1. **Skan recepcji** (`app/api/scan/reception/route.ts`): cookie dostaje `expires` =
+   `session.expires_at` (24h przy `auth_level=1`).
+2. **Skan pokoju** (`app/api/scan/room/route.ts`): po `upgradeSession()` cookie jest re-wydawane z
+   nowym `expires` = check-out + 2h (`upgradeSession` w `lib/scan/room.ts` zwraca teraz
+   `{ expiresAt }`); gałąź `already_active` też re-wydaje cookie z `expires_at` istniejącej sesji.
+3. **`proxy.ts`**: każda nawigacja strony (nie `/api/*`) z ważną sesją re-wydaje cookie z aktualnym
+   `expires_at` wiersza — pokrywa to przedłużenie check-out przez recepcję
+   (`lib/reservations/update-checkout.ts` przelicza `expires_at` aktywnych sesji, cookie by za nim
+   nie nadążyło) oraz konwertuje na trwałe cookies istniejących instalacji sprzed fixu przy ich
+   najbliższej wizycie.
+Testy regresyjne: `__tests__/proxy.test.ts` (re-wydanie cookie na trasie strony z `expires` równym
+`expires_at` wiersza + brak dotykania cookie bez sesji), `lib/scan/__tests__/it-2.test.ts` (Test 1:
+cookie recepcji ma expiry ~24h; Test 3: po step-upie cookie ma expiry = `expires_at` sesji z bazy).
+`tsc --noEmit`, pełne `npm test` (404/404) i `npm run build` zielone. Poza formalnym zakresem
+jakiejkolwiek sesji z `session-plan.md` — udokumentowane tu z tego samego powodu co wpisy powyżej.
+
 ---
 
 ## FAZA 7 — Wydajność

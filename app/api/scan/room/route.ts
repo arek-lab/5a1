@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { validateRoomScan, upgradeSession } from '@/lib/scan/room'
 import { retryOrErrorRedirect, clearScanRetryCookie } from '@/lib/scan/retry'
+import { setSessionCookie } from '@/lib/guest/session-cookie'
 import { checkScanRateLimit } from '@/lib/rate-limit/scan'
 import { resolveIpInfo } from '@/lib/geo/ip-info'
 import { trackAndDetectAnomaly } from '@/lib/anomaly/detect'
@@ -41,6 +42,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   if (validation.status === 'already_active') {
     const response = NextResponse.redirect(absoluteUrl('/'))
+    setSessionCookie(response, sessionId, validation.session.expires_at)
     clearScanRetryCookie(response)
     return response
   }
@@ -49,7 +51,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   // Sessions row upgrade must precede refreshSession() so the hook sees auth_level=2
   // when it queries sessions on the next token refresh.
-  await upgradeSession({
+  const { expiresAt: upgradedExpiresAt } = await upgradeSession({
     sessionId,
     roomId,
     reservationId: reservation.id,
@@ -77,6 +79,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // Supabase SSR client reads existing anonymous session from request cookies and
   // writes refreshed tokens to the redirect response.
   const response = NextResponse.redirect(absoluteUrl('/'))
+  setSessionCookie(response, sessionId, upgradedExpiresAt)
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

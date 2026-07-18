@@ -114,6 +114,12 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     expect(sessionCookie?.secure).toBe(true)
     expect(sessionCookie?.sameSite).toBe('lax')
     expect(sessionCookie?.path).toBe('/')
+    // Persistent cookie (not a browser-session one): expiry must mirror the sessions
+    // row's expires_at (~24h at auth_level 1), or mobile OSes killing the browser
+    // process wipe the cookie mid-stay while the row is still valid.
+    const receptionExpiresMs = new Date(sessionCookie!.expires!).getTime()
+    expect(receptionExpiresMs).toBeGreaterThan(Date.now() + 23 * 60 * 60 * 1000)
+    expect(receptionExpiresMs).toBeLessThan(Date.now() + 25 * 60 * 60 * 1000)
 
     // Capture for downstream tests (Tests 2 and 3)
     capturedSessionId = sessionCookie!.value
@@ -158,6 +164,12 @@ describe('IT-2: QR scan route handlers (real Supabase)', () => {
     expect(session?.auth_level).toBe(2)
     expect(session?.room_id).toBe(roomId)
     expect(session?.reservation_id).toBe(reservationId)
+
+    // Step-up must re-issue the cookie with the upgraded expiry (check-out + 2h),
+    // matching the sessions row written by upgradeSession.
+    const upgradedCookie = response.cookies.get('__Host-session')
+    expect(upgradedCookie?.value).toBe(capturedSessionId)
+    expect(new Date(upgradedCookie!.expires!).getTime()).toBe(new Date(session!.expires_at).getTime())
   }, 30_000)
 
   it('Test 4 — room step-up outside valid window', async () => {
