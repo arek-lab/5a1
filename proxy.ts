@@ -11,9 +11,31 @@ import type { Database } from './lib/supabase/database.types'
 const handleI18nRouting = createIntlMiddleware(routing)
 
 const GUEST_RETURN_GAP_MS = 30 * 60 * 1000
+// last_seen_at is analytics-grade ("roughly when was the guest last here"), not an activity
+// log — writing it on every navigation doubles the middleware's Supabase round-trips for no
+// consumer that needs minute-level precision. The 30-min return detection reads the gap
+// *before* this write, so a 5-min write gap undercounts it by at most 5 minutes.
+const LAST_SEEN_WRITE_GAP_MS = 5 * 60 * 1000
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  // Server-Timing entries for the response — zero-cost in-code instrumentation so
+  // production latency can be attributed per middleware phase straight from DevTools.
+  const serverTimings: string[] = []
+  const timed = async <T>(name: string, fn: () => PromiseLike<T>): Promise<T> => {
+    const start = performance.now()
+    try {
+      return await fn()
+    } finally {
+      serverTimings.push(`${name};dur=${(performance.now() - start).toFixed(1)}`)
+    }
+  }
+  const withServerTiming = <T extends NextResponse>(response: T): T => {
+    if (serverTimings.length > 0) {
+      response.headers.set('Server-Timing', serverTimings.join(', '))
+    }
+    return response
+  }
 
   // Admin area lives outside [locale] entirely — single shared-token gate, no
   // guest-session or intl routing logic applies here.
@@ -59,11 +81,13 @@ export default async function proxy(request: NextRequest) {
   let guestSessionExpiresAt: string | null = null
   if (sessionId) {
     const admin = createServiceRoleClient()
-    const { data: session } = await admin
-      .from('sessions')
-      .select('id, revoked, expires_at, property_id, last_seen_at, auth_level, reservation_id, room_id')
-      .eq('id', sessionId)
-      .single()
+    const { data: session } = await timed('sessions-select', () =>
+      admin
+        .from('sessions')
+        .select('id, revoked, expires_at, property_id, last_seen_at, auth_level, reservation_id, room_id')
+        .eq('id', sessionId)
+        .single()
+    )
 
     const expired = session !== null && new Date(session.expires_at) <= new Date()
     if (!session || session.revoked || expired) {
@@ -103,10 +127,12 @@ export default async function proxy(request: NextRequest) {
           { distinctId: session.id, propertyId: session.property_id }
         )
       }
-      void admin
-        .from('sessions')
-        .update({ last_seen_at: new Date().toISOString() })
-        .eq('id', session.id)
+      if (gapMs > LAST_SEEN_WRITE_GAP_MS) {
+        void admin
+          .from('sessions')
+          .update({ last_seen_at: new Date().toISOString() })
+          .eq('id', session.id)
+      }
     }
 
     guestSessionExpiresAt = session.expires_at
@@ -120,44 +146,54 @@ export default async function proxy(request: NextRequest) {
     }
   }
 
-  let supabaseResponse = NextResponse.next({ request })
-
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  // getClaims() refreshes the JWT (like getUser()) and decodes the token itself,
-  // so it reflects claims injected by the Custom Access Token Hook. getUser() must
-  // NOT be used here: it returns auth.users.raw_app_meta_data from the Auth server,
-  // which the hook never modifies — only the issued JWT's claims are hook-derived.
-  const { data: claimsData } = await supabase.auth.getClaims()
-
-  // Inject tenant claims from JWT app_metadata into request headers so that
-  // route handlers can call withTenantContext(headers) without re-decoding the JWT.
   const requestHeaders = new Headers(request.headers)
-  const meta = claimsData?.claims.app_metadata as
-    | { property_id?: string; session_id?: string }
-    | undefined
-  if (typeof meta?.property_id === 'string') {
-    requestHeaders.set('x-property-id', meta.property_id)
-  }
-  if (typeof meta?.session_id === 'string') {
-    requestHeaders.set('x-session-id', meta.session_id)
+  let supabaseResponse: NextResponse | null = null
+
+  // The whole Supabase Auth block exists only to refresh hotel-panel tokens. A guest
+  // authenticates solely via __Host-session — with no `sb-*` cookies there is no token to
+  // refresh and getClaims() is a guaranteed-empty network round-trip, so skip it entirely.
+  // When both cookie kinds are present (hotelier testing the guest app in the same browser)
+  // the block still runs; guestSessionHeaders overrides the JWT-derived headers below.
+  const hasSupabaseAuthCookies = request.cookies.getAll().some((c) => c.name.startsWith('sb-'))
+  if (hasSupabaseAuthCookies) {
+    supabaseResponse = NextResponse.next({ request })
+
+    const supabase = createServerClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({ request })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              supabaseResponse!.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    // getClaims() refreshes the JWT (like getUser()) and decodes the token itself,
+    // so it reflects claims injected by the Custom Access Token Hook. getUser() must
+    // NOT be used here: it returns auth.users.raw_app_meta_data from the Auth server,
+    // which the hook never modifies — only the issued JWT's claims are hook-derived.
+    const { data: claimsData } = await timed('get-claims', () => supabase.auth.getClaims())
+
+    // Inject tenant claims from JWT app_metadata into request headers so that
+    // route handlers can call withTenantContext(headers) without re-decoding the JWT.
+    const meta = claimsData?.claims.app_metadata as
+      | { property_id?: string; session_id?: string }
+      | undefined
+    if (typeof meta?.property_id === 'string') {
+      requestHeaders.set('x-property-id', meta.property_id)
+    }
+    if (typeof meta?.session_id === 'string') {
+      requestHeaders.set('x-session-id', meta.session_id)
+    }
   }
 
   // guestSessionHeaders comes straight from the `sessions` row already fetched above (same
@@ -173,23 +209,25 @@ export default async function proxy(request: NextRequest) {
   // next-intl rewriting /api/* to /[locale]/api/* (which doesn't exist).
   if (request.nextUrl.pathname.startsWith('/api/')) {
     const apiResponse = NextResponse.next({ request: { headers: requestHeaders } })
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
+    supabaseResponse?.cookies.getAll().forEach((cookie) => {
       apiResponse.cookies.set(cookie)
     })
-    return apiResponse
+    return withServerTiming(apiResponse)
   }
 
   // Page routes: run next-intl locale routing on a request that already carries
   // the tenant headers, so any internal rewrite also forwards them to the route handler.
-  const intlResponse = handleI18nRouting(
-    new NextRequest(request.url, {
-      headers: requestHeaders,
-      method: request.method,
-    })
+  const intlResponse = await timed('intl', async () =>
+    handleI18nRouting(
+      new NextRequest(request.url, {
+        headers: requestHeaders,
+        method: request.method,
+      })
+    )
   )
 
   // Transfer Supabase auth cookies (session refresh) onto the intl response.
-  supabaseResponse.cookies.getAll().forEach((cookie) => {
+  supabaseResponse?.cookies.getAll().forEach((cookie) => {
     intlResponse.cookies.set(cookie)
   })
 
@@ -197,7 +235,7 @@ export default async function proxy(request: NextRequest) {
     setSessionCookie(intlResponse, sessionId, guestSessionExpiresAt)
   }
 
-  return intlResponse
+  return withServerTiming(intlResponse)
 }
 
 export const config = {

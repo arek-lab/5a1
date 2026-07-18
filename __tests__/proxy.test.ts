@@ -22,10 +22,12 @@ vi.mock('@/lib/analytics/capture', () => ({
   captureEvent: vi.fn(),
 }))
 
+import { createServerClient } from '@supabase/ssr'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { captureEvent } from '@/lib/analytics/capture'
 import proxy, { config } from '../proxy'
 
+const mockCreateServerClient = vi.mocked(createServerClient)
 const mockCreateServiceRoleClient = vi.mocked(createServiceRoleClient)
 const mockCaptureEvent = vi.mocked(captureEvent)
 
@@ -122,13 +124,34 @@ describe('proxy: guest_session_returned', () => {
   })
 
   it('does not fire guest_session_returned for a recent visit', async () => {
-    const admin = makeAdmin(makeSession({ lastSeenAt: new Date(Date.now() - 5 * 60 * 1000).toISOString() }))
+    const admin = makeAdmin(makeSession({ lastSeenAt: new Date(Date.now() - 10 * 60 * 1000).toISOString() }))
     mockCreateServiceRoleClient.mockReturnValue(admin as never)
 
     await proxy(requestWithSession('http://localhost/'))
 
     expect(mockCaptureEvent).not.toHaveBeenCalled()
     expect(admin.update).toHaveBeenCalled()
+  })
+
+  it('throttles the last_seen_at write when the last visit is under 5 minutes old', async () => {
+    const admin = makeAdmin(makeSession({ lastSeenAt: new Date(Date.now() - 2 * 60 * 1000).toISOString() }))
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    await proxy(requestWithSession('http://localhost/'))
+
+    expect(mockCaptureEvent).not.toHaveBeenCalled()
+    expect(admin.update).not.toHaveBeenCalled()
+  })
+
+  it('writes last_seen_at once the 5-minute write gap is exceeded', async () => {
+    const admin = makeAdmin(makeSession({ lastSeenAt: new Date(Date.now() - 6 * 60 * 1000).toISOString() }))
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    await proxy(requestWithSession('http://localhost/'))
+
+    expect(admin.update).toHaveBeenCalledWith(
+      expect.objectContaining({ last_seen_at: expect.any(String) })
+    )
   })
 
   it('does not fire or update last_seen_at for /api/ routes', async () => {
@@ -139,6 +162,43 @@ describe('proxy: guest_session_returned', () => {
 
     expect(mockCaptureEvent).not.toHaveBeenCalled()
     expect(admin.update).not.toHaveBeenCalled()
+  })
+})
+
+describe('proxy: Supabase Auth block skipped without sb-* cookies', () => {
+  beforeEach(() => vi.resetAllMocks())
+
+  it('does not create a Supabase Auth client for a guest-only request', async () => {
+    const admin = makeAdmin(makeSession())
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    const response = await proxy(requestWithSession('http://localhost/'))
+
+    expect(mockCreateServerClient).not.toHaveBeenCalled()
+    // Guest headers still flow to the downstream request without the Auth block.
+    expect(response.headers.get('x-middleware-request-x-property-id')).toBe(PROP)
+  })
+
+  it('does not create a Supabase Auth client for an anonymous request', async () => {
+    await proxy(new NextRequest('http://localhost/'))
+
+    expect(mockCreateServerClient).not.toHaveBeenCalled()
+  })
+
+  it('runs the Auth block when sb-* cookies are present alongside the guest cookie', async () => {
+    const admin = makeAdmin(makeSession())
+    mockCreateServiceRoleClient.mockReturnValue(admin as never)
+
+    const response = await proxy(
+      new NextRequest('http://localhost/', {
+        headers: { cookie: `__Host-session=${SESSION_ID}; sb-abc-auth-token=jwt` },
+      })
+    )
+
+    expect(mockCreateServerClient).toHaveBeenCalledTimes(1)
+    // guestSessionHeaders must still win over any JWT-derived fallback headers.
+    expect(response.headers.get('x-middleware-request-x-property-id')).toBe(PROP)
+    expect(response.headers.get('x-middleware-request-x-session-id')).toBe(SESSION_ID)
   })
 })
 

@@ -31,16 +31,27 @@ const withSerwist = withSerwistInit({
   swDest: 'public/sw.js',
   disable: process.env.NODE_ENV === 'development',
   additionalPrecacheEntries,
-  // App Router client-side navigation (next/link) fetches an RSC payload, not
-  // a `document` — our own runtimeCaching document rule never sees it. This
-  // hooks history.pushState to explicitly fetch+cache the destination
-  // document into the "pages" cache on every soft navigation.
-  cacheOnNavigation: true,
+  // cacheOnNavigation (offline "pages" cache fill on soft navigation) was removed in S7.2:
+  // it issued a second full document fetch per soft navigation, doubling middleware runs —
+  // and the per-request `SELECT sessions` is a hard HITL requirement that can't be cached
+  // away, so the duplicate round-trip cost is structural. Trade-off: pages visited only via
+  // soft navigation aren't cached for offline; precache + NetworkFirst on full loads remain.
 });
+
+// Only next/image-optimized hosts belong here — `hostname: '**'` turns the image optimizer
+// into an open proxy (and burns CPU for arbitrary hosts). Unsplash stays until the category
+// images (components/guest/category-grid.tsx) move into public/ like the hero did.
+const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : '*.supabase.co';
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    remotePatterns: [
+      { protocol: 'https', hostname: supabaseHostname },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
+    ],
     formats: ['image/avif', 'image/webp'],
   },
 };

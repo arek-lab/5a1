@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { createServerClient } from '@/lib/supabase/server'
 import { getHotelUser } from '@/lib/panel/auth'
 import { canPerform } from '@/lib/panel/rbac'
@@ -58,6 +58,9 @@ export async function saveHotelProfile(formData: FormData): Promise<{ error?: st
 
   revalidatePath('/onboarding')
   revalidatePath('/dashboard')
+  // The guest layout serves property name/logo/bot/phone from a 300 s unstable_cache entry —
+  // drop it so profile edits reach guests immediately instead of after the TTL.
+  revalidateTag(`guest-property-${hotelUser.propertyId}`, 'max')
 
   return {}
 }

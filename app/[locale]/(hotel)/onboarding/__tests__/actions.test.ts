@@ -3,6 +3,7 @@ import type { HotelUser } from '@/lib/panel/auth'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
 }))
 vi.mock('@/lib/panel/auth', () => ({
   getHotelUser: vi.fn(),
