@@ -1,7 +1,7 @@
 ---
 change_id: e2e-01
 title: Test Playwright E2E-01 — happy path gościa (B3, gate przed pilotem)
-status: implementing
+status: implemented
 created: 2026-07-19
 updated: 2026-07-19
 archived_at: null

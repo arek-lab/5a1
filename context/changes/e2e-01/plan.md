@@ -258,7 +258,7 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Manual
 
-- [ ] 3.4 Trace/report odpowiada checkliście smoke-test poz. 1-4 + „Moje zamówienia"
+- [x] 3.4 Trace/report odpowiada checkliście smoke-test poz. 1-4 + „Moje zamówienia" — potwierdzone przez usera 2026-07-19
 
 ### Phase 4: Job e2e w CI
 
@@ -268,4 +268,4 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Manual
 
-- [ ] 4.2 Job osobny od `test` w Actions; artifact reportu przy porażce
+- [x] 4.2 Job osobny od `test` w Actions; artifact reportu przy porażce — potwierdzone przez usera 2026-07-19
