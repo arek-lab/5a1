@@ -252,9 +252,9 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Automated
 
-- [x] 3.1 `npx playwright test` lokalnie: 1 passed
-- [x] 3.2 Drugi przebieg z rzędu: passed (determinizm)
-- [x] 3.3 `npm test` nadal zielony
+- [x] 3.1 `npx playwright test` lokalnie: 1 passed — 4cd5efc
+- [x] 3.2 Drugi przebieg z rzędu: passed (determinizm) — 4cd5efc
+- [x] 3.3 `npm test` nadal zielony — 4cd5efc
 
 #### Manual
 
