@@ -238,9 +238,9 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Automated
 
-- [x] 1.1 `npm run typecheck` przechodzi
-- [x] 1.2 `npm test` przechodzi bez wykonywania plików z `e2e/`
-- [x] 1.3 `npx playwright test --list` bez błędu konfiguracji
+- [x] 1.1 `npm run typecheck` przechodzi — 06d7610
+- [x] 1.2 `npm test` przechodzi bez wykonywania plików z `e2e/` — 06d7610
+- [x] 1.3 `npx playwright test --list` bez błędu konfiguracji — 06d7610
 
 ### Phase 2: Seed i teardown hotelu testowego
 
