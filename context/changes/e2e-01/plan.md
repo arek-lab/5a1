@@ -264,7 +264,7 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Automated
 
-- [ ] 4.1 Job `e2e` zielony na PR
+- [x] 4.1 Job `e2e` zielony na PR — 79567ab
 
 #### Manual
 
