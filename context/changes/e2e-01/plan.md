@@ -246,7 +246,7 @@ Brak migracji. Po zielonym CI: checklista manualna `smoke-test-e2e01.md` pozosta
 
 #### Automated
 
-- [x] 2.1 Seed + teardown przebiegają czysto; po teardown zero wierszy property testowego
+- [x] 2.1 Seed + teardown przebiegają czysto; po teardown zero wierszy property testowego — 6ef1327
 
 ### Phase 3: Test e2e-01-happy-path
 
