@@ -684,7 +684,7 @@ Framework zgodny ze stackiem (T1/T2): **Vitest** (unit), **Supabase test client 
 ### 9.3 Testy e2e
 
 **Flow gościa (QR → usługa):**
-- **E2E-01 (MUST, gate przed pilotem):** QR scan → auth → splash ≤1,5 s → welcome („Witaj [Imię]" z tokenu) → home (5 kategorii + „Polecamy" below fold) → kategoria → usługa → modal → „Dopisz do rachunku" → ekran sukcesu → „Moje zamówienia" status „złożone". Asercje: gość NIC nie wpisał (HITL #1); zero pola karty (HITL #5).
+- **E2E-01 (MUST, gate przed pilotem):** QR scan → auth → splash ≤1,5 s → welcome („Witamy w pokoju [nr]" — bez imienia; minimalizacja PII wg korekty s2-9, `guest_first_name` nie jest zbierane) → home (5 kategorii + „Polecamy" below fold) → kategoria → usługa → modal → „Dopisz do rachunku" → ekran sukcesu → „Moje zamówienia" status „złożone". Asercje: gość NIC nie wpisał (HITL #1); zero pola karty (HITL #5).
 - **E2E-02..09 (SHOULD/COULD):** zmiana języka; offline browsing z cache; SSE status update + fallback polling; token wygasły P0; usługa niedostępna (greyed, nie ukryta); zamówienie odrzucone; AI czat (sugeruje nie inicjuje + disclosure HITL #8); błąd 5xx + retry.
 
 **Flow hotelu (panel → widoczność w appce):**

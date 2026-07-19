@@ -18,18 +18,13 @@ function renderBanner(props: Parameters<typeof WelcomeBanner>[0]) {
 }
 
 describe('WelcomeBanner', () => {
-  it('greets the guest by first name when present', () => {
-    renderBanner({ guestFirstName: 'Anna', roomNumber: '204' })
-    expect(screen.getByText('Witaj, Anna!')).toBeTruthy()
-  })
-
-  it('falls back to the room number when no name is present', () => {
-    renderBanner({ guestFirstName: null, roomNumber: '204' })
+  it('greets with the room number — never a guest name (PII minimization, s2-9)', () => {
+    renderBanner({ roomNumber: '204' })
     expect(screen.getByText('Witamy w pokoju 204')).toBeTruthy()
   })
 
-  it('shows a scan-room CTA when neither name nor room number is present', () => {
-    renderBanner({ guestFirstName: null, roomNumber: null })
+  it('shows a scan-room CTA when no room number is present', () => {
+    renderBanner({ roomNumber: null })
     const link = screen.getByRole('link', { name: 'Skanuj kod pokoju' })
     expect(link).toBeTruthy()
     expect(link.getAttribute('href')).toBe('/scan')

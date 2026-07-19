@@ -1,16 +1,12 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-export function WelcomeBanner({
-  guestFirstName,
-  roomNumber,
-}: {
-  guestFirstName: string | null;
-  roomNumber: string | null;
-}) {
+// Bez wariantu z imieniem: minimalizacja PII (s2-9) — recepcja nie zbiera imion,
+// powitanie identyfikuje wyłącznie pokój.
+export function WelcomeBanner({ roomNumber }: { roomNumber: string | null }) {
   const t = useTranslations('guest.welcome');
 
-  if (!guestFirstName && !roomNumber) {
+  if (!roomNumber) {
     return (
       <div className="px-4 py-6">
         <Link
@@ -23,13 +19,11 @@ export function WelcomeBanner({
     );
   }
 
-  const greeting = guestFirstName
-    ? t('greetingWithName', { name: guestFirstName })
-    : t('greetingWithRoom', { room: roomNumber! });
-
   return (
     <div className="px-4 py-6">
-      <h1 className="font-display text-xl font-semibold text-guest-ink">{greeting}</h1>
+      <h1 className="font-display text-xl font-semibold text-guest-ink">
+        {t('greetingWithRoom', { room: roomNumber })}
+      </h1>
     </div>
   );
 }
