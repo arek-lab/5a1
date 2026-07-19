@@ -11,7 +11,7 @@ import { HotelDescription } from '@/components/guest/hotel-description';
 import { PolecamySection } from '@/components/guest/polecamy-section';
 
 export default async function GuestHomePage() {
-  const { guestFirstName, roomNumber, propertyId, sessionId, propertyName } = await requireGuestSession();
+  const { roomNumber, propertyId, sessionId, propertyName } = await requireGuestSession();
 
   const client = await withTenantContext(await headers());
   const locale = await getLocale();
@@ -22,7 +22,7 @@ export default async function GuestHomePage() {
       <SplashScreen />
       <main>
         <HeroImage />
-        <WelcomeBanner guestFirstName={guestFirstName} roomNumber={roomNumber} />
+        <WelcomeBanner roomNumber={roomNumber} />
         <AmenitiesCta />
         <HotelDescription />
         <PolecamySection services={services} sessionId={sessionId} hotelName={propertyName} />

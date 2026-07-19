@@ -131,7 +131,6 @@
       "retry": "Back to home"
     },
     "welcome": {
-      "greetingWithName": "Welcome, {name}!",
       "greetingWithRoom": "Welcome to room {room}",
       "scanCta": "Scan room code",
       "amenitiesCta": "See what we've prepared for you",
