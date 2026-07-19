@@ -12,7 +12,7 @@ import { SEED_STATE_PATH, type SeedState } from './fixtures/seed'
 const state = (): SeedState => JSON.parse(fs.readFileSync(SEED_STATE_PATH, 'utf8')) as SeedState
 
 test('E2E-01: skan QR → zamówienie na rachunek → status „złożone"', async ({ page }) => {
-  const { initToken, roomId, guestFirstName, serviceName, category } = state()
+  const { initToken, roomId, roomNumber, serviceName, category } = state()
 
   // Krok 1: skan QR recepcji (auth_level 1) — sesja anonimowa, redirect na home
   await page.goto(`/api/scan/reception?init_token=${initToken}`)
@@ -22,8 +22,9 @@ test('E2E-01: skan QR → zamówienie na rachunek → status „złożone"', asy
   await page.goto(`/api/scan/room?room_id=${roomId}`)
   await expect(page).toHaveURL(/\/(pl\/?)?$/)
 
-  // Krok 3: welcome — „Witaj, [Imię]!" z rezerwacji, gość niczego nie wpisywał
-  await expect(page.getByText(`Witaj, ${guestFirstName}!`)).toBeVisible()
+  // Krok 3: welcome — „Witamy w pokoju {nr}", bez imienia (minimalizacja PII,
+  // s2-9: guest_first_name = NULL w realnym przepływie recepcji)
+  await expect(page.getByText(`Witamy w pokoju ${roomNumber}`)).toBeVisible()
 
   // Baner analityki (fixed bottom, z-50) zasłania dolny arkusz modala — zamknij go
   // jak realny gość, zanim ruszymy dalej

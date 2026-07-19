@@ -16,7 +16,6 @@ export interface SeedState {
   serviceId: string
   category: string
   serviceName: string
-  guestFirstName: string
   roomNumber: string
 }
 
@@ -69,7 +68,8 @@ export default async function globalSetup(): Promise<void> {
     .insert({
       property_id: property.id,
       room_id: room.id,
-      guest_first_name: 'Anna',
+      // Bez imienia — minimalizacja PII (s2-9, korekta HITL): recepcja melduje
+      // tylko pokój + datę wyjazdu, welcome pokazuje „Witamy w pokoju {nr}"
       check_in: yesterday,
       check_out: tomorrow,
       source: 'direct',
@@ -131,7 +131,6 @@ export default async function globalSetup(): Promise<void> {
     serviceId: service.id,
     category: 'room_service',
     serviceName: service.name,
-    guestFirstName: 'Anna',
     roomNumber: '901',
   }
   fs.writeFileSync(SEED_STATE_PATH, JSON.stringify(state, null, 2))
