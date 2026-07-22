@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "public/sw.js",
     "public/sw.js.map",
     "public/swe-worker-*.js",
+    // CommonJS config file for size-limit (czytane przez size-limit jako CJS).
+    ".size-limit.js",
   ]),
 ]);
 
